@@ -6,7 +6,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 
-
+\author{Jordan T Dawe, Phil Austin}
 
 
 \usepackage{babel}
@@ -34,8 +34,8 @@ tracer calculations.
 
 The largest uncertainties in Global Circulation Model (GCM) simulations
 come from the subgridscale parameterization of clouds. The IPCC 2007
-report found the {*}TK{*} models they examined showed a {*}TK{*} W
-m$^{-2}$ range in the cloud feedback response, relative to a {*}TK{*}
+report found the *TK* models they examined showed a *TK* W
+m$^{-2}$ range in the cloud feedback response, relative to a *TK*
 W m$^{-2}$ total climate sensitivity.  Improvements in the accuracy of 
 these subgridscale cloud parametrizations are neccessary to simulate 
 the rate and spatial pattern of global warming.
@@ -49,7 +49,7 @@ and the heights at which the clouds deposit that heat and moisture.
 They also have effects on the vertical transport of aerosols out of
 the boundary layer and the rate at which chemical reactions can occur
 in those aerosols. Several approaches to the parametrization of entrainment
-and detrainment rates have been proposed, including {*}TK{*}.
+and detrainment rates have been proposed, including *TK*.
 
 Large Eddy Simulation (LES) is an important tool used in the study
 of cloud entrainment and detrainment. LES models achieve grid resolutions
@@ -80,9 +80,17 @@ cloud environment are horizontally homogenous slabs; this is a much
 less accurate assumption on the level of an individual cloud.
 
 Alternatively, entrianment and detrianment could simply be calculated
-directly from the LES velocity and humidity field, using
+directly from the LES velocity and humidity field.  \cite{Siebesma1998} 
+defines Entrainment and Detrainment as
 
-\equation{E-D=\oiintop u\cdot\nabla ndA},
+\begin{equation}
+E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
+\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\end{equation}
+\begin{equation}
+D = \frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) > 0}
+\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\end{equation}
 
 where $E$ and $D$ are the entrainment and detrainment rates in kg 
 m$^{-3}$ s$^{-1}$, u is velocity in m s$^{-1}$, *TK*.  However, the
@@ -95,7 +103,7 @@ modeled surface velocity to be either 0 m s$^{-1}$ or $\Delta x / \Delta t
 $\Delta t$ is the model timestep.  The surface of the cloud only moves 
 when a grid cell's humidity reaches saturation, and when it 
 does, an entire grid cell worth of fluid leaves or enters the cloud.  This 
-causes both the entrainment and detrainment to be over-estimated. 
+causes both the entrainment and detrainment to be over-estimated.
 
 Here we present a method for calculation of the cloud entrainment and 
 detrainment rates that relies on interpolation of the subgrid location 
@@ -108,6 +116,46 @@ individual LES clouds.
 
 \section{Method}
 
+In this section we present a general method for calculation of entrainment and 
+detrainment through a cloud surface in a discrete numerical model.
+
+\cite{Siebesma1998} gives the net Entrainment and Detrainment over the 
+cloud interface to be:
+
+\begin{equation}
+\label{eq:E_minus_D} 
+E - D = \int_A \rho ( \mathbf{u} -  \mathbf{u_i}) \cdot d\mathbf{A}.
+\end{equation}
+
+Consider a discrete 3-d numerical model operating on an Arakawa C-grid
+(Fig \ref{fig:C_grid}). At any timestep $t = n\Delta t$, the humidity
+of each grid
+
+
+
+Leibnitz theorem:
+
+\begin{equation}
+\label{eq:leibnitz} 
+\frac{d}{dt}\int_{V(t)} \rho dV = \int_{V(t)} \frac{\partial \rho}{ \partial t} dV 
+                                + \int_{A(t)} \rho \mathbf{u_i}\cdot d\mathbf{A}
+\end{equation}
+
+Since ${\partial \rho}/{ \partial t} \approx 0$ we can combine equations (\ref{eq:E_minus_D})
+and (\ref{eq:leibnitz}) to give:
+
+\begin{equation}
+E - D = \int_A \rho \mathbf{u} \cdot d\mathbf{A} - \frac{d}{dt}\int_{V(t)} \rho dV.
+\end{equation}
+
+Divergence theorem:
+
+\begin{equation}
+\label{eq:divergence} 
+\int_{V(t)} \nabla \cdot (\rho \mathbf{u}) dV = \int_{A(t)} \rho \mathbf{u}\cdot d\mathbf{A}
+\end{equation}
+
+
 
 \section{Comparison with bulk conserved tracer calculations}
 
@@ -119,9 +167,13 @@ Acknowledgments
 Figures were generated using the matplotlib library in the Python
 programming language.
 
-%\bibliographystyle{natsci}
+\bibliographystyle{agu}
 
+\bibliography{entrainment_interpolation}{} 
 
-%\bibliography{entrainment_interpolation}{} 
+\begin{figure}
+\label{fig:C_grid}
+\caption{Blah blah blah}
+\end{figure}
 
 \end{document}
