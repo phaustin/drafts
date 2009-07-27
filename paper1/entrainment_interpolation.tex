@@ -1,0 +1,127 @@
+%% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+
+
+
+
+\usepackage{babel}
+
+\begin{document}
+
+\title{Interpolation of LES cloud surfaces for use in direct calculations
+of entrainment and detrainment}
+\maketitle
+\begin{abstract}
+Direct calculations of the entrainment and detrianment of air between
+clouds and their environment require a knowledge of the relative velocity
+difference between the air and the cloud surface. LES model grids
+force the distance moved by the cloud surface over a timestep to be
+either zero or the width of a model grid cell, while in reality the
+cloud surface tends to move at a more constant rate. Here we present
+a method for the subgrid interpolation of a cloud surface given total
+humidity and saturated humidity on a regular LES grid. This method
+is used to calculate entrainment and detrainment rates for an LES
+model, which are compared with rates inferred from bulk conserved
+tracer calculations. 
+\end{abstract}
+
+\section{Introduction}
+
+The largest uncertainties in Global Circulation Model (GCM) simulations
+come from the subgridscale parameterization of clouds. The IPCC 2007
+report found the {*}TK{*} models they examined showed a {*}TK{*} W
+m$^{-2}$ range in the cloud feedback response, relative to a {*}TK{*}
+W m$^{-2}$ total climate sensitivity.  Improvements in the accuracy of 
+these subgridscale cloud parametrizations are neccessary to simulate 
+the rate and spatial pattern of global warming.
+
+Proper simulation of the subgridscale effect of cumulus clouds in
+GCMs requires understanding the rates at which air is entrained into
+and detrained from the clouds. Cloud entrainment and detrainment rates
+exert influences on profiles of cloud properties, the height of the
+cloud tops, the amount of heat and moisture the clouds transport upwards,
+and the heights at which the clouds deposit that heat and moisture.
+They also have effects on the vertical transport of aerosols out of
+the boundary layer and the rate at which chemical reactions can occur
+in those aerosols. Several approaches to the parametrization of entrainment
+and detrainment rates have been proposed, including {*}TK{*}.
+
+Large Eddy Simulation (LES) is an important tool used in the study
+of cloud entrainment and detrainment. LES models achieve grid resolutions
+on the order of 10-100 m, so that the smallest length scales resolved
+by the model touch the small wave number end of the Kolmagorov -5/3
+turbulence spectrum. This allows for a relatively simple turbulence
+model that captures the important statistics of the subgridscale eddy
+fluxes and thus, an accurate representation of the atmospheric physics
+of a domain \textasciitilde{}10 km$^{2}$, which is enough to simulate
+a field of clouds. LES simulations can be ground-truthed against results
+taken from large field surveys, such as the Barbados Oceanographic
+and Meteorological Experiment (BOMEX) or the Atmospheric Radiation
+Measurement (ARM) Program, and such comparisons show good agreement
+between the LES simulations and field data.
+
+Several recent studies have looked at the lifecycle of individual
+clouds taken from LES models, trying to break the cloud field into
+its component parts. Estimates of entrainment and detrainment rates
+for individual clouds would be quite useful in these types of studies,
+but are difficult to achieve. Entrainment and detrainment rates are 
+typically calculated in LES simulations by recording budgets
+of bulk conserved tracer variables, such as the total humidity or
+the liquid water moist static energy, and inferring the amount of
+fluid exchange between cloud and clear air that is needed to explain
+the rate at which that tracer is being vertically advected within
+the cloud field. These budgets typically assume the clouds and the
+cloud environment are horizontally homogenous slabs; this is a much
+less accurate assumption on the level of an individual cloud.
+
+Alternatively, entrianment and detrianment could simply be calculated
+directly from the LES velocity and humidity field, using
+
+\equation{E-D=\oiintop u\cdot\nabla ndA},
+
+where $E$ and $D$ are the entrainment and detrainment rates in kg 
+m$^{-3}$ s$^{-1}$, u is velocity in m s$^{-1}$, *TK*.  However, the
+accuracy of this method suffers from the need to calculate the velocity 
+of the air relative to the cloud surface.  In reality 
+these velocities are very nearly identical, \textasciitilde{} 1 m 
+s$^{-1}$, but the discrete nature of the LES model grid forces the 
+modeled surface velocity to be either 0 m s$^{-1}$ or $\Delta x / \Delta t 
+\approx$ 30 m s$^{-1}$, where $\Delta x$ is the model grid spacing and 
+$\Delta t$ is the model timestep.  The surface of the cloud only moves 
+when a grid cell's humidity reaches saturation, and when it 
+does, an entire grid cell worth of fluid leaves or enters the cloud.  This 
+causes both the entrainment and detrainment to be over-estimated. 
+
+Here we present a method for calculation of the cloud entrainment and 
+detrainment rates that relies on interpolation of the subgrid location 
+of the cloud surface.  In section 2 we describe this method, in section 
+3 we compare this calculation with entrainment and detrainment rates 
+calculated using bulk conserved tracer budgets, and in section 4 we 
+discuss our results.  With this method, we believe accurate estimates 
+of the cloud entrainment and detrainment rates are possible for 
+individual LES clouds.
+
+\section{Method}
+
+
+\section{Comparison with bulk conserved tracer calculations}
+
+
+\section{Discussion}
+
+Acknowledgments
+
+Figures were generated using the matplotlib library in the Python
+programming language.
+
+%\bibliographystyle{natsci}
+
+
+%\bibliography{entrainment_interpolation}{} 
+
+\end{document}
