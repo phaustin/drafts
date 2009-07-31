@@ -116,24 +116,30 @@ individual LES clouds.
 
 \section{Method}
 
-In this section we present a general method for calculation of entrainment and 
-detrainment through a cloud surface in a discrete numerical model.
+\subsection{Flux Calculations}
 
-\cite{Siebesma1998} gives the net Entrainment and Detrainment over the 
-cloud interface to be:
+Consider a discrete 3-d numerical model operating on an Arakawa C-grid
+(Fig \ref{fig:C_grid}) containing a cloud surface $\mathbf{A}$, where
+the vectors representing $\mathbf{A}$ point outward from the cloud.  For 
+the moment we neglect specifying the interpolation scheme that determines 
+this surface.  This surface, combined with the walls of the grid cell, 
+encloses a cloud volume $V$.  
+
+Converted to our notation, \cite{Siebesma1998} gives the net Entrainment 
+and Detrainment over the cloud interface to be:
 
 \begin{equation}
 \label{eq:E_minus_D} 
 E - D = \int_A \rho ( \mathbf{u} -  \mathbf{u_i}) \cdot d\mathbf{A}.
 \end{equation}
 
-Consider a discrete 3-d numerical model operating on an Arakawa C-grid
-(Fig \ref{fig:C_grid}). At any timestep $t = n\Delta t$, the humidity
-of each grid
+where $\rho$ is the air density in kg m$^{-3}$, $\mathbf{u}$ is the velocity
+of the air in m s$^{-1}$ and $\mathbf{u_i}$ is the velocity of the cloud interface. 
+Calculating this integral for a numerical model cloud field would require interpolation
+of the velocity field to the surface of  $\mathbf{A}$ and a record of the time 
+evoluion of $\mathbf{A}$.  Instead, we seek a simplified but equivalent calculation.
 
-
-
-Leibnitz theorem:
+To calculate the velocity of the cloud interface, we make use of the Leibnitz Theorem:
 
 \begin{equation}
 \label{eq:leibnitz} 
@@ -141,20 +147,53 @@ Leibnitz theorem:
                                 + \int_{A(t)} \rho \mathbf{u_i}\cdot d\mathbf{A}
 \end{equation}
 
-Since ${\partial \rho}/{ \partial t} \approx 0$ we can combine equations (\ref{eq:E_minus_D})
+Since the walls of the grid cell do not move, if we assume
+${\partial \rho}/{ \partial t} \approx 0$ we can combine equations (\ref{eq:E_minus_D}) 
 and (\ref{eq:leibnitz}) to give:
 
 \begin{equation}
-E - D = \int_A \rho \mathbf{u} \cdot d\mathbf{A} - \frac{d}{dt}\int_{V(t)} \rho dV.
+E - D = \rho \int_A \mathbf{u} \cdot d\mathbf{A} -  \rho \frac{d}{dt}\int_{V(t)} dV.
 \end{equation}
 
-Divergence theorem:
+Next we apply the divergence theorem to simplify the flux integral through $\mathbf{A}$:
 
 \begin{equation}
 \label{eq:divergence} 
-\int_{V(t)} \nabla \cdot (\rho \mathbf{u}) dV = \int_{A(t)} \rho \mathbf{u}\cdot d\mathbf{A}
+\int_{V} \nabla \cdot (\rho \mathbf{u}) dV = \int_{A} \rho \mathbf{u}\cdot d\mathbf{A}
 \end{equation}
 
+Due to mass conservation, $\nabla \cdot (\rho \mathbf{u}) = 0$, which implies that
+the massflux passing through $\mathbf{A}$ is equal to the massflux entering the volume $V$ 
+through the walls of the model grid cell.  If we take the u and v velocities at the 
+grid cell walls to be constant, we can calculate these fluxes simply by multiplying the 
+velocity by the area of the grid cell wall occupied by cloud.  Thus:
+
+\begin{equation}
+E - D = \rho \int_S \mathbf{u} \cdot d\mathbf{S} -  \rho \frac{dV}{dt}
+\end{equation}.
+
+Thus, to calculate the entrainment and detrainment, we need to calculate the flux through 
+the cloudy portion of the grid cell walls, and the rate of change of the cloud volume 
+inside the grid cell.
+
+\subsection{Cloud Surface Interpolation}
+
+There are a multitude of interpolation schemes that can be used to determine the cloud 
+volume and cell wall area in a numerical model.  The simplest would be to assume 
+that saturated grid cells are completely filled with cloud and unsaturated grid cells 
+have no cloud at all.  We refer to this as the "no inerpolation" case.
+
+At the other end of the range of interpolation schemes, we can use linear (or higher order) 
+interpolation to estimate the surface where the total water equals the saturated humidity 
+and calculate the cloud volume and cell surface areas at each timestep.  Several standard 
+techniques exist for this kind of calculation in the field of computer visualization, such
+as the Marching Squares algorithm *TK*.  These techniques, however, are generally complex and 
+require large amounts of calculation to perform.
+
+Instead of these complex interpolation schemes, we propose a compromise scheme that calculates 
+an approximate area and volume for the cloud surface while requiring much less computation time.
+To do this, we divide each grid cell into six pyramids (Figure \ref{fig:pyramid_scheme}).  Next,
+we assign the center of each grid cell to be cloudy or clear based upon the specific humidity.
 
 
 \section{Comparison with bulk conserved tracer calculations}
@@ -174,6 +213,39 @@ programming language.
 \begin{figure}
 \label{fig:C_grid}
 \caption{Blah blah blah}
+\end{figure}
+
+\begin{figure}
+\label{fig:pyramid_scheme}
+\caption{Schematic representaiton of our pyramid interpolation scheme.}
+\end{figure}
+
+
+\begin{figure}
+\label{fig:effect_of_interpolation}
+\caption{Effect of surface interpolation on calculation of a) entrainment and b) detrainment.}
+\end{figure}
+
+\begin{figure}
+\label{fig:direct_vs_tracer}
+\caption{Comparison of entrainment rates calculated using a) our direct method using pyramid 
+interpolation, b) using the conserved bulk tracer method, and c) the ratio of the two methods.}
+\end{figure}
+
+\begin{figure}
+\label{fig:entrainment_vs_radial_structure}
+\caption{Comparison of a) ratio of direct to tracer entrainment, and b) ratio of mean cloud-environment bulk tracer
+differences to differences at the cloud edge.}
+\end{figure}
+
+\begin{figure}
+\label{fig:correlations}
+\caption{Correlation between bulk tracer entrainment variability and direct entrainment variability.}
+\end{figure}
+
+\begin{figure}
+\label{fig:resolution}
+\caption{Dependance of direct entrainment on model grid resolution.}
 \end{figure}
 
 \end{document}
