@@ -48,7 +48,7 @@
 %%%% optional article formats author might want to use
 
 % To produce a galley version:
-% \documentclass[galley,jgrga]{AGUTeX}
+%\documentclass[galley,jgrga]{AGUTeX}
 
 % To produce a two columned version:
 % \documentclass[jgrga]{AGUTeX}
@@ -72,51 +72,14 @@
 % To activate the commands, uncomment \usepackage{lineno}
 % and \linenumbers*[1]command, below:
 
-% \usepackage{lineno}
-% \linenumbers*[1]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Figures and Tables
-%
-
-% When submitting articles through the GEMS system:
-% COMMENT OUT ANY COMMANDS THAT INCLUDE GRAPHICS.
-% (See FIGURES section near the end of the file)
-
-
-%  Figures and Tables should be placed at the end of the article,
-%  after the references.
-%
-%  Uncomment the following command to include .eps files
-%  (comment out this line for draft format):
-%  \usepackage[dvips]{graphicx}
-%
-%    Uncomment the following command to allow illustrations to print
-%    when using Draft:
-%  \setkeys{Gin}{draft=false}
-%
-% Substitute one of the following for [dvips] above
-% if you are using a different driver program and want to
-% proof your illustrations on your machine:
-%
-% [xdvi], [dvipdf], [dvipsone], [dviwindo], [emtex], [dviwin],
-% [pctexps],  [pctexwin],  [pctexhp],  [pctex32], [truetex], [tcidvi],
-% [oztex], [textures]
-%
-% See how to enter figures and tables at the end of the article, after
-% references.
-%
-%% ------------------------------------------------------------------------ %%
-%
-%  ENTER PREAMBLE
-%
-%% ------------------------------------------------------------------------ %%
+\usepackage{lineno}
+\linenumbers*[1]
 
 % Author names in capital letters:
-\authorrunninghead{BALES ET AL.}
+\authorrunninghead{DAWE ET AL.}
 
 % Shorter version of title entered in capital letters:
-\titlerunninghead{SHORT TITLE}
+\titlerunninghead{Entrainment}
 
 % Author mailing address: please repeat this command for
 % each author and alphabetize authors:
@@ -145,9 +108,9 @@
 %
 %% ------------------------------------------------------------------------ %%
 
+\title{Interpolation of LES cloud surfaces for use in direct calculations
+of entrainment and detrainment}
 
-\title{Title of article}
-%
 % e.g., \title{Terrestrial ring current:
 % Origin, formation, and decay $\alpha\beta\Gamma\Delta$}
 % You may use \\ to break the title over several lines.
@@ -191,7 +154,17 @@
 % >> the body of the abstract.
 
 \begin{abstract}
-(Type abstract here)
+Direct calculations of the entrainment and detrianment of air between
+clouds and their environment require a knowledge of the relative velocity
+difference between the air and the cloud surface. LES model grids
+force the distance moved by the cloud surface over a timestep to be
+either zero or the width of a model grid cell, while in reality the
+cloud surface tends to move at a more constant rate. Here we present
+a method for the subgrid interpolation of a cloud surface given total
+humidity and saturated humidity on a regular LES grid. This method
+is used to calculate entrainment and detrainment rates for an LES
+model, which are compared with rates inferred from bulk conserved
+tracer calculations. 
 \end{abstract}
 
 %% ------------------------------------------------------------------------ %%
@@ -212,66 +185,188 @@
 %  TEXT
 %
 %% ------------------------------------------------------------------------ %%
-
 \section{Introduction}
-(Article text here)
+
+The largest uncertainties in Global Circulation Model (GCM) simulations
+come from the subgridscale parameterization of clouds. The IPCC 2007
+report found the *TK* models they examined showed a *TK* W
+m$^{-2}$ range in the cloud feedback response, relative to a *TK*
+W m$^{-2}$ total climate sensitivity.  Improvements in the accuracy of 
+these subgridscale cloud parametrizations are neccessary to simulate 
+the rate and spatial pattern of global warming.
+
+Proper simulation of the subgridscale effect of cumulus clouds in
+GCMs requires understanding the rates at which air is entrained into
+and detrained from the clouds. Cloud entrainment and detrainment rates
+exert influences on profiles of cloud properties, the height of the
+cloud tops, the amount of heat and moisture the clouds transport upwards,
+and the heights at which the clouds deposit that heat and moisture.
+They also have effects on the vertical transport of aerosols out of
+the boundary layer and the rate at which chemical reactions can occur
+in those aerosols. Several approaches to the parametrization of entrainment
+and detrainment rates have been proposed, including *TK*.
+
+Large Eddy Simulation (LES) is an important tool used in the study
+of cloud entrainment and detrainment. LES models achieve grid resolutions
+on the order of 10-100 m, so that the smallest length scales resolved
+by the model touch the small wave number end of the Kolmagorov -5/3
+turbulence spectrum. This allows for a relatively simple turbulence
+model that captures the important statistics of the subgridscale eddy
+fluxes and thus, an accurate representation of the atmospheric physics
+of a domain \textasciitilde{}10 km$^{2}$, which is enough to simulate
+a field of clouds. LES simulations can be ground-truthed against results
+taken from large field surveys, such as the Barbados Oceanographic
+and Meteorological Experiment (BOMEX) or the Atmospheric Radiation
+Measurement (ARM) Program, and such comparisons show good agreement
+between the LES simulations and field data.
+
+Several recent studies have looked at the lifecycle of individual
+clouds taken from LES models, trying to break the cloud field into
+its component parts. Estimates of entrainment and detrainment rates
+for individual clouds would be quite useful in these types of studies,
+but are difficult to achieve. Entrainment and detrainment rates are 
+typically calculated in LES simulations by recording budgets
+of bulk conserved tracer variables, such as the total humidity or
+the liquid water moist static energy, and inferring the amount of
+fluid exchange between cloud and clear air that is needed to explain
+the rate at which that tracer is being vertically advected within
+the cloud field. These budgets typically assume the clouds and the
+cloud environment are horizontally homogenous slabs; this is a much
+less accurate assumption on the level of an individual cloud.
+
+Alternatively, entrianment and detrianment could simply be calculated
+directly from the LES velocity and humidity field.  \cite{Siebesma1998} 
+defines Entrainment and Detrainment as
+
+\begin{equation}
+E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
+\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\end{equation}
+\begin{equation}
+D = \frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) > 0}
+\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\end{equation}
+
+where $E$ and $D$ are the entrainment and detrainment rates in kg 
+m$^{-3}$ s$^{-1}$, u is velocity in m s$^{-1}$, *TK*.  However, the
+accuracy of this method suffers from the need to calculate the velocity 
+of the air relative to the cloud surface.  In reality 
+these velocities are very nearly identical, \textasciitilde{} 1 m 
+s$^{-1}$, but the discrete nature of the LES model grid forces the 
+modeled surface velocity to be either 0 m s$^{-1}$ or $\Delta x / \Delta t 
+\approx$ 30 m s$^{-1}$, where $\Delta x$ is the model grid spacing and 
+$\Delta t$ is the model timestep.  The surface of the cloud only moves 
+when a grid cell's humidity reaches saturation, and when it 
+does, an entire grid cell worth of fluid leaves or enters the cloud.  This 
+causes both the entrainment and detrainment to be over-estimated.
+
+Here we present a method for calculation of the cloud entrainment and 
+detrainment rates that relies on interpolation of the subgrid location 
+of the cloud surface.  In section 2 we describe this method, in section 
+3 we compare this calculation with entrainment and detrainment rates 
+calculated using bulk conserved tracer budgets, and in section 4 we 
+discuss our results.  With this method, we believe accurate estimates 
+of the cloud entrainment and detrainment rates are possible for 
+individual LES clouds.
+
+\section{Method}
+
+\subsection{Flux Calculations}
+
+Consider a discrete 3-d numerical model operating on an Arakawa C-grid
+(Fig \ref{fig:C_grid}) containing a cloud surface $\mathbf{A}$, where
+the vectors representing $\mathbf{A}$ point outward from the cloud.  For 
+the moment we neglect specifying the interpolation scheme that determines 
+this surface.  This surface, combined with the walls of the grid cell, 
+encloses a cloud volume $V$.  
+
+Converted to our notation, \cite{Siebesma1998} gives the net Entrainment 
+and Detrainment over the cloud interface to be:
+
+\begin{equation}
+\label{eq:E_minus_D} 
+E - D = \int_A \rho ( \mathbf{u} -  \mathbf{u_i}) \cdot d\mathbf{A}.
+\end{equation}
+
+where $\rho$ is the air density in kg m$^{-3}$, $\mathbf{u}$ is the velocity
+of the air in m s$^{-1}$ and $\mathbf{u_i}$ is the velocity of the cloud interface. 
+Calculating this integral for a numerical model cloud field would require interpolation
+of the velocity field to the surface of  $\mathbf{A}$ and a record of the time 
+evoluion of $\mathbf{A}$.  Instead, we seek a simplified but equivalent calculation.
+
+To calculate the velocity of the cloud interface, we make use of the Leibnitz Theorem:
+
+\begin{equation}
+\label{eq:leibnitz} 
+\frac{d}{dt}\int_{V(t)} \rho dV = \int_{V(t)} \frac{\partial \rho}{ \partial t} dV 
+                                + \int_{A(t)} \rho \mathbf{u_i}\cdot d\mathbf{A}
+\end{equation}
+
+Since the walls of the grid cell do not move, if we assume
+${\partial \rho}/{ \partial t} \approx 0$ we can combine equations (\ref{eq:E_minus_D}) 
+and (\ref{eq:leibnitz}) to give:
+
+\begin{equation}
+E - D = \rho \int_A \mathbf{u} \cdot d\mathbf{A} -  \rho \frac{d}{dt}\int_{V(t)} dV.
+\end{equation}
+
+Next we apply the divergence theorem to simplify the flux integral through $\mathbf{A}$:
+
+\begin{equation}
+\label{eq:divergence} 
+\int_{V} \nabla \cdot (\rho \mathbf{u}) dV = \int_{A} \rho \mathbf{u}\cdot d\mathbf{A}
+\end{equation}
+
+Due to mass conservation, $\nabla \cdot (\rho \mathbf{u}) = 0$, which implies that
+the massflux passing through $\mathbf{A}$ is equal to the massflux entering the volume $V$ 
+through the walls of the model grid cell.  If we take the u and v velocities at the 
+grid cell walls to be constant, we can calculate these fluxes simply by multiplying the 
+velocity by the area of the grid cell wall occupied by cloud.  Thus:
+
+\begin{equation}
+E - D = \rho \int_S \mathbf{u} \cdot d\mathbf{S} -  \rho \frac{dV}{dt}
+\end{equation}.
+
+Thus, to calculate the entrainment and detrainment, we need to calculate the flux through 
+the cloudy portion of the grid cell walls, and the rate of change of the cloud volume 
+inside the grid cell.
+
+\subsection{Cloud Surface Interpolation}
+
+There are a multitude of interpolation schemes that can be used to determine the cloud 
+volume and cell wall area in a numerical model.  The simplest would be to assume 
+that saturated grid cells are completely filled with cloud and unsaturated grid cells 
+have no cloud at all.  We refer to this as the "no inerpolation" case.
+
+At the other end of the range of interpolation schemes, we can use linear (or higher order) 
+interpolation to estimate the surface where the total water equals the saturated humidity 
+and calculate the cloud volume and cell surface areas at each timestep.  Several standard 
+techniques exist for this kind of calculation in the field of computer visualization, such
+as the Marching Squares algorithm *TK*.  These techniques, however, are generally complex and 
+require large amounts of calculation to perform.
+
+Instead of these complex interpolation schemes, we propose a compromise scheme that calculates 
+an approximate area and volume for the cloud surface while requiring much less computation time.
+To do this, we divide each grid cell into six pyramids (Figure \ref{fig:pyramid_scheme}).  Next,
+we assign the center of each grid cell to be cloudy or clear based upon the specific humidity.
+
+
+\section{Comparison with bulk conserved tracer calculations}
+
+
+\section{Discussion}
+
 
 %%% End of body of article:
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional Appendix goes here
-%
-%%%%%%%%%%%%%%%%%
-% Geophysical Research Letters only allows an appendix without a letter.
-%% You can get this result with
-%  \section*{Appendix}
-%  or
-%  \section*{Appendix: Title}
-%%%%%%%%%%%%%%%%%
-%
-% \appendix resets counters and redefines section heads
-% but doesn't print anything.
-% After typing  \appendix
-%
-% \section{Here Is Appendix Title}
-% will print
-% Appendix A: Here Is Appendix Title
-%
-% \section*{Appendix}
-% will print
-% Appendix
-%
-% \section*{Appendix: Here Is Appendix Title}
-% will print
-% Appendix: Here Is Appendix Title
-%
-% For only 1 appendix \appendix \section{Appendix} is preferred.
-% which will print
-% Appendix A
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Optional Glossary or Notation section, goes here
-%
-%%%%%%%%%%%%%%
-% Glossary only allowed in Reviews of Geophysics
-% \section*{Glossary}
-% \paragraph{Term}
-% Term Definition here
-%
-%%%%%%%%%%%%%%
-% Notation -- End each entry with a period.
-% \begin{notation}
-% Term & definition.\\
-% Second Term & second definition.
-% \end{notation}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 %  ACKNOWLEDGMENTS
 
 \begin{acknowledgments}
-(Text here)
+Figures were generated using the matplotlib library in the Python
+programming language.
 \end{acknowledgments}
+
+
 
 %% ------------------------------------------------------------------------ %%
 %
@@ -303,7 +398,8 @@
 % AGU does not want a .bib or a .bbl file, but asks that you
 % copy in the contents of your .bbl file here.
 
-\begin{thebibliography}{}
+\bibliographystyle{agu}
+\bibliography{entrainment_interpolation}{} 
 
 %\bibitem[{\textit{Kilby}(2008)}]{jskilby}
 %Kilby, J. S. (2008), Invention of the integrated circuit, {\it IEEE
@@ -313,8 +409,6 @@
 %Kilby, J. S., S. Smith, and R. Jones (2008), Invention of the
 %integrated circuit, {\it IEEE Trans. Electron Devices,} \textit{23},
 %648--650.
-
-\end{thebibliography}
 
 %Reference citation examples:
 
@@ -371,210 +465,3 @@
 \end{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-More Information and Advice:
-
-%  SECTION HEADS
-
- ---------------
- Level 1 head
-
- Use the \section{} command to identify level 1 heads;
- type the appropriate head wording between the curly
- brackets, as shown below.
-
- Capitalize the first letter of each word (expect for
- prepositions, conjunctions, and articles that are
- three or fewer letters).
-
- Do not hyphenate level 1 heads. To break lines,
- type \protect\\ where you want the break to occur.
- AGU prefers the inverted triangle, breaking before
- prepositions, conjunctions, and articles, if possible.
-
-An example:
-\section{Level 1 Head: Introduction}
-
- ---------------
- Level 2 head
-
- Use the \subsection{} command to identify level 2 heads.
-
- Capitalize the first letter of each word (expect for
- prepositions, conjunctions, and articles that are
- three or fewer letters).
-
- Do not hyphenate level 1 heads. To break lines,
- type \protect\\ where you want the break to occur.
- AGU prefers the inverted triangle, breaking before
- prepositions, conjunctions, and articles, if possible.
-
-\subsection{Level 2 Head} An example.
-
- ---------------
- Level 3 head
-
- Use the \subsubsection{} command to identify level 3 heads
-
- Capitalize only the first letter of the first word, acronyms,
- first letter of proper nouns, and first letter of first word
- after a colon.
-
- Hyphenation is permitted in level 3 heads, if needed.
-
-\subsubsection{Level 3 Head} An example.
-
-\subsubsubsection{Level 4 Head} An example.
-
-%% ------------------------------------------------------------------------ %%
-%
-%  IN-TEXT LISTS
-%
-%% ------------------------------------------------------------------------ %%
-
-% Do not use bulleted lists; enumerated lists are okay.
- \begin{enumerate}
- \item
- \item
- \item
- \end{enumerate}
-
-%% ------------------------------------------------------------------------ %%
-%
-%  EQUATIONS
-%
-%% ------------------------------------------------------------------------ %%
-
-% Single-line equations are centered.
-
- Math coded inside display math mode \[ ...\]
- will not be numbered e.g.:
- \[ x^2=y^2 + z^2\]
-
- Math coded inside \begin{equation} and \end{equation} will
- be automatically numbered e.g.:
- \begin{equation}
- x^2=y^2 + z^2
- \end{equation}
-
-% IF YOU HAVE MULTI-LINE EQUATIONS, PLEASE
-% BREAK THE EQUATIONS INTO TWO OR MORE LINES
-% OF SINGLE COLUMN WIDTH (20 pc, 8.3 cm)
-% using double backslashes (\\).
-
-% To create multiline equations, use the
-% \begin{eqnarray} and \end{eqnarray} environment
-% as demonstrated below.
-\begin{eqnarray}
-  x_{1} & = & (x - x_{0}) \cos \Theta \nonumber \\
-        && + (y - y_{0}) \sin \Theta  \nonumber \\
-  y_{1} & = & -(x - x_{0}) \sin \Theta \nonumber \\
-        && + (y - y_{0}) \cos \Theta.
-\end{eqnarray}
-
-If you don't want an equation number, use the star form:
-\begin{eqnarray*}...\end{eqnarray*}
-
-% Break each line at a sign of operation
-% (+, -, etc.) if possible, with the sign of operation
-% on the new line.
-
-% Indent second and subsequent lines to align with
-% the first character following the equal sign on the
-% first line.
-
-% Use an \hspace{} command to insert horizontal space
-% into your equation if necessary. Place an appropriate
-% unit of measure between the curly braces, e.g.
-% \hspace{1in}; you may have to experiment to achieve
-% the correct amount of space.
-
-% There is another multiline equation environment:
-% \begin{aguleftmath}...\end{aguleftmath}
-% The equation is aligned left and the second line indents to
-% the width of a paragraph indent (AGU style)
-
-
-%% ------------------------------------------------------------------------ %%
-%
-%  EQUATION NUMBERING: COUNTER
-%
-%% ------------------------------------------------------------------------ %%
-
-% You may change equation numbering by resetting
-% the equation counter or by explicitly numbering
-% an equation.
-
-% To explicitly number an equation, type \eqnum{}
-% (with the desired number between the brackets)
-% after the \begin{equation} or \begin{eqnarray}
-% command.  The \eqnum{} command will affect only
-% the equation it appears with; LaTeX will number
-% any equations appearing later in the manuscript
-% according to the equation counter.
-%
-% To reset the equation counter, place the setcounter{equation}
-% command in front of your equation(s).
-%\setcounter{equation}{0}
-
-% Set the equation counter to 0 if the next
-% number needed is 1 or set it to 7 if the
-% next number needed is 8, etc.
-%
-% The \setcounter{equation} command does affect
-% equations appearing later in the manuscript.
-
-% If you have a multiline equation that needs only
-% one equation number, use a \nonumber command in
-% front of the double backslashes (\\) as shown in
-% the multiline equation above.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Landscape figure and table examples
-%
-% ---------------
-% Landscape (broadside) figure/table
-% (These objects will not display properly in draft mode, use galley.)
-%
-% ONE-COLUMN landscape figure and table
-%
-% \begin{landscapefigure}
-% \includegraphics[height=.75\mycolumnwidth,width=42pc]{samplefigure.eps}
-% \caption{Caption text here}
-% \end{landscapefigure}
-%
-% \begin{landscapetable}
-% \caption{Caption text here}
-% \begin{tabular*}{\hsize}{@{\extracolsep{\fill}}lcccc}
-% \tableline
-% ....
-% \tableline\\
-% \multicolumn5l{(a) Algorithms from Numerical Recipes}\\
-% \end{tabular*}
-% \tablenotetext{}{}
-% \tablecomments{}
-% \end{landscapetable}
-%
-% FULL-PAGE landscape figures and tables
-%
-% \begin{figure*}[p]
-% \begin{landscapefigure*}
-% illustration here
-% \caption{caption here}
-% \end{landscapefigure*}
-% \end{figure*}
-%
-% \begin{table}[p]
-% \begin{landscapetable*}
-% \caption{}
-% \begin{tabular*}{\textheight}{@{\extracolsep{\fill}}lccrrrcrrr}
-% ....
-% \end{tabular*}
-% \begin{tablenotes}
-% ...
-% \end{tablenotes}
-% \end{landscapetable*}
-% \end{table}
-%
