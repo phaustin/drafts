@@ -3,6 +3,7 @@
 \documentclass[english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
+\usepackage{amsmath}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 
@@ -15,9 +16,11 @@
 
 \title{Interpolation of LES cloud surfaces for use in direct calculations
 of entrainment and detrainment}
+
 \maketitle
+
 \begin{abstract}
-Direct calculations of the entrainment and detrianment of air between
+Direct calculations of the entrainment and detrainment of air between
 clouds and their environment require a knowledge of the relative velocity
 difference between the air and the cloud surface. LES model grids
 force the distance moved by the cloud surface over a timestep to be
@@ -29,6 +32,8 @@ is used to calculate entrainment and detrainment rates for an LES
 model, which are compared with rates inferred from bulk conserved
 tracer calculations. 
 \end{abstract}
+
+\newpage
 
 \section{Introduction}
 
@@ -193,15 +198,79 @@ require large amounts of calculation to perform.
 Instead of these complex interpolation schemes, we propose a compromise scheme that calculates 
 an approximate area and volume for the cloud surface while requiring much less computation time.
 To do this, we divide each grid cell into six pyramids (Figure \ref{fig:pyramid_scheme}).  Next,
-we assign the center of each grid cell to be cloudy or clear based upon the specific humidity.
+we compute the value of $q_{diff} = q_t - q_{sat}(T, p)$, which is positive for cloudy points and negative for 
+clear points.  Then we compare the value of $q_{diff}$ with the nearest neighbour cells in all
+six directions around the grid cell.  If both are clear, the pyramid contains no cloud and the 
+area of cloud at the cell wall is zero.  If both are cloudy, the pyramid is filled with cloud 
+and the cell wall is completely cloudy.  Otherwise, the fractional distances between the grid
+cell centers at which $q_{diff} = 0$ is calculated via linear interpolation:
 
+\begin{equation}
+x = \frac{q_{diff}(1)}{q_{diff}(2) - q_{diff}(1)}
+\end{equation}
 
-\section{Comparison with bulk conserved tracer calculations}
+This is taken to be the location of the cloud surface, and we assume the surface cuts the 
+pyramid parallel to the grid cell wall.  Thus, if the cloud surface is outside the grid cell, 
+the entire pyramid is set to be cloudy (or clear) and the grid cell wall area is set to be 
+cloudy (or clear).  If the cloud surface is inside the grid cell, however, the volume of the 
+cut pyramid is calculated as:
 
+\begin{equation}
+V = \frac{4}{3}x^3
+\end{equation}
+
+and the cell wall is set to clear (or cloudy, depending on the value of $q_{diff}$).
+
+Finally, to calculate the flux through the cloud walls, we simply calculate the mass flux
+through any cloudy grid cell wall using the model's continuity equation solver, and sum the 
+flux for any cloudy grid cell wall.
+
+We have implimented both the "no interpolation" and the "pyramid" schemes in the System 
+for Atmospheric Modeling (SAM, \cite{Khairoutdinov2003}).  Running both schemes to calculate
+entrainment and detrainment in a standard GCSSARM run (\cite{Brown2002}) shows that the 
+"no interpolation" scheme estimates entrainment and detrainment rates to be double those 
+estimated using the "pyramid" scheme (Figure \ref{fig:effect_of_interpolation}).
+
+\section{Comparison with conserved bulk tracer calculations}
+
+\cite{Siebesma1995} derive the following equations for entrainment and detrainment from a
+simple entraining plume based on conserved bulk tracer properties:
+
+\begin{equation}
+  \begin{split}
+    E (\chi_e - \chi_c) 
+    = M_c \frac{\partial \chi_c}{\partial z}
+    + \frac{\partial \rho a \overline{w' \chi'}^c}{\partial z} \\
+    + \rho a \frac{\partial \chi_c}{\partial t}
+    - a \rho \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
+  \end{split}
+\end{equation}
+
+\begin{equation}
+  \begin{split}
+    D (\chi_e - \chi_c)
+    = M_c \frac{\partial \chi_e}{\partial z}
+    - \frac{\partial \rho (1 - a) \overline{w' \chi'}^e}{\partial z} \\
+    - \rho (1 - a) \frac{\partial \chi_e}{\partial t}
+    + \rho (1 - a) \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
+  \end{split}
+\end{equation}
+
+Here $\chi$ represents any conserved bulk tracer, such as total water ($q_t$, kg kg$^{-1}$) or 
+liquid water moist static energy ($h$, J kg$^{-1}$), $a$ is the fractional cloud area, $M_c$
+is vertical mass flux, $w$ is vertical velocity in m s$^{-1}$.  $e$ and $c$ sub- and 
+super-scripts denote values conditially sampled in the environemnt and cloud, primed values 
+represent anomalies relative to the horizontal mean, and over lines represent horizontal 
+averaging.
 
 \section{Discussion}
 
-Acknowledgments
+We have shows that using a simple interpolation scheme we have been able to calculate 
+direct entrainment and detrainment rates that are more accurate than a scheme without 
+interpolation and which are statistically consistent with entrainment and detrainment 
+calculated using conserved bulk tracers.
+
+\section*{Acknowledgments}
 
 Figures were generated using the matplotlib library in the Python
 programming language.
@@ -209,6 +278,8 @@ programming language.
 \bibliographystyle{agu}
 
 \bibliography{entrainment_interpolation}{} 
+
+\newpage
 
 \begin{figure}
 \label{fig:C_grid}
@@ -219,7 +290,6 @@ programming language.
 \label{fig:pyramid_scheme}
 \caption{Schematic representaiton of our pyramid interpolation scheme.}
 \end{figure}
-
 
 \begin{figure}
 \label{fig:effect_of_interpolation}
