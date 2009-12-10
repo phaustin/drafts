@@ -264,7 +264,7 @@ be to assume that saturated grid cells are completely filled with cloud and
 unsaturated grid cells have no cloud at all.  We refer to this as the "no 
 interpolation" case.  Since the cloud surface only moves when a whole grid cell 
 undergoes condensation or evaporation, this will result in poor estimates of 
-$dV/dt$ and $\mathbf{S}$, resulting in overestimates of the entrainment and 
+$dV/dt$ and $\mathbf{S}$, which will then overestimate the entrainment and 
 detrainment.
 
 At the other end of the range of interpolation schemes, we can use linear (or 
@@ -643,15 +643,21 @@ the fluid detraining from the cloud is likely invalid.
 While we may have shown the magnitudes of the $E$ and $D$ calculated using our
 direct flux method agrees with the bulk tracer method in the mean, we still 
 have not shown that the variability of the two fields is correlated.  To do
-this, we take the correlation over the whole model run of the fifteen-minute
-averaged $E$ and $D$ values calculated via the two methods over the three hour
-model run at each height to generate correlation profiles.  Heights at which 
-the model does not have clouds for the entire three hour period are excluded 
-from the calculation.  The result of this shows significant correlations 
-between the methods for both $E$ and $D$ at all heights except directly above 
-cloudbase (Figure \ref{fig:correlations}).
+this, we take the correlation of the fifteen-minute averaged $E$ and $D$ values 
+calculated via the two methods over the three hour model run at each height to 
+generate correlation profiles.  Heights at which the model does not have clouds 
+for the entire three hour period are excluded from the calculation.  The result 
+of this shows significant correlations between the methods for both $E$ and $D$ 
+at all heights except directly above cloudbase, where the tracer method 
+generates negative detrainment values and thus is invalid 
+(Figure \ref{fig:correlations}).
 
-*TK* pyramid-direct entrainment correlations
+Finally, entrainment and detrainment values calculated via the tetrahedral and 
+pyramid entrainment schemes show nearly perfect levels of correlation, 
+indicating that the pyramid interpolation scheme, modified by an appropriate 
+scaling factor, can likely be used in place of the tetrahedral interpolation 
+scheme in simulations with limited compuational resources.
+
 *TK* area-corrected correlations
 
 %==============================================================================
@@ -775,7 +781,7 @@ tetrahedral interpolation.}\label{fig:correlations}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/resolution_dependence_core.eps}\\
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/resolution_dependence_core.eps}\\
   \caption{Dependance of direct and corrected tracer entrainment on model 
 grid resolution.}\label{fig:resolution_dependence}
 \end{figure}
