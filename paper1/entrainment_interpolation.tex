@@ -376,6 +376,8 @@ timestep.  The model was run for 6 hours, the first three hours of simulation
 were discarded as the model was still adjusting into steady-state.  15 minute 
 averages were output for the terms of each of our calculations.
 
+*TK* agreement with Siebesma
+
 \subsection{Interpolation Comparison}
 
 Running the tetrahedral scheme resulted in a *TK*\% performance hit; the 
@@ -489,20 +491,11 @@ small differences between the $E-D$ calculated with tetrahedral surface
 interpolation vs $E-D$ calculated without any surface interpolation at all.  On
 the other hand, the bulk tracer calculations result in $E-D$ values that
 significantly differ from the continuity equation values, although they 
-preserve the overall shape of the vertical profile.
-
-Since the continuity equation is such a simple calculation, and our direct flux 
-calculations of $E-D$ agree with continuity so well, we interpret the problems 
-in the bulk tracer calculation of $E-D$ to represent a general bias in this
-calculation.  Comparison of the direct flux calculation of $E$ and $D$ with the
-bulk tracer calculations (figure \ref{fig:corrected_entrainment}) suggests that
-the bulk tracer calculation is underestimating the magnitude of fluid detrained
-from the cloud.  We suspect this underestimate arises from variations in the 
-properties of the fluid being entrained and detrained that are not represented 
-in simple area averages; since detrainment from the cloud is essentially caused 
-by evaporation, only the dryest fluid will be detraining from the cloud, and 
-the assumption that the mean cloud properties are representitive of the fluid
-detraining from the cloud is likely invalid.
+preserve the overall shape of the vertical profile.  Since the continuity 
+equation is such a simple calculation, and our direct flux calculations of 
+$E-D$ agree with continuity so well, we interpret the problems in the bulk 
+tracer calculation of $E-D$ to represent a general bias in the bulk tracer 
+calculation.
 
 %-----------------------------------------------------------------------------
 
@@ -672,37 +665,54 @@ limited compuational resources.
 
 \section{Dependance on model resolution}
 
-Since our direct flux entrainment and detrainment calculations depend on the 
-subgrid interpolation of cloud properties, model resolution is likely to have 
-strong impacts upon the calculation of entrainment and detrainment.  For 
-example, consider a cloud that occupies a single grid cell.  Assume that over 
-the course of a model timestep, the liquid water content of the cloudy grid 
-cell decreases.  The bulk tracer calculation will interpret this change as 
-being the result of entrainment of environmental air drying the fluid in the 
-grid cell.  Our surface interpolation, however, will come to the opposite 
-conclusion; the reduction of liquid water content will move the interpolated 
-cloud surface closer to the grid cell center, reducing the volume of the cloud 
-and thus detraining cloud fluid.  The coarser the grid resolution of the model, 
-the more disagreement will occur between the two methods.
+\cite{Brown1999} found entrainment and detrainment depended on LES model 
+resolution surprisingly little.  Our entrainment and detrainment calculations 
+using the bulk tracer method without correcting for the cloud shell show a
+similar lack of resolution dependence (Figure \ref{fig:resolution_dependence}).
+However, both the direct flux calculation and the bulk tracer calculation 
+corrected for the influence of the cloud shell show strong resolution
+dependence, with entrainment and detrainment values steadily decreasing as 
+grid spacing increases.  Overall, the direct flux entrainment and detrainment 
+agree fairly well with the corrected bulk tracer values.  These results hold 
+for fractional entrainment $\epsilon$ and fraction detrainment $\delta$ values
+as well (not shown).
 
-Comparing entrainment and detrainment calculated via direct fluxes and bulk 
-tracer budgets corrected for the influence of the moist cloud shell at 25 m, 
-50 m and 100 m grid resolution shows entrainment and detrainment values
-steadily decrease as resolution decreases (Figure 
-\ref{fig:resolution_dependence}).  However, the direct flux entrainment and
-detrainment values appear to decrease more rapidly than the bulk tracer values.
+It appears that the constant values for $\epsilon$ and $\delta$ reported by 
+\cite{Brown1999} are in some sense the result of compensating changes in the 
+properties of the cloud shell.
+
+
+Since our direct flux entrainment and detrainment calculations depend on the 
+subgrid interpolation of cloud properties, it is not surprising that model 
+resolution has strong impacts upon the calculation of entrainment and 
+detrainment.  For example, consider a cloud that occupies a single grid cell.  
+Assume that over the course of a model timestep, the liquid water content of 
+the cloudy grid cell decreases.  The bulk tracer calculation will interpret 
+this change as being the result of entrainment of environmental air drying the 
+fluid in the grid cell.  Our surface interpolation, however, will come to the 
+opposite conclusion; the reduction of liquid water content will move the 
+interpolated cloud surface closer to the grid cell center, reducing the volume 
+of the cloud and thus detraining cloud fluid.  The coarser the grid resolution 
+of the model, the more disagreement will occur between the two methods.
+
 
 
 %==============================================================================
 
 \section{Discussion}
 
-We have shown that by interpolating the location of cloud surfaces in an LES
-model we have been able to calculate entrainment and detrainment rates directly 
-from model mass fluxes which are statistically consistent with entrainment and
-detrainment calculated using conserved bulk tracers.
-
-*TK* Discuss better interpolation schemes
+Several possible improvements to the surface interpolation schemes we have 
+discussed here are possible.  First, the amount of computation required by our 
+tetrahedral scheme is high than is strictly neccessary.  Proper implementation
+of a marching cubes algorithm could significantly improve the numerical 
+performance of our scheme, at the cost of greater programming complexity.
+Second, higher-order interpolation schemes could be used to improve the
+calculated location of the cloud surface.  Finally, interpolation of the model 
+velocity over the cloud surface could improve the estimate of flux through the 
+interpolated cloud surface.  The good agreement between the tetrahedral scheme
+and the rates calcualted from bulk tracer budgets does not appear to need 
+significant improvement.  However, such techniques might be profitably applied
+to the pyramidal scheme.
 
 *TK* Probably still want to transform direct entrainment values into bulk 
 entrainment values for use in cloud parameterizaitons.
@@ -716,6 +726,41 @@ preferentially evaporating the dryest cloud parcels.
 *TK* Suitable for use in calculating entrainment and detrainment rates for 
 individual clouds.
 
+*TK* May be important for correcting entrainment/detrainment rates for any 
+tracer that does not have similar distributions as the humidity, such as 
+vertical momentum, or for tracers whose properties are altered by the presence 
+of liquid water, such as aerosols.
+
+
+%==============================================================================
+
+\section{Conclusions}
+
+We have shown that by interpolating the location of cloud surfaces in an LES
+model we have been able to calculate entrainment and detrainment rates directly 
+from model mass fluxes which are statistically consistent with rates calculated
+using conserved bulk tracers.  For proper agreement between these methods, the
+bulk tracer calculations must be corrected for the effect of the moist shell of
+evaporated air around the cloud.  This correction to the bulk tracer calculation
+increases entrainment and detrainment rates by a factor of 2-3.
+
+The corrections that must be applied to the bulk tracer scheme to make it agree
+with the direct flux scheme suggest that the presence of the moist cloud shell 
+has a significant role in mediating fluxes between the clouds and the
+environemnt.  This suggests that the assumption made in most bulk
+parameterization that reynolds flux correlations in the cloud environment are
+much smaller than mean fluxes may have to be reconsidered.
+
+We evaluated two cloud surface interpolation methods for use in direct flux 
+calculations.  The tetrahedral interpolation scheme resulted in better
+agreement with the bulk tracer calculation values than the pyramidal
+interpolation scheme, which resulted in values that were too high by a factor
+ of 2.  Both schemes, however, showed nearly perfect correlations in their
+variation over time, suggesting the pyramid scheme would still be usable with a
+suitable correction factor.  We therefore conclude that both schemes are
+suitable for use in calculating entrainment and detrainment rates for
+individual clouds in an LES model.
+
 %==============================================================================
 
 
@@ -725,24 +770,24 @@ programming language.
 \end{acknowledgment}
 
 % Use appendix}[A], {appendix}[B], etc. etc. in place of appendix if you have multiple appendixes.
-\ifthenelse{\boolean{dc}}
-{}
-{\clearpage}
-\begin{appendix}
-\section*{\begin{center}Appendix Title Is Entered Here (Primary heading)\end{center}}
-\subsection{First appendix secondary heading}
+%\ifthenelse{\boolean{dc}}
+%{}
+%{\clearpage}
+%\begin{appendix}
+%\section*{\begin{center}Appendix Title Is Entered Here (Primary heading)\end{center}}
+%\subsection{First appendix secondary heading}
 
-\subsection{Second appendix secondary heading}
+%\subsection{Second appendix secondary heading}
 
-\subsubsection{First appendix tertiary heading}
+%\subsubsection{First appendix tertiary heading}
 
-\subsubsection{Second appendix tertiary heading}
+%\subsubsection{Second appendix tertiary heading}
 
-\paragraph{First appendix quaternary heading}
+%\paragraph{First appendix quaternary heading}
 
-\paragraph{Second appendix quaternary heading}
+%\paragraph{Second appendix quaternary heading}
 
-\end{appendix}
+%\end{appendix}
 
 % Create a bibliography directory and place your .bib file there.
 \ifthenelse{\boolean{dc}}
@@ -786,6 +831,11 @@ c) the ratio of the two methods.}\label{fig:direct_vs_tracer}
 \end{figure}
 
 \begin{figure}[t]
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core.eps}\\
+  \caption{Entrainment minus Detrainment calculated for...}\label{fig:E_minus_D}
+\end{figure}
+
+\begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/shell_edge_profiles_core.eps}\\
   \caption{Height profiles of $q_t$ in the cloud core, core edge, core shell, 
 and environment.}\label{fig:shell_edge_profiles}
@@ -798,10 +848,6 @@ of mean cloud-environment bulk tracer differences to differences at the cloud
 edge.}\label{fig:corrected_entrainment}
 \end{figure}
 
-\begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core.eps}\\
-  \caption{Entrainment minus Detrainment calculated for...}\label{fig:E_minus_D}
-\end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/correlations_core.eps}\\
@@ -821,23 +867,23 @@ grid resolution.}\label{fig:resolution_dependence}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[t]
-\caption{This is a sample table caption and table layout.  Enter as many tables as
-  necessary at the end of your manuscript. Table from Lorenz (1963).}\label{t1}
-\begin{center}
-\begin{tabular}{ccccrrcrc}
-\hline\hline
-$N$ & $X$ & $Y$ & $Z$\\
-\hline
- 0000 & 0000 & 0010 & 0000 \\
- 0005 & 0004 & 0012 & 0000 \\
- 0010 & 0009 & 0020 & 0000 \\
- 0015 & 0016 & 0036 & 0002 \\
- 0020 & 0030 & 0066 & 0007 \\
- 0025 & 0054 & 0115 & 0024 \\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
+%\begin{table}[t]
+%\caption{This is a sample table caption and table layout.  Enter as many tables as
+%  necessary at the end of your manuscript. Table from Lorenz (1963).}\label{t1}
+%\begin{center}
+%\begin{tabular}{ccccrrcrc}
+%\hline\hline
+%$N$ & $X$ & $Y$ & $Z$\\
+%\hline
+% 0000 & 0000 & 0010 & 0000 \\
+% 0005 & 0004 & 0012 & 0000 \\
+% 0010 & 0009 & 0020 & 0000 \\
+% 0015 & 0016 & 0036 & 0002 \\
+% 0020 & 0030 & 0066 & 0007 \\
+% 0025 & 0054 & 0115 & 0024 \\
+%\hline
+%\end{tabular}
+%\end{center}
+%\end{table}
 %
 \end{document}
