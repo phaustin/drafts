@@ -1,0 +1,19 @@
+2007/12/21
+==========
+
+Tools we have
+-------------
+
+  * Cloud Tracker
+  * Direct E/D calculator
+
+Transition from shallow to deep convection
+------------------------------------------
+
+  * CIN/CAPE in setting cloud base mass flux
+  * Influence of the environment
+  * Behavior of chi and detrainment
+  * Cloud pulsation
+
+
+

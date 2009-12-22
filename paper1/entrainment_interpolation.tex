@@ -242,7 +242,7 @@ the velocity by the area of the grid cell wall occupied by cloud.  This is
 trivial for a model using an Arakawa C-grid, while interpolation can give 
 velocities at the grid cells for other grid configurations.  This results in
 
-\begin{equation}
+\begin{equation}gay bar lyrics
 \label{eq:entrainment_detrainment} 
 E - D = \rho \int_S \mathbf{u} \cdot d\mathbf{S} - \rho \frac{dV}{dt}
 \end{equation}.
@@ -376,6 +376,8 @@ timestep.  The model was run for 6 hours, the first three hours of simulation
 were discarded as the model was still adjusting into steady-state.  15 minute 
 averages were output for the terms of each of our calculations.
 
+*TK* agreement with Siebesma
+
 \subsection{Interpolation Comparison}
 
 Running the tetrahedral scheme resulted in a *TK*\% performance hit; the 
@@ -447,21 +449,21 @@ and treating the model values of $q_t$, $T$ and $p$ as point values, instead of
 as grid cell averages.  On the other hand, errors in the bulk tracer
 calculations mainly involve the assumption that all fluid entrained or
 detrained from the cloud has the mean properties of the environment or cloud, 
-respectively.  Furthermore, the two calculations are not neccessarily entirely 
+respectively.  Furthermore, the two calculations are not neccessarily 
 equivalent, as we are effectively redefining the cloud volume with our
 interpolation.
 
-The effect of errors in the bulk tracer calculation can be immediately seen in
-the large negative detrainment values near cloudbase (Figure 
+The effect of these biases on the bulk tracer calculation can be immediately 
+seen in the large negative detrainment values near cloudbase (Figure 
 \ref{fig:direct_vs_tracer}).  These negative values result from the fact that
-entrainment at cloudbase results from thermodynamic changes instead of from
-mechanical mixing.  Only the moistest environmental parcels condense at
-cloudbase to form clouds, and this means that fluid entrained at cloudbase is
-much moister than the mean environment.  As this moist fluid essentially has 
-the same properties as cloudbase air it does not drive changes in the mean
-cloud properties, and thus does not appear as entrainment in equation 
-(\ref{eq:entrainment}).  However, the removal of the moistest fluid from the
-environment results in drying of the environmental mean, and this drying is
+entrainment at cloudbase is due to thermodynamic changes instead of mechanical 
+mixing.  Only the moistest environmental parcels condense at cloudbase to form 
+clouds, and this means that fluid entrained at cloudbase is much moister than 
+the mean environment would suggest.  As this moist fluid essentially has the 
+same properties as cloudbase air it does not drive changes in the mean cloud 
+properties, and thus does not appear as entrainment in equation 
+(\ref{eq:entrainment}).  However, the removal of the moistest fluid from the 
+environment does result in drying of the environmental mean, and this drying is 
 interpreted as negative detrainment by equation (\ref{eq:detrainment}).
 
 %-----------------------------------------------------------------------------
@@ -481,28 +483,18 @@ calculations.
 Comparison of the values of $E-D$ we have calculated with the value demanded by 
 the continuity equation shows our direct flux calculations preserve fluid 
 continuity fairly well (Figure \ref{fig:E_minus_D}).  Our direct flux 
-calculated using the thetrahedral interpolation schele diverges slightly from
-the continuity equation values between cloudbase and 1 km height, but this is
-unsurprising, since our interpolation scheme effectively redefines the area
-over which the vertical mass flux is averaged.  This effect can be seen in the 
-small differences between the $E-D$ calculated with tetrahedral surface
-interpolation vs $E-D$ calculated without any surface interpolation at all.  On
-the other hand, the bulk tracer calculations result in $E-D$ values that
-significantly differ from the continuity equation values, although they 
-preserve the overall shape of the vertical profile.
-
-Since the continuity equation is such a simple calculation, and our direct flux 
-calculations of $E-D$ agree with continuity so well, we interpret the problems 
-in the bulk tracer calculation of $E-D$ to represent a general bias in this
-calculation.  Comparison of the direct flux calculation of $E$ and $D$ with the
-bulk tracer calculations (figure \ref{fig:corrected_entrainment}) suggests that
-the bulk tracer calculation is underestimating the magnitude of fluid detrained
-from the cloud.  We suspect this underestimate arises from variations in the 
-properties of the fluid being entrained and detrained that are not represented 
-in simple area averages; since detrainment from the cloud is essentially caused 
-by evaporation, only the dryest fluid will be detraining from the cloud, and 
-the assumption that the mean cloud properties are representitive of the fluid
-detraining from the cloud is likely invalid.
+calculated using the thetrahedral interpolation scheme diverges slightly from
+the continuity equation values between cloudbase and 1 km height, since our 
+interpolation scheme redefines the area over which the vertical mass flux is 
+averaged.  This effect can be seen in the small differences between the $E-D$ 
+calculated with tetrahedral surface interpolation vs $E-D$ calculated without 
+any surface interpolation at all.  On the other hand, the bulk tracer 
+calculations result in $E-D$ values that are slightly =smaller than the 
+continuity equation values, although they preserve the overall shape of the 
+vertical profile.  Since the continuity equation is such a simple calculation, 
+and our direct flux calculations of $E-D$ agree with continuity so well, we 
+interpret the problems in the bulk tracer calculation of $E-D$ to represent a 
+general bias in the bulk tracer calculation.
 
 %-----------------------------------------------------------------------------
 
@@ -517,12 +509,26 @@ properties of the core mean.  Examination of the properties of cloud core edge
 and cloud core shell (non-core cells that are horizontally adjacent to core
 cells) compared with mean cloud core and environment shows cloud shell
 properties are signficantly different than environment properties (Figure 
-\ref{fig:shell_edge_profiles}.  This will tend to result in equations 
-(\ref{eq:entrainment}) and (\ref{eq:detrainment}) being biased low.  
+\ref{fig:shell_edge_profiles}.
 
-Here we derive a correction to equations (\ref{eq:entrainment}) and 
-(\ref{eq:detrainment}) to account for the radial variation in cloud properties.
-We start our derivation by modifying equation (5.1) from \cite{Siebesma1995}
+Furthermore, detrainment is a thermodynamic process: fluid detrains when it 
+evaporates (for clouds) or becomes negatively buoyant (for cloud core).  This 
+implies that the fluid detraining from the cloud is systematically closer to 
+the properties of the environment than suggested by the mean properties.  To 
+account for this bias, we calculate at each height the fraction of 
+environmental air needed to mix with the core air in order to make the air 
+leave the core (see \cite{Rooy2008} for details of this calculation).  Then we 
+use this mixing fraction to calculate $q_t$ values for diluted core parcels 
+that are on the verge of detraining from the core ("diluted shell" in Figure
+\ref{fig:shell_edge_profiles}).
+
+Thus, the assumption that fluid entraining and detraining from the cloud has 
+the mean properties of the cloud core and environment is incorrect.  This will 
+tend to result in equations (\ref{eq:entrainment}) and (\ref{eq:detrainment}) 
+being biased low.  Here we derive a correction to equations 
+(\ref{eq:entrainment}) and (\ref{eq:detrainment}) to account for the radial 
+variation in cloud properties.  We start our derivation by modifying equation 
+(5.1) from \cite{Siebesma1995}
 
 \begin{equation}
   \label{eq:derivation_entrainment}
@@ -589,63 +595,68 @@ becomes:
 
 \begin{equation}
   \label{eq:final_entrainment}
-    E = \frac{(\chi_{sc} - \chi_e)A + (\chi_c - \chi_{sc})B}
-             {(\chi_c - \chi_{se})(\chi_{sc} - \chi_e) 
-            - (\chi_c - \chi_{sc})(\chi_{se} - \chi_e)}
+    E = \frac{(\chi_{sc} - \chi_e)E_0 + (\chi_c - \chi_{sc})D_0}
+             {(\chi_{sc} - \chi_{se})}
 \end{equation}
 
 \begin{equation}
   \label{eq:final_detrainment}
-    D = \frac{(\chi_{se} - \chi_e)A + (\chi_c - \chi_{se})B}
-             {(\chi_c - \chi_{se})(\chi_{sc} - \chi_e) 
-            - (\chi_c - \chi_{sc})(\chi_{se} - \chi_e)}
+    D = \frac{(\chi_{se} - \chi_e)E_0 + (\chi_c - \chi_{se})D_0}
+             {(\chi_{sc} - \chi_{se})}
 \end{equation}
 
-where
+where $E_0$ and $D_0$ represent the entrainment and detrainment values
+calculated in \cite{Siebesma1995}:
 
 \begin{equation}
-  \label{eq:A_equation}
-    A = - M_c \frac{\partial \chi_c}{\partial z}
+  \label{eq:E_0_equation}
+    E_0 = \frac{- M_c \frac{\partial \chi_c}{\partial z}
         - \frac{\partial \rho a \overline{w' \chi'}^c}{\partial z}
         - \rho a \frac{\partial \chi_c}{\partial t}
-        + a \rho \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
+        + a \rho \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}}
+        {\chi_c - \chi_e}
 \end{equation}
 
 and
 
 \begin{equation}
-  \label{eq:B_equation}
-    B = - M_c \frac{\partial \chi_e}{\partial z}
+  \label{eq:D_0_equation}
+    D_0 = \frac{- M_c \frac{\partial \chi_e}{\partial z}
         + \frac{\partial \rho (1 - a) \overline{w' \chi'}^e}{\partial z}
         + \rho (1 - a) \frac{\partial \chi_e}{\partial t}
-        - \rho (1 - a) \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
+        - \rho (1 - a) \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}}
+        {\chi_c - \chi_e}
 \end{equation}.
 
-Equations (\ref{eq:entrainment}) and (\ref{eq:detrainment}) essentially 
-represent the processes of cloud parcels moistening the environment and 
-environmental parcels drying the cloud; the new $D (\chi_c - \chi_{sc})$ term
-in equation (\ref{eq:entrainment_2}) and the $E (\chi_{se} - \chi_e)$ term in
-equation (\ref{eq:detrainment_2}) instead represent drying the environment
-by entraining anomalously moist environmental parcels, and moistening the
-average cloud properties by detraining anomalously dry cloud parcels.
+We can immediately see this correction increases the value of the entrainment 
+by a factor $(\chi_{sc} - \chi_e)/(\chi_{sc} - \chi_{se})$ and the detrainment 
+by a factor of $(\chi_c - \chi_{se})/(\chi_{sc} - \chi_{se})$, to account for 
+the greater quantity of edge and shell air needed to balance the bulk tracer 
+tendency terms.  The correction also adds a term to represent the changes in 
+the mean core and environment properties due to entraining parcels moister than 
+the environmental mean and detraining parcels dryer than the cloud mean.  Note 
+that this correction does not alter the value of $E-D$ calculated for the bulk 
+tracers, as can be easily confirmed by subtracting equation 
+(\ref{final_detrainment}) from equation (\ref{final_entrainment}).
 
 Applying these corrections to the tracer calculations of entrainment and 
-detrainment results in quite good agreement with our direct flux calculations 
-(Figure \ref{fig:corrected_entrainment}).  Furthermore, the shape of the 
-correction (Figure \ref{fig:corrected_entrainment}c) agrees with the shape of 
-the original difference between the tracer method and our direct method 
-(Figure \ref{fig:direct_vs_tracer}c). This lends support to the idea that 
-the cloud shell properties should modify the entrainment and detrainment
-values, and that our direct flux method is calculating correct values.
+detrainment, using the environmental shell profile for $\chi_{se}$ and the 
+diluted edge profile for $\chi_{sc}$ results in better agreement with our 
+direct flux calculations (Figure \ref{fig:corrected_entrainment}); In fact, the 
+corrected bulk tracer calculation now shows values larger than the direct flux
+calculation.  However, this correction is obviously not exact--the true fluxes
+will not occur between grid cells with exactly the mean properties of the cloud
+surface.  Instead we take this as an order of magnitude estimate of the possible
+bias in the entrainment and detrainment fluxes calculated by 
+\cite{siebesma1995}, which shows the size of our directly calculated fluxes is 
+plausable.
 
-Interestingly, this correction does not alter the value of $E-D$ calculated
-for the bulk tracers.  Instead, $E$ and $D$ appear to compensate each other,
-increasing by exactly the same amount.  This suggests the corrected bulk 
-tracer calculation still contains a bias.  Since the corrected bulk tracer 
-detrainment is smaller than the direct flux detrainment by the same amount 
-needed to make $E-D$ agree with the continuity equation (Figure 
-\ref{fig:corrected_entrainment}b), we conclude the corrected bulk tracer
-detrainment is biased low.
+Finally, we note this correction has little bearing on the entrainment and 
+detrainment values needed for GCM cloud parameterizations, which only have 
+access to large-scale mean bulk tracer values.  Entrainment and detrainment 
+values calculated by our direct flux method should thus be corrected to 
+values compatible with mean bulk field tendencies to be compatible with GCM 
+parameterizations.
 
 %-----------------------------------------------------------------------------
 
@@ -654,7 +665,7 @@ detrainment is biased low.
 While we may have shown the magnitudes of the $E$ and $D$ calculated using our
 direct flux method are consistent with the bulk tracer method in the mean, we
 still have not shown that the variability of the two fields is correlated.  To
-dothis, we take the correlation of the fifteen-minute averaged $E$ and $D$
+do this, we take the correlation of the fifteen-minute averaged $E$ and $D$
 values calculated via the two methods over the three hour model run at each
 height to generate correlation profiles.  Heights at which the model does not
 have clouds for the entire three hour period are excluded from the
@@ -663,46 +674,69 @@ methods for both $E$ and $D$ at all heights except directly above cloudbase,
 where the tracer method generates negative detrainment values and thus is
 invalid (Figure \ref{fig:correlations}).  Additionally, entrainment and
 detrainment values calculated via the tetrahedral and pyramid entrainment
-schemes show nearly perfect levels of correlation, indicating that the pyramid
-interpolation scheme, modified by an appropriate scaling factor, can likely be
-used in place of the tetrahedral interpolation scheme in simulations with
-limited compuational resources.
+schemes show nearly perfect levels of correlation (not shown), indicating that 
+the pyramid interpolation scheme, modified by an appropriate scaling factor, 
+can be used in simulations with limited compuational resources.
+
+Fractional entrainment $\epsilon = E/M_c$ and detrainment $\delta = D/M_c$
+show little correlation between the direct flux and the bulk tracer method 
+(not shown), but this is due to the very high correlation between $E$, $D$ and
+$M_c$ that results in either method; nearly all the variability in $E$ and $D$ 
+in this steady state simulation is correlated with variability in the cloud 
+mass flux.
 
 %==============================================================================
 
 \section{Dependance on model resolution}
 
-Since our direct flux entrainment and detrainment calculations depend on the 
-subgrid interpolation of cloud properties, model resolution is likely to have 
-strong impacts upon the calculation of entrainment and detrainment.  For 
-example, consider a cloud that occupies a single grid cell.  Assume that over 
-the course of a model timestep, the liquid water content of the cloudy grid 
-cell decreases.  The bulk tracer calculation will interpret this change as 
-being the result of entrainment of environmental air drying the fluid in the 
-grid cell.  Our surface interpolation, however, will come to the opposite 
-conclusion; the reduction of liquid water content will move the interpolated 
-cloud surface closer to the grid cell center, reducing the volume of the cloud 
-and thus detraining cloud fluid.  The coarser the grid resolution of the model, 
-the more disagreement will occur between the two methods.
+\cite{Brown1999} found entrainment and detrainment depended on LES model 
+resolution surprisingly little.  Our entrainment and detrainment calculations 
+using the bulk tracer method without correcting for the cloud shell show a
+similar lack of resolution dependence (Figure \ref{fig:resolution_dependence}).
+However, both the direct flux calculation and the bulk tracer calculation 
+corrected for the influence of the cloud shell show strong resolution
+dependence, with entrainment and detrainment values steadily decreasing as 
+grid spacing increases.  Overall, the direct flux entrainment and detrainment 
+agree fairly well with the corrected bulk tracer values.  These results hold 
+for fractional entrainment $\epsilon$ and fraction detrainment $\delta$ values
+as well (not shown).
 
-Comparing entrainment and detrainment calculated via direct fluxes and bulk 
-tracer budgets corrected for the influence of the moist cloud shell at 25 m, 
-50 m and 100 m grid resolution shows entrainment and detrainment values
-steadily decrease as resolution decreases (Figure 
-\ref{fig:resolution_dependence}).  However, the direct flux entrainment and
-detrainment values appear to decrease more rapidly than the bulk tracer values.
+It appears that the constant values for $\epsilon$ and $\delta$ reported by 
+\cite{Brown1999} are the result of compensating changes in the properties of 
+the cloud shell.
+
+
+Since our direct flux entrainment and detrainment calculations depend on the 
+subgrid interpolation of cloud properties, it is not surprising that model 
+resolution has strong impacts upon the calculation of entrainment and 
+detrainment.  For example, consider a cloud that occupies a single grid cell.  
+Assume that over the course of a model timestep, the liquid water content of 
+the cloudy grid cell decreases.  The bulk tracer calculation will interpret 
+this change as being the result of entrainment of environmental air drying the 
+fluid in the grid cell.  Our surface interpolation, however, will come to the 
+opposite conclusion; the reduction of liquid water content will move the 
+interpolated cloud surface closer to the grid cell center, reducing the volume 
+of the cloud and thus detraining cloud fluid.  The coarser the grid resolution 
+of the model, the more disagreement will occur between the two methods.
+
 
 
 %==============================================================================
 
 \section{Discussion}
 
-We have shown that by interpolating the location of cloud surfaces in an LES
-model we have been able to calculate entrainment and detrainment rates directly 
-from model mass fluxes which are statistically consistent with entrainment and
-detrainment calculated using conserved bulk tracers.
-
-*TK* Discuss better interpolation schemes
+Several possible improvements to the surface interpolation schemes we have 
+discussed here are possible.  First, the amount of computation required by our 
+tetrahedral scheme is high than is strictly neccessary.  Proper implementation
+of a marching cubes algorithm could significantly improve the numerical 
+performance of our scheme, at the cost of greater programming complexity.
+Second, higher-order interpolation schemes could be used to improve the
+calculated location of the cloud surface.  Finally, interpolation of the model 
+velocity over the cloud surface could improve the estimate of flux through the 
+interpolated cloud surface.  The good agreement between the tetrahedral scheme
+and the rates calcualted from bulk tracer budgets does not appear to need 
+significant improvement.  However, such techniques might be profitably applied
+to the pyramidal scheme.
 
 *TK* Probably still want to transform direct entrainment values into bulk 
 entrainment values for use in cloud parameterizaitons.
@@ -716,6 +750,38 @@ preferentially evaporating the dryest cloud parcels.
 *TK* Suitable for use in calculating entrainment and detrainment rates for 
 individual clouds.
 
+*TK* May be important for correcting entrainment/detrainment rates for any 
+tracer that does not have similar distributions as the humidity, such as 
+vertical momentum, or for tracers whose properties are altered by the presence 
+of liquid water, such as aerosols.
+
+
+%==============================================================================
+
+\section{Conclusions}
+
+We have shown that by interpolating the location of cloud surfaces in an LES
+model we have been able to calculate entrainment and detrainment rates directly 
+from model mass fluxes which are statistically consistent with rates calculated
+using conserved bulk tracers.  For proper agreement between these methods, the
+bulk tracer calculations must be corrected for the effect of the moist shell of
+evaporated air around the cloud.  This correction to the bulk tracer calculation
+increases entrainment and detrainment rates by a factor of 2-3.  The 
+corrections that must be applied to the bulk tracer scheme to make it agree
+with the direct flux scheme suggest that the presence of the moist cloud shell 
+has a significant role in mediating fluxes between the clouds and the
+environemnt.  
+
+We evaluated two cloud surface interpolation methods for use in direct flux 
+calculations.  The tetrahedral interpolation scheme resulted in better
+agreement with the bulk tracer calculation values than the pyramidal
+interpolation scheme, which resulted in values that were too high by a factor
+ of 2.  Both schemes, however, showed nearly perfect correlations in their
+variation over time, suggesting the pyramid scheme would still be usable with a
+suitable correction factor.  We therefore conclude that both schemes are
+suitable for use in calculating entrainment and detrainment rates for
+individual clouds in an LES model.
+
 %==============================================================================
 
 
@@ -725,24 +791,24 @@ programming language.
 \end{acknowledgment}
 
 % Use appendix}[A], {appendix}[B], etc. etc. in place of appendix if you have multiple appendixes.
-\ifthenelse{\boolean{dc}}
-{}
-{\clearpage}
-\begin{appendix}
-\section*{\begin{center}Appendix Title Is Entered Here (Primary heading)\end{center}}
-\subsection{First appendix secondary heading}
+%\ifthenelse{\boolean{dc}}
+%{}
+%{\clearpage}
+%\begin{appendix}
+%\section*{\begin{center}Appendix Title Is Entered Here (Primary heading)\end{center}}
+%\subsection{First appendix secondary heading}
 
-\subsection{Second appendix secondary heading}
+%\subsection{Second appendix secondary heading}
 
-\subsubsection{First appendix tertiary heading}
+%\subsubsection{First appendix tertiary heading}
 
-\subsubsection{Second appendix tertiary heading}
+%\subsubsection{Second appendix tertiary heading}
 
-\paragraph{First appendix quaternary heading}
+%\paragraph{First appendix quaternary heading}
 
-\paragraph{Second appendix quaternary heading}
+%\paragraph{Second appendix quaternary heading}
 
-\end{appendix}
+%\end{appendix}
 
 % Create a bibliography directory and place your .bib file there.
 \ifthenelse{\boolean{dc}}
@@ -786,6 +852,11 @@ c) the ratio of the two methods.}\label{fig:direct_vs_tracer}
 \end{figure}
 
 \begin{figure}[t]
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core.eps}\\
+  \caption{Entrainment minus Detrainment calculated for...}\label{fig:E_minus_D}
+\end{figure}
+
+\begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/shell_edge_profiles_core.eps}\\
   \caption{Height profiles of $q_t$ in the cloud core, core edge, core shell, 
 and environment.}\label{fig:shell_edge_profiles}
@@ -798,10 +869,6 @@ of mean cloud-environment bulk tracer differences to differences at the cloud
 edge.}\label{fig:corrected_entrainment}
 \end{figure}
 
-\begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core.eps}\\
-  \caption{Entrainment minus Detrainment calculated for...}\label{fig:E_minus_D}
-\end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/correlations_core.eps}\\
@@ -821,23 +888,23 @@ grid resolution.}\label{fig:resolution_dependence}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[t]
-\caption{This is a sample table caption and table layout.  Enter as many tables as
-  necessary at the end of your manuscript. Table from Lorenz (1963).}\label{t1}
-\begin{center}
-\begin{tabular}{ccccrrcrc}
-\hline\hline
-$N$ & $X$ & $Y$ & $Z$\\
-\hline
- 0000 & 0000 & 0010 & 0000 \\
- 0005 & 0004 & 0012 & 0000 \\
- 0010 & 0009 & 0020 & 0000 \\
- 0015 & 0016 & 0036 & 0002 \\
- 0020 & 0030 & 0066 & 0007 \\
- 0025 & 0054 & 0115 & 0024 \\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
+%\begin{table}[t]
+%\caption{This is a sample table caption and table layout.  Enter as many tables as
+%  necessary at the end of your manuscript. Table from Lorenz (1963).}\label{t1}
+%\begin{center}
+%\begin{tabular}{ccccrrcrc}
+%\hline\hline
+%$N$ & $X$ & $Y$ & $Z$\\
+%\hline
+% 0000 & 0000 & 0010 & 0000 \\
+% 0005 & 0004 & 0012 & 0000 \\
+% 0010 & 0009 & 0020 & 0000 \\
+% 0015 & 0016 & 0036 & 0002 \\
+% 0020 & 0030 & 0066 & 0007 \\
+% 0025 & 0054 & 0115 & 0024 \\
+%\hline
+%\end{tabular}
+%\end{center}
+%\end{table}
 %
 \end{document}
