@@ -821,59 +821,94 @@ programming language.
 
 \begin{figure}[t]
   \noindent\includegraphics[width=40pc,angle=0]{./figures/pyramid_scheme.eps}\\
-  \caption{Schematic representaiton of our pyramid interpolation 
-scheme.}\label{fig:pyramid_scheme}
+  \caption{Schematic representation of the pyramidal interpolation scheme.
+Left panel shows the subdivision of the model grid cell into six pyramids.  
+Center panel shows the interpolation of the cloud surface within a 
+sub-pyramid between points at the  apex and the center of the pyramid base.  
+Right panel shows a horizontal slice through the model's Arakawa C-grid.  
+Rightward pointing triangles represent u-velocity points, upward pointing 
+triangles represent v-velocity points, circles represent bulk tracer 
+quantities, and x represents the location of the cloud surface interpolation
+points.  Dotted lines show the boundaries of the pyramidal subdivision of the 
+grid, and grey shading represents cloud volume.}\label{fig:pyramid_scheme}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=40pc,angle=0]{./figures/tetrahedral_scheme.eps}\\
-  \caption{Schematic representaiton of our tetrahedron interpolation 
-scheme.}\label{fig:tetrahedral_scheme}
+  \caption{Schematic representaiton of the tetrahedral interpolation 
+scheme.  Left panel shows the subdivision of the model grid cell into forty-
+eight tetrahedrons.  Center panel shows the interpolation of the cloud surface
+within a sub-tetrahedron between points at the four verticies of the 
+tetrahedron.  Right panel shows a horizontal slice through the model's Arakawa 
+C-grid.  Rightward pointing triangles represent u-velocity points, upward 
+pointing triangles represent v-velocity points, circles represent bulk tracer
+quantities, and x represents the location of the cloud surface interpolation
+points.  Dotted lines show the boundaries of the tetrahedral subdivision of the 
+grid, and grey shading represents cloud volume.}\label{fig:tetrahedral_scheme}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/effect_of_interpolation.eps}\\
-  \caption{Effect of surface interpolation on calculation of a) entrainment and 
-b) detrainment.}\label{fig:effect_of_interpolation}
+  \caption{Comparison between a) entrainment and b) detrainment values 
+calculated directly from fluxes using no surface interpolation vs pyramidal 
+surface interpolation (grey) and no surface interpolation vs tetrahedral 
+surface interpolation (black).}\label{fig:effect_of_interpolation}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=40pc,angle=0]{./figures/direct_vs_tracer_core.eps}\\
-  \caption{Comparison of entrainment rates calculated using a) our direct method 
-using pyramid interpolation, b) using the conserved bulk tracer method, and 
-c) the ratio of the two methods.}\label{fig:direct_vs_tracer}
+  \caption{Comparison of mean model profiles of core a) entrainment and b) 
+detrainment calculated using bulk tracer calculations (grey line), direct flux
+calculations using pyramidal interpolation (thin black line), and direct flux
+calculations using tetrahedral interpolation (thick black line).  c) Ratio of 
+bulk tracer rates to the direct flux rate using tetrahedral interpolation for
+entrainment (black) and detrainment (grey).}\label{fig:direct_vs_tracer}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core.eps}\\
-  \caption{Entrainment minus Detrainment calculated for...}\label{fig:E_minus_D}
+  \caption{Average profiles of entrainment minus detrainment calculated using 
+direct fluxes with tetrahedral surface interpolation (dashed line), direct 
+fluxes with no surface interpolation (dotted line), bulk tracer calculations 
+(black line), and the continuity equation (grey line).}\label{fig:E_minus_D}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/shell_edge_profiles_core.eps}\\
-  \caption{Height profiles of $q_t$ in the cloud core, core edge, core shell, 
-and environment.}\label{fig:shell_edge_profiles}
+  \caption{Mean profiles of $q_t$ in the cloud core (thick grey line), core 
+edge (thin black line), core shell (thin grey line), and environment (thick 
+black line).}\label{fig:shell_edge_profiles}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=40pc,angle=0]{./figures/corrected_entrainment_core.eps}\\
-  \caption{Comparison of a) ratio of direct to tracer entrainment, and b) ratio 
-of mean cloud-environment bulk tracer differences to differences at the cloud 
-edge.}\label{fig:corrected_entrainment}
+  \caption{Comparison of mean a) entrainment and b) detrainment profiles 
+calculated using uncorrected bulk tracer budgets (thin grey line), bulk tracer 
+budgets corrected for the presence of a moist cloud shell (thick grey line), and
+direct flux calculations with tetrahedral surface interpolation (black line).
+c) Profile of the ratio of the uncorrected bulk tracer budget calculations to
+the bulk tracer calculations corrected for the presence of a moist cloud shell
+for entrainment (black line) and detrainment (grey line).
+}\label{fig:corrected_entrainment}
 \end{figure}
 
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/correlations_core.eps}\\
-  \caption{Correlation between a) entrainment and b) detrainment calculated 
-using conserved bulk tracers and direct entrainment calculations with 
-tetrahedral interpolation.}\label{fig:correlations}
+  \caption{Profiles of correlation between a) entrainment and b) detrainment
+calculated using corrected bulk tracers budgets and direct entrainment 
+calculations with tetrahedral surface interpolation.  Dotted line shows the 
+99\% confidence level for a significant correlation.}\label{fig:correlations}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=40pc,angle=0]{./figures/resolution_dependence_core.eps}\\
-  \caption{Dependance of direct and corrected tracer entrainment on model 
-grid resolution.}\label{fig:resolution_dependence}
+  \caption{Mean entrainment (top row) and detrainment (bottom row) calculated
+at 25m (left column), 50m (center column), and 100m (right column) grid 
+spacing using direct flux calculations with tetrahedral surface interpolation 
+(black line), bulk tracer calculations (thick grey line) and bulk tracer 
+calculations corrected for the presence of the moist cloud shell (thin grey 
+line).}\label{fig:resolution_dependence}
 \end{figure}
 
 
