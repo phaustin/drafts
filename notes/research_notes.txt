@@ -18,10 +18,10 @@ Transition from shallow to deep convection
 Stochastic mixing
 -----------------
 
-can we improve on p. 8-9-10 of "nature/nurture" by comparing
-life histories of tracked clouds with the parcel
-model?    Can we confirm the PDF they assume in (1) on
-p. 9?
+  * can we improve on p. 8-9-10 of "nature/nurture" by comparing
+    life histories of tracked clouds with the parcel
+    model?
+  * Can we confirm the PDF they assume in (1) on p. 9?
 
 
 

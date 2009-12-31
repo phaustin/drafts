@@ -99,11 +99,10 @@ calculations of entrainment and detrainment}}}
 
 The largest uncertainties in Global Circulation Model (GCM) simulations
 come from the subgridscale parameterization of clouds. The IPCC 2007
-report found the *TK* models they examined showed a *TK* W
-m$^{-2}$ range in the cloud feedback response, relative to a *TK*
-W m$^{-2}$ total climate sensitivity.  Improvements in the accuracy of 
-these subgridscale cloud parametrizations are neccessary to simulate 
-the spatial pattern and rate of global warming.
+report found a *TK* W m$^{-2}$ range in the cloud feedback response, relative 
+to a *TK* W m$^{-2}$ total climate sensitivity.  Improvements in the accuracy 
+of these subgridscale cloud parametrizations are neccessary to simulate the 
+spatial pattern and rate of global warming.
 
 Proper simulation of the subgridscale effect of cumulus clouds in
 GCMs requires understanding the rates at which air is entrained into
@@ -124,10 +123,10 @@ model that captures the important statistics of the subgridscale eddy
 fluxes and thus, an accurate representation of the atmospheric physics
 of a domain \textasciitilde{}10 km$^{2}$, which is enough to simulate
 a field of clouds. LES simulations can be ground-truthed against results
-taken from large field surveys, such as the Barbados Oceanographic
-and Meteorological Experiment (BOMEX) or the Atmospheric Radiation
-Measurement (ARM) Program, and such comparisons show good agreement
-between the LES simulations and field data.
+taken from field surveys such as the Barbados Oceanographic and Meteorological
+Experiment \citep[BOMEX;][]{Holland1973} or the Atmospheric Radiation 
+Measurement \citep[ARM;][]{Brown2002} Program, and such comparisons 
+show good agreement between LES and data.
 
 Several recent studies have looked at the lifecycle of individual
 clouds taken from LES models, trying to break the cloud field into
@@ -157,17 +156,19 @@ D = \frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) > 0}
 \end{equation}
 
 where $E$ and $D$ are the entrainment and detrainment rates in kg 
-m$^{-3}$ s$^{-1}$, u is velocity in m s$^{-1}$, *TK*.  However, the
-accuracy of this method suffers from the need to calculate the velocity 
-of the air relative to the cloud surface.  In reality 
-these velocities are very nearly identical, \textasciitilde{} 1 m 
-s$^{-1}$, but the discrete nature of the LES model grid forces the 
-modeled surface velocity to be either 0 m s$^{-1}$ or $\Delta x / \Delta t 
-\approx$ 30 m s$^{-1}$, where $\Delta x$ is the model grid spacing and 
-$\Delta t$ is the model timestep.  The surface of the cloud only moves 
-when a grid cell's humidity reaches saturation, and when it 
-does, an entire grid cell worth of fluid leaves or enters the cloud.  This 
-causes both the entrainment and detrainment to be over-estimated.
+m$^{-3}$ s$^{-1}$, $u$ is the velocity of the air in m s$^{-1}$, $u_i$ is the 
+velocity of the cloud surface in m s$^{-1}$, A is the area of the cloud in m,
+$\mathbf{\hat{n}}$ is a unit vector directed out the cloud surface, and the 
+path integral is taken around the cloud surface at a constant vertical level.
+However, the accuracy of this method suffers from the need to calculate the 
+velocity of the air relative to the cloud surface.  In reality these velocities 
+are very nearly identical, \textasciitilde{} 1-2 m s$^{-1}$, but the discrete 
+nature of the LES model grid forces the modeled surface velocity to be either 
+0 m s$^{-1}$ or $\Delta x / \Delta t \approx$ 15-30 m s$^{-1}$, where 
+$\Delta x$ is the model grid spacing and $\Delta t$ is the model timestep.  The
+surface of the cloud only moves when a grid cell's humidity reaches saturation, 
+and when it does, an entire grid cell worth of fluid leaves or enters the cloud.
+This causes both the entrainment and detrainment to be over-estimated.
 
 Here we present a method for calculation of the cloud entrainment and 
 detrainment rates that relies on interpolation of the subgrid location 
@@ -325,11 +326,11 @@ method is more accurate than the pyramidal interpolation scheme, but with
 much higher computational requirements.
 
 The surface is defined in a similar way to the Marching Cubes algorithm 
-(*TK*).  As each tetrahedron has four vertexes, each of which can either be 
-cloudy or clear, there are 16 possibly cases that must be considered.  Many of 
-these cases share symmetries, reducing the number of independent cases to four 
-classes.  If the vertexes of a tetrahedron are all cloudy or all clear, the 
-cloud surface does not pass through the tetrahedron.  If only one of the 
+\citep{Lorensen1987}.  As each tetrahedron has four vertexes, each of which can
+either be cloudy or clear, there are 16 possible cases that must be considered. 
+Many of these cases share symmetries, reducing the number of independent cases 
+to four classes.  If the vertexes of a tetrahedron are all cloudy or all clear, 
+the cloud surface does not pass through the tetrahedron.  If only one of the 
 vetexes is clear (or conversely, only one is cloudy) than that corner of the 
 tetrahedron is cut by a triangle that intersects the tetrahedron edges where 
 $q_{diff}=0$, determined by linearly interpolating the values at the vertexes; 
@@ -367,15 +368,16 @@ Oceanographic and Meteorological Experiment (BOMEX) LES simulation
 \citep{Holland1973, Siebesma2003}.  Precipitation was disabled for this 
 configuration, as the BOMEX trade-cumulus clouds are non-precipitating.  The 
 model has periodic boundary conditions in the horizontal, and a domain extent 
-of 6.4 km x 6.4 km in the horizontal and 3.2 km in the vertical.  To examine 
-resolution dependence of our scheme, we ran three models: one at 25m grid 
-spacing in all directions with a 1.5 second timestep, one at 50m grid spacing 
-with a 3 second timestep, and one at 100m grid spacing with a 6 second 
+of 6.4 km x 6.4 km in the horizontal and 3.2 km in the vertical.  Calculations 
+of cloud area, vertical velocity, and entrainment diagnosed from bulk conserved
+tracer budgets agree well with the results presented in \cite{Siebesma2003}.
+
+To examine resolution dependence of our scheme, we ran three models: one at 25m 
+grid spacing in all directions with a 1.5 second timestep, one at 50m grid 
+spacing with a 3 second timestep, and one at 100m grid spacing with a 6 second 
 timestep.  The model was run for 6 hours, the first three hours of simulation 
 were discarded as the model was still adjusting into steady-state.  15 minute 
 averages were output for the terms of each of our calculations.
-
-*TK* agreement with Siebesma
 
 \subsection{Interpolation Comparison}
 
@@ -747,6 +749,19 @@ important for calculating fluxes of properties that have differing radial
 dependencies--such as vertical momentum, which is negative in the shell--or for
 aerosols whose chemical properties are altered by the presence of liquid
 water.
+
+/cite{Romps} very recently created a complimentary technique to measure 
+entrainment and detrainment in an LES, which instead of interpolating the 
+location of the cloud surface in space, averages the surface fluxes over the 
+time needed for an entire grid cell to entrain or detrain.
+
+* values are smaller than ours
+* values are likely more accurate--fewer assumptions
+* nevertheless, scaling E/D for the specific question being considered is still
+  neccesary.
+* does not result in instantaneous values; our system is more appropriate for
+  cloud tracking
+
 
 %==============================================================================
 
