@@ -102,12 +102,13 @@ calculations of entrainment and detrainment}}}
 
 \section{Introduction}
 
-The largest uncertainties in Global Circulation Model (GCM) simulations
-come from the subgridscale parameterization of clouds. The IPCC 2007
-report found a TK W m$^{-2}$ range in the cloud feedback response, relative 
-to a TK W m$^{-2}$ total climate sensitivity.  Improvements in the accuracy 
-of these subgridscale cloud parametrizations are neccessary to simulate the 
-spatial pattern and rate of global warming.
+The largest uncertainties in climate sensitivity estimates from Global
+Circulation Model (GCM) simulations come from the subgridscale
+parameterization of low clouds \citep{Colman2003,Bony2005,Webb2006}.
+Specifically, stratocumulus clouds and the transition regime from
+stratocumulus to trade cumulus are the dominant source of variance
+between models in the estimation of the cloud radiative response to
+changing climate \citep{Williams2009}.
 
 Proper simulation of the subgridscale effect of cumulus clouds in
 GCMs requires understanding the rates at which air is entrained into
@@ -117,8 +118,11 @@ cloud tops, the amount of heat and moisture the clouds transport upwards,
 and the heights at which the clouds deposit that heat and moisture.
 They also have effects on the vertical transport of aerosols out of
 the boundary layer and the rate at which chemical reactions can occur
-in those aerosols. Several approaches to the parametrization of entrainment
-and detrainment rates have been proposed, including TK.
+in those aerosols \citep{Barahona2007,Anldrejczuk2008}. 
+Several approaches to the parametrization of entrainment
+and detrainment rates have been proposed, including 
+\citep{Lock2000,Bretherton2009,Siebesma2007}.  *PA -- words here*
+
 
 Large Eddy Simulation (LES) is an important tool used in the study
 of cloud entrainment and detrainment. LES models achieve grid resolutions
@@ -126,7 +130,7 @@ on the order of 10-100 m, well within the domain of the Kolmagorov -5/3
 turbulence spectrum. This allows for a relatively simple turbulence
 model that captures the important statistics of the subgridscale eddy
 fluxes and thus, an accurate representation of the atmospheric physics
-of a domain $\approx$ 10 km$^{2}$, which is enough to simulate a field of clouds. 
+of a domain $\approx$ 10 km$^{2}$, which is enough to simulate a field of shallow clouds. 
 LES simulations can be ground-truthed against results taken from field surveys 
 such as the Barbados Oceanographic and Meteorological
 Experiment \citep[BOMEX;][]{Holland1973} or the Atmospheric Radiation 
@@ -853,12 +857,12 @@ programming language.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\begin{figure}[t]
-%  \noindent\includegraphics[width=19pc,angle=0]{./figures/cell_diagram.eps}\\
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/cell_diagram}\\
 %  \caption{C grid cell with cloud surface.}\label{fig:cell_diagram}
 %\end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=40pc,angle=0]{./figures/pyramid_scheme.eps}\\
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/pyramid_scheme}\\
   \caption{Schematic representation of the pyramidal interpolation scheme.
 Left panel shows the subdivision of the model grid cell into six pyramids.  
 Center panel shows the interpolation of the cloud surface within a 
@@ -872,7 +876,7 @@ grid, and grey shading represents cloud volume.}\label{fig:pyramid_scheme}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=40pc,angle=0]{./figures/tetrahedral_scheme.eps}\\
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/tetrahedral_scheme}\\
   \caption{Schematic representation of the tetrahedral interpolation 
 scheme.  Left panel shows the subdivision of the model grid cell into forty-
 eight tetrahedrons.  Center panel shows the interpolation of the cloud surface
@@ -886,7 +890,7 @@ grid, and grey shading represents cloud volume.}\label{fig:tetrahedral_scheme}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/effect_of_interpolation.eps}\\
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/effect_of_interpolation}\\
   \caption{Comparison between a) entrainment and b) detrainment values 
 calculated directly from fluxes using no surface interpolation vs pyramidal 
 surface interpolation (grey) and no surface interpolation vs tetrahedral 
@@ -894,7 +898,7 @@ surface interpolation (black).}\label{fig:effect_of_interpolation}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=40pc,angle=0]{./figures/direct_vs_tracer_core.eps}\\
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/direct_vs_tracer_core}\\
   \caption{Comparison of mean model profiles of core a) entrainment and b) 
 detrainment calculated using bulk tracer calculations (grey line), direct flux
 calculations using pyramidal interpolation (thin black line), and direct flux
@@ -905,7 +909,7 @@ a) and b) but for the fractional entrainment and detrainment rates.}\label{fig:d
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core.eps}\\
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/E_minus_D_core}\\
   \caption{Average profiles of entrainment minus detrainment calculated using 
 direct fluxes with tetrahedral surface interpolation (dashed line), direct 
 fluxes with no surface interpolation (dotted line), bulk tracer calculations 
@@ -913,14 +917,14 @@ fluxes with no surface interpolation (dotted line), bulk tracer calculations
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/shell_edge_profiles_core.eps}\\
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/shell_edge_profiles_core}\\
   \caption{Mean profiles of $q_t$ in the cloud core (thick grey line), core 
 edge (thin black line), core shell (thin grey line), and environment (thick 
 black line).}\label{fig:shell_edge_profiles}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=40pc,angle=0]{./figures/corrected_entrainment_core.eps}\\
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/corrected_entrainment_core}\\
   \caption{Comparison of mean a) entrainment and b) detrainment profiles 
 calculated using uncorrected bulk tracer budgets (thin grey line), bulk tracer 
 budgets corrected for the presence of a moist cloud shell (thick grey line), and
@@ -932,7 +936,7 @@ detrainment rates.}\label{fig:corrected_entrainment}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/correlations_core.eps}\\
+  \noindent\includegraphics[width=19pc,angle=0]{./figures/correlations_core}\\
   \caption{Profiles of the correlation between direct entrainment calculations
 with tetrahedral surface interpolation and either uncorrected (grey lines) or 
 corrected (black lines) bulk tracer calculations for a) entrainment and b) 
@@ -941,7 +945,7 @@ correlation.}\label{fig:correlations}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=40pc,angle=0]{./figures/resolution_dependence_core.eps}\\
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/resolution_dependence_core}\\
   \caption{Mean entrainment (top row) and detrainment (bottom row) calculated
 at 25m (left column), 50m (center column), and 100m (right column) grid 
 spacing using direct flux calculations with tetrahedral surface interpolation 
