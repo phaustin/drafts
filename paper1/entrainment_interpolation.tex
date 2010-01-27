@@ -35,11 +35,11 @@ interpolation of a cloud surface on a discrete numerical model grid.  This
 method is used to calculate entrainment and detrainment rates for an LES model,
 which are compared with rates inferred from bulk conserved tracer
 calculations.  Our method results in entrainment and detrainment values that
-are 2.5 to 4 times as large as values calculated via bulk tracers.  Correcting 
+are 1.5 to 3 times as large as values calculated via bulk tracers.  Correcting 
 the entrainment and detrainment values to account for the effect of the moist 
-cloud shell reduces this over-estimate to a factor of two.  However, the 
-correlation of values calculated via the two methods is nearly unity, 
-suggesting our method captures the dynamics of entrainment and detrainment well.
+cloud shell corrects this over-estimate.  The correlation of values calculated 
+via the two methods is nearly unity, suggesting our method captures the 
+dynamics of entrainment and detrainment well.
 }
 %
 \begin{document}
@@ -257,8 +257,9 @@ of the cloud volume inside the grid cell.  If equation $E - D$ is greater than
 zero, the total is applied to entrainment and if less than zero, to 
 detrainment.  This technique works equally well for flux through any surface 
 that can be defined within the model; in this paper we perform these 
-calculations for the cloud core, which we define as fluid having condensed 
-liquid water and positive buoyancy relative to the horizontal mean.  
+calculations for the cloud core, which we define following \cite{Siebesma1995} 
+as fluid having condensed liquid water, upward velocity, and positive buoyancy 
+relative to the horizontal mean.  
 
 Calculating the mass flux through the grid cell walls can be accomplished using 
 the numerical model's advection routine; this is trivial for a model using an 
@@ -462,18 +463,10 @@ terms on the right hand side of equations (\ref{eq:entrainment}) and
 (\ref{eq:detrainment}) directly in the model code and output 15 minute averages 
 of the calculated values.  Comparison of our direct entrainment scheme with the 
 bulk tracer method shows our scheme using tetrahedral interpolation estimates
-entrainment values approximately 4 times larger than the bulk tracer method.
+entrainment values approximately 3 times larger than the bulk tracer method.
 Detrainment values from our scheme agree better, but are still approximately 
-2.5 times larger than the bulk tracer method (Figure 
+1.5 times larger than the bulk tracer method (Figure 
 \ref{fig:direct_vs_tracer}).
-
-Our scheme does show some benefits over the bulk tracer calculations.  At 
-cloud base, the bulk tracer calculation show little entrainment occurring, 
-instead displaying a large negative entrainment; our scheme displays a large 
-entrainment and a large and positive detrainment at cloud base.  Additionally, 
-at cloud top the bulk tracer method calculates a negative entrainment, 
-while our method calculates a small positive value.  In both these cases our 
-calculation generates a more physically realistic result.
 
 There are many possible sources of error in our direct flux calculation that 
 could help explain the large magnitude differences, including: linearly
@@ -528,7 +521,7 @@ values calculated from the direct flux without surface interpolation and the
 direct flux with tetrahedral surface interpolation.
 
 Second, we take the disagreement between the continuity equation and $E-D$
-calculated via direct fluxes without surface interpolation to be evidence of
+calculated via direct fluxes without surface interpolation to be the result of
 bias in the continuity equation calculation, as we calculate the direct flux in
 the model directly from the tracer advection routine.  The interpolation and
 centered differencing we use to calculate mass flux divergence will result in a
@@ -562,14 +555,15 @@ that are horizontally adjacent to non-core cells) shows the cloud core edge has
 nearly the same properties as the mean core, while the cloud core shell 
 properties (non-core cells that are horizontally adjacent to core cells) 
 are significantly different than mean environment properties (Figure 
-\ref{fig:shell_edge_profiles}).  Thus, the assumption that fluid entraining
-into the cloud has the mean properties of the cloud core environment is 
-incorrect.  Here we derive a correction to equations (\ref{eq:entrainment}) and 
-(\ref{eq:detrainment}) to account for the radial variation in cloud properties. 
-We start our derivation by modifying equation (5.1) from \cite{Siebesma1995},
-replacing the mean cloud and environment values of $\chi$ in the entrainment 
-and detrainment terms with the cloud and environment values at the cloud 
-surface, $\chi_{se}$ and $\chi_{sc}$:
+\ref{fig:shell_edge_profiles}).  This is in agreement with previous results 
+from both LES modelling and observations /citep{Heus2008}.  Thus, the 
+assumption that fluid entraining into the cloud has the mean properties of the 
+cloud core environment is incorrect.  Here we derive a correction to equations 
+(\ref{eq:entrainment}) and (\ref{eq:detrainment}) to account for the radial 
+variation in cloud properties. We start our derivation by modifying equation 
+(5.1) from \cite{Siebesma1995}, replacing the mean cloud and environment values 
+of $\chi$ in the entrainment and detrainment terms with the cloud and 
+environment values at the cloud surface, $\chi_{se}$ and $\chi_{sc}$:
 \begin{equation}
   \label{eq:derivation_entrainment}
   \begin{split}
@@ -660,28 +654,25 @@ tracers, as can be easily confirmed by subtracting equation
 (\ref{eq:final_detrainment}) from equation (\ref{eq:final_entrainment}).
 
 Applying these corrections to the tracer calculations of entrainment and 
-detrainment roughly doubles the calculated values and results in better--though 
-still not perfect--agreement with our direct flux calculations (Figure 
-\ref{fig:corrected_entrainment}).  However, it does bring the ratio of the bulk 
-tracer to direct flux values of $E$ and $D$ into agreement (Figure 
-\ref{fig:corrected_entrainment}c).  This ratio still diverges near cloud top 
-and base with the $E$ ratio becoming negative at cloud top and the $D$ ratio 
-becoming negative at cloud base.  However, these are clearly the result of a
-breakdown in the bulk tracer calculation, which results in negative values 
-of $E$ and $D$.  This simple proportionality relationship between the 
-entrainment and detrainment calculated via the corrected bulk tracers and our 
-direct flux scheme suggests we can convert between different measurements 
-simply by properly scaling the values.
+detrainment roughly doubles the calculated values and results in much better 
+agreement with our direct flux calculations (Figure 
+\ref{fig:corrected_entrainment}).  Bulk tracer detrainment values now agree 
+nearly exactly with our direct flux values, while bulk tracer entrainment 
+values are now 20\% higher that our direct flux values.  This agreement breaks 
+down near cloud top and base, but this is clearly the result of a problem in 
+the bulk tracer calculation which results in negative values of $E$ and $D$.  
 
 %-----------------------------------------------------------------------------
 
 \subsection{Correlation of bulk tracer and direct calculation methods}
 
-If $E$ and $D$ calculated via the corrected bulk tracer method and our direct 
-flux scheme are proportionally related to each other, the variability of the two 
-fields should be strongly correlated.  Therefore, we take the correlation of 
-the fifteen-minute averaged $E$ and $D$ values calculated via the two methods 
-over the three hour model run at each height to generate correlation profiles.  
+So far we have shown that our direct flux calculation produces entrainment and
+detrainment values that agree reasonably well with the values produced via 
+bulk tracer budgets corrected for the presence of the moist cloud shell.  
+However, this does not ensure that the same variability is displayed by the two 
+calculations.  To analyze the variability, we take the correlation of the 
+fifteen-minute averaged $E$ and $D$ values calculated via the two methods over 
+the three hour model run at each height to generate correlation profiles.  
 Additionally, we calculate correlations between our direct flux scheme and 
 the uncorrected bulk tracer method for comparison.  Heights at which the model 
 does not have clouds for the entire three hour period are excluded from the 
@@ -720,10 +711,10 @@ similar lack of resolution dependence (Figure \ref{fig:resolution_dependence}).
 However, both the direct flux calculation and the bulk tracer calculation 
 corrected for the influence of the cloud shell show steadily increasing values 
 as grid spacing decreases.  At 100m grid resolution, all three methods produce
-similar values.  At 25m and 50m resolution, the direct fluxes are consistently 
-larger than the correct bulk tracer fluxes.  These results hold for fractional
-entrainment $\epsilon$ and fraction detrainment $\delta$ values as well (not
-shown).  
+similar values.  At 25m and 50m resolution, the direct flux entrainment is 
+consistently smaller than the corrected bulk tracer entrainment, while the 
+detrainments agree quite well.  These results hold for fractional entrainment 
+$\epsilon$ and fraction detrainment $\delta$ values as well (not shown).  
 
 It appears that the constant values for $\epsilon$ and $\delta$ with increasing
 model resolution reported by \cite{Brown1999} are the result of compensating
@@ -738,57 +729,65 @@ clouds and environment.
 
 \section{Discussion}
 
-The high levels of correlation, as well as the similar response to changing 
-model resolution, and the simple scaling that allows conversion between our 
-direct flux scheme and the bulk tracer method corrected for the presence of the 
-cloud shell, gives us confidence that our calculation is a valid representation 
-of the variability, if not the absolute magnitude, of the flux through the 
-cloud surface.  However, as our method redefines the location of the cloud 
-volume, there are interpretation issues when comparing the fluxes calculated by 
-the two methods.  For example, consider a cloud that occupies a single grid 
-cell.  Assume that over the course of a model time step, the liquid water 
-content of the cloudy grid cell decreases, while advective processes maintain 
-the moisture in the grid cell's surroundings constant.  The bulk tracer 
-calculation will interpret this change as being the result of entrainment of 
-environmental air drying the fluid in the grid cell.  Our surface 
-interpolation, however, will come to the opposite conclusion; the reduction of 
-liquid water content will move the interpolated cloud surface closer to the 
-grid cell center, reducing the volume of the cloud and thus detraining cloud 
-fluid.  Which calculation is 'right' depends on which set of assumptions 
-regarding the subgridscale variability one prefers.
+The good agreement between our technique and the bulk tracer method corrected 
+for the presence of the cloud shell gives us confidence that our calculation is 
+a valid representation of the flux through the cloud surface.  However, as our 
+method redefines the location of the cloud volume, there are interpretation 
+issues when comparing the fluxes calculated by the two methods.  For example, 
+consider a cloud that occupies a single grid cell.  Assume that over the course 
+of a model time step, the liquid water content of the cloudy grid cell 
+decreases, while advective processes maintain the moisture in the grid cell's 
+surroundings constant.  The bulk tracer calculation will interpret this change 
+as being the result of entrainment of environmental air drying the fluid in the 
+grid cell.  Our surface interpolation, however, will come to the opposite 
+conclusion: the reduction of liquid water content will move the interpolated 
+cloud surface closer to the grid cell center, reducing the volume of the cloud 
+and thus detraining cloud fluid.  We believe effects like this explain why the 
+surface interpolation method estimates $E$ and $D$ values that are smaller than 
+those estimated via bulk conserved tracers at 100 m resolution; at this grid 
+spacing, nearly all the clouds occupy only a single grid cell in the horizontal.
+Which calculation is correct depends on which set of assumptions regarding the 
+subgridscale variability one prefers.  
 
-In many ways, the entrainment or detrainment value one considers to be correct 
-will depend on the purpose for which they are used.  The correction to the bulk 
-tracer calculation due to the cloud shell has little bearing on the entrainment 
-and detrainment values needed for calculating cloud moisture and energy in GCM 
-parameterizations, which only have access to large-scale mean bulk tracer 
-values.  Indeed, correct LES $E$ and $D$ values would no doubt have to be 
-properly scaled to make them comparable with the values needed for GCM cumulus 
-parameterizations.  However, this correction may be important for calculating 
+At the same time, the entrainment or detrainment value one considers to be 
+correct will depend on the purpose for which they are used.  The correction to 
+the bulk tracer calculation due to the cloud shell has little bearing on the 
+entrainment and detrainment values needed for calculating cloud moisture and 
+energy in GCM parameterizations, which only have access to large-scale mean 
+bulk tracer values.  However, this correction may be important for calculating 
 fluxes of properties that have different radial dependencies than $q_t$ or $h$, 
-such as vertical momentum, which is negative in the shell, or for aerosols 
-whose chemical properties are altered by reactions in the presence of liquid 
-water.  In any case, the increase of correlation between the bulk tracer method
-and our direct flux method when the bulk tracer method is corrected for the 
-influence of the cloud shell suggests the correction removes a significant bias 
-from the bulk tracer calculation that underestimates the true mass exchange that
-occurs.  While our direct flux technique calculates values nearly twice as 
-large as the corrected bulk tracer method, the highly correlated variability 
-should allow us to use the large-scale mean values from the two methods to 
-scale the direct flux values to calculate entrainment rates for individual 
-clouds.
+such as vertical momentum, which is negative in the shell \citep{Heus2008}, or 
+for aerosols whose chemical properties are altered by reactions in the presence 
+of liquid water \citep{Hoppel1994}.  In any case, the agreement between our 
+direct flux method and the bulk tracer method corrected for the influence of 
+the cloud shell suggests the shell correction removes a significant bias when 
+estimating the total mass exchange between clouds and environment.
+
+Additionally, our scheme shows some benefits over the bulk tracer calculations. 
+At cloud base, the bulk tracer calculation show little entrainment occurring, 
+instead displaying a large negative entrainment; our scheme displays a large 
+entrainment and a large and positive detrainment at cloud base (Figure 
+\ref{fig:corrected_entrainment}).  On the other hand, at cloud top the bulk 
+tracer method calculates a negative entrainment, while our method calculates a 
+small positive value.  In both these cases our calculation generates a more 
+physically realistic result.  
 
 \cite{Romps2010} very recently created a complimentary technique to measure 
 entrainment and detrainment in an LES, which instead of interpolating the 
 location of the cloud surface in space, averages the surface fluxes over the 
-time needed for an entire grid cell to entrain or detrain.  This technique has 
-the advantage of making no assumptions about the cloud surface and is therefore 
-more consistent with the LES model assumptions.  Indeed, Romps' values agree 
+time needed for an entire grid cell to entrain or detrain.  Romps' values agree 
 quite well with the values we calculate from the bulk conserved tracers 
-corrected for the cloud shell.  However, our method has the advantage of giving 
-instantaneous values for entrainment and detrainment, while Romps gives 
-$\approx$30 second averages, making our technique more useful for tracking 
+corrected for the cloud shell, as well at those calculated from our technique 
+with tetrahedral interpolation.  Romps' technique has the advantage of making 
+no assumptions about the cloud surface and is therefore more consistent with 
+the LES model assumptions.  However, our method has the advantage of giving 
+instantaneous values for entrainment and detrainment, while Romps' gives 
+$\approx$30 second averages.  This makes our technique more useful for tracking 
 entrainment variability in individual clouds.
+
+Finally, we note that nothing in our technique is dependent on the shallow 
+cumulus regeime; it should be equally useful in calculating entrainment and 
+detrainment in cumulus and stratocumulus clouds.
 
 %==============================================================================
 
@@ -857,7 +856,7 @@ programming language.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/cell_diagram}\\
+% \noindent\includegraphics[width=19pc,angle=0]{./figures/cell_diagram}\\
 %  \caption{C grid cell with cloud surface.}\label{fig:cell_diagram}
 %\end{figure}
 
