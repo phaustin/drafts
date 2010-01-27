@@ -119,9 +119,12 @@ and the heights at which the clouds deposit that heat and moisture.
 They also have effects on the vertical transport of aerosols out of
 the boundary layer and the rate at which chemical reactions can occur
 in those aerosols \citep{Barahona2007,Anldrejczuk2008}. 
-Several approaches to the parametrization of entrainment
-and detrainment rates have been proposed, including 
-\citep{Lock2000,Bretherton2009,Siebesma2007}.  *PA -- words here*
+A simple entraining plume model is at the heart of many parameterizations
+of shallow and deep convection, and a variety of approaches
+to calculate appropriate entrainment and detrainment rates
+for these models have been proposed
+\citep{Lock2000,Bretherton2009,Siebesma2007}.
+
 
 
 Large Eddy Simulation (LES) is an important tool used in the study
@@ -172,7 +175,7 @@ path integral is taken around the cloud surface at a constant vertical level.
 However, the accuracy of this method suffers from the need to calculate the 
 velocity of the air relative to the cloud surface.  In reality these velocities 
 are very nearly identical, \textasciitilde{} 1-2 m s$^{-1}$, but the discrete 
-nature of the LES model grid forces the modelled surface velocity to be either 
+nature of the LES model grid forces the modeled surface velocity to be either 
 0 m s$^{-1}$ or $\Delta x / \Delta t \approx$ 15-30 m s$^{-1}$, where 
 $\Delta x$ is the model grid spacing and $\Delta t$ is the model time step.  The
 surface of the cloud only moves when a grid cell's humidity reaches saturation, 
@@ -820,10 +823,13 @@ improving parameterizations of shallow convection.
 
 
 \begin{acknowledgment}
+This paper benefited from helpful discussions with Fleur Couvreux and Catherine Rio.
+Support was provided by the Canadian Foundation for Climate and Atmospheric
+Science through the Cloud Aerosol Feedback and Climate network.
 Figures were generated using the matplotlib library in the Python
 programming language.
 \end{acknowledgment}
-
+http://en.scientificcommons.org/
 % Use appendix}[A], {appendix}[B], etc. etc. in place of appendix 
 % if you have multiple appendixes.
 %\ifthenelse{\boolean{dc}}
