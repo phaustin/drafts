@@ -23,5 +23,11 @@ Stochastic mixing
     model?
   * Can we confirm the PDF they assume in (1) on p. 9?
 
+2010/01/27
+==========
 
+JAS package info for entrainment interpolation paper:
 
+Your journal is: JAS
+Your package ID is: 14960
+Your package password is: 3ntr41n 
