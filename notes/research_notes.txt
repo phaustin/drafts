@@ -31,3 +31,10 @@ JAS package info for entrainment interpolation paper:
 Your journal is: JAS
 Your package ID is: 14960
 Your package password is: 3ntr41n 
+
+
+2010/03/01
+==========
+
+find testable parameters in theories
+

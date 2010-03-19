@@ -91,7 +91,38 @@ simulation model is presented.
 
 %==============================================================================
 
-\section{Method}
+\section{Cloud Tracking}
+
+* Label all cloud core points
+* Find depth of point from surface of core
+* Find deepest core points, assign to cloudlets
+* Iteratively expand into next deepest points
+* Any points at that depth that are not in a cloudlet are assigned to new 
+    cloudlets
+* This allows clouds to merge and split
+* Once all the core points are selected, the shell points are joined into 
+    cloudlets as well.
+
+Then the cloudlets are joined into clouds.  There are several ways to do this,
+and the exact method used can be tailored to the problem beign studied.
+
+At the first time step, cloudlets with touching core are joined into clouds
+
+At subsequent timesteps
+ * cloudlets that overlap with a cloud at a previous timestep are assigned the same cloud number
+ * then cloudlets with cores that touch the other clouds are joined
+
+Then from the graph formed, seperate out clusters.
+
+%==============================================================================
+
+\section{Tracked Cloud Statistics}
+
+
+
+
+
+
 
 \begin{equation}
 \label{eq:E_minus_D} 
@@ -143,7 +174,7 @@ programming language.
 {}
 {\clearpage}
 \bibliographystyle{./ametsoc}
-\bibliography{./bibliography/entrainment_interpolation}
+\bibliography{./bibliography/cloud_tracking}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURES
@@ -151,7 +182,13 @@ programming language.
 
 \begin{figure}[t]
   \noindent\includegraphics[width=40pc,angle=0]{./figures/figure1}\\
-  \caption{Blah blah blah}\label{fig:figure1}
+  \caption{Schematic representation of our cloudlet algorithm.}\label{fig:figure1}
 \end{figure}
+
+\begin{figure}[t]
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/figure1}\\
+  \caption{Associating cloudlets with cloud from previous time step.}\label{fig:figure1}
+\end{figure}
+
 
 \end{document}
