@@ -148,9 +148,8 @@ homogeneous slabs; this is a much less accurate assumption on the level of an
 individual cloud.
 
 Alternatively, entrainment and detrainment could simply be calculated directly 
-from the LES velocity and humidity field.  \cite{Siebesma1998} defines 
-Entrainment and Detrainment as
-
+from the LES velocity, pressure, humidity and temperature fields.  
+\cite{Siebesma1998} defines Entrainment and Detrainment as
 \begin{equation}
 E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
 \mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
@@ -159,7 +158,6 @@ E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
 D = \frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) > 0}
 \mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
 \end{equation}
-
 where $E$ and $D$ are the entrainment and detrainment rates in kg m$^{-3}$ 
 s$^{-1}$, $u$ is the velocity of the air in m s$^{-1}$, $u_i$ is the velocity 
 of the cloud surface in m s$^{-1}$, A is the area of the cloud in m,
@@ -192,10 +190,10 @@ discuss our results, and in section 6 we present our conclusions.
 
 \section{Method}
 
-Consider a 3-d numerical model grid cell containing a cloud surface with 
-normal vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the cloud.
-This surface, combined with $\mathbf{W}$, the portion of the grid cell walls
-that lie within the cloud, encloses a cloud volume $V$ with surface $\mathbf{A}
+Consider a numerical model grid cell containing a cloud surface with normal 
+vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the cloud.  This 
+surface, combined with $\mathbf{W}$, the portion of the grid cell walls that 
+lie within the cloud, encloses a cloud volume $V$ with surface $\mathbf{A}
 = \mathbf{C} \cup \mathbf{W}$.  \cite{Siebesma1998} gives the net entrainment 
 and detrainment over the cloud surface to be:
 \begin{equation}
@@ -255,8 +253,9 @@ Therefore, we can find the entrainment and detrainment by calculating the mass
 flux through the cloudy portion of the grid cell walls and the rate of change
 of the cloud volume inside the grid cell.  If equation $E - D$ is greater than 
 zero, the total is applied to entrainment and if less than zero, to 
-detrainment.  This technique works equally well for flux through any surface 
-that can be defined within the model; in this paper we perform these 
+detrainment.  This technique works equally well for flux through any isosurface 
+of a scalar quantity defined within the model, though slight modifications must
+be made for positive definite quantities.  In this paper we perform these 
 calculations for the cloud core, which we define following \cite{Siebesma1995} 
 as fluid having condensed liquid water, upward velocity, and positive buoyancy 
 relative to the horizontal mean.  
@@ -265,85 +264,94 @@ Calculating the mass flux through the grid cell walls can be accomplished using
 the numerical model's advection routine; this is trivial for a model using an 
 Arakawa C-grid, while interpolation can give fluxes for other grid 
 configurations.  We assume the mass flux is constant over the grid cell wall.  
-To calculate the portion of the grid cell walls within the cloud and the cloud 
-volume inside the grid cell we interpolate the location of the cloud surface at 
-each time step.  Next, we describe the interpolation schemes we use for this 
+
+There are a multitude of interpolation schemes that can be used to determine 
+the cloud core volume and cell wall area in a numerical model.  The simplest 
+would be to assume that saturated grid cells with positive vertical velocity 
+and virtual potential temperature $\theta_v$ (K) greater than the horizontal 
+mean are completely filled with cloud core, and otherwise grid cells contain 
+no cloud core at all.  We refer to this as the "no interpolation" case.  Since
+the cloud core surface only moves when a whole grid cell undergoes 
+condensation or evaporation this will result in poor estimates of $dV/dt$ and
+$\mathbf{S}$, which will overestimate the entrainment and detrainment.  To 
+reduce this overestimate, we interpolate the location of the cloud surface at 
+each time step.  Next we describe the interpolation scheme we use for this 
 purpose.
 
 %-----------------------------------------------------------------------------
 
-\subsection{Cloud Surface Interpolation}
+\subsection{Cloud core surface interpolation}
 
-There are a multitude of interpolation schemes that can be used to determine 
-the cloud volume and cloudy cell wall area in a numerical model.  The simplest 
-would be to assume that saturated grid cells are completely filled with cloud 
-and unsaturated grid cells have no cloud at all.  We refer to this as the "no 
-interpolation" case.  Since the cloud surface only moves when a whole grid cell 
-undergoes condensation or evaporation, this will result in poor estimates of 
-$dV/dt$ and $\mathbf{S}$, which will then overestimate the entrainment and 
-detrainment.
+Several standard techniques exist for subgrid isosurface interpolation in the 
+field of computer visualization, such as the Marching Cubes algorithm 
+\citep{Lorensen1987}.  In the spirit of these techniques, we have implemented 
+a scheme that relies on subdividing the grid cells into regular sub-cells, 
+finding the location of the cloud surface within these sub-cells, and then 
+reassembling the cells to construct the location of the cloud core surface.
+Our interpolation method, which we refer to as the "tetrahedral interpolation"
+case, splits the cubic grid cell into six pyramids, then splits each pyramid 
+into eight tetrahedrons (Figure \ref{fig:tetrahedral_interpolation}, left 
+panel).  This results in forty-eight tetrahedrons, each composed of four 
+vertices located at the grid cell centre, the center of a grid cell wall, the 
+centre of a grid cell edge, and a grid cell corner.
 
-At the other end of the range of interpolation schemes, we can use 
-interpolation to estimate the surface where the total water equals the 
-saturated humidity and calculate the cloud volume and cell surface areas at 
-each time step.  Several standard techniques exist for this kind of calculation 
-in the field of computer visualization, such as the Marching Cubes algorithm 
-\citep{Lorensen1987}.  Instead we have implemented a scheme that relies on 
-subdividing the grid cells into regular sub-cells, finding the location 
-of the cloud surface within these sub-cells, and then reassembling the cells to 
-construct the location of the cloud surface.
+Generally, model scalar quantities will be defined on only one of these 
+verticies, and so we must interpolate the surrounding grid to determine the 
+quantity values at these points.  On an Arakawa C-grid humidity is defined 
+at the grid centers, and so we must interpolate to find the values at three 
+of the tetrahedron verticies.  To find values at the center of the grid cell 
+wall, we average the two values on opposite sides of the wall; at the grid 
+cell edge, we average the four values around the edge; and at the corners, 
+we average the values of the eight cells surrounding each corner.
 
+To find the cloud core surface, we must find the location where the total 
+humidity equals the saturated humidity, the vertical velocity is zero and 
+$\theta_v$ is equal to the horizontal mean of $theta_v$.  First we define a 
+variable $q_{diff} = q_t - q_{sat}(T, p)$, where $q_t$ is the total specific 
+water and $q_{sat}(T, p)$ is the saturated specific humidity, all in kg 
+kg$^{-1}$.  $q_{diff}$ is positive for cloudy points, negative for clear 
+points, and zero at the cloud surface, representing the moisture excess or 
+deficiency relative to the cloud surface.  Similarily, we calculate $\Delta 
+\theta_v = \theta_v - \overline{\theta_v}$, where the bar represents the 
+horizontal mean, to represent buoyancy excess or deficiency.  Vertical 
+velocity $w$ requires no new variable to be calculated, but as it is defined 
+at the center of the top and bottom of the grid cell, the interpolation 
+locations are slightly different.
 
-The interpolation method, which we refer to as the "tetrahedral 
-interpolation" case, involves splitting the cube into six pyramids, then 
-splitting each pyramid into eight tetrahedrons. This results in forty-eight 
-tetrahedrons in total, each composed of four vertices located at the grid cell 
-centre, the centre of a grid cell wall, the centre of a grid cell edge, and 
-a grid cell corner.  The values of $q_{diff}$, $\theta_v$, and w are linearly 
-interpolated to each of these points, then used to find the location of the 
-cloud surface.
+The cloud core surface itself is defined in a similar way to the Marching 
+Cubes algorithm \citep{Lorensen1987}.  Each tetrahedron has four vertexes, 
+which can either be cloud core or environment, depending on the interpolated 
+values of $q_{diff}$, $\Delta \theta_v$, and $w$.  This results in 16 
+possible combinations of vertex values that must be considered.  For example,
+if the vertexes of a tetrahedron all contain cloud core, the entire 
+tetrahedron must contain cloud core, while if three vertexes are core and one 
+is environment, the cloud core surface must pass through the tetrahedron.
+Many of these cases share symmetries, reducing the number of independent cases 
+to four classes.  If the vertexes of a tetrahedron all contain cloud core or 
+environment, the surface does not pass through the tetrahedron; this accounts 
+for two of the cases.  If only one of the vertexes is clear (or conversely, 
+only one is cloudy) than that corner of the tetrahedron is cut by a triangle 
+representing the cloud core surface (Figure 
+\ref{fig:tetrahedral_interpolation}, center panel); this accounts for eight of
+the cases.  The remaining six cases have two vertexes containing cloud core 
+and two vertexes containing environment, and result in the tetrahedron being 
+cut by two triangles which share a common edge.
 
-Next, we compute the value of 
-$q_{diff} = q_t - q_{sat}(T, p)$, where $q_t$ is the total specific water and
-$q_{sat}(T, p)$ is the saturated specific humidity, all in kg kg$^{-1}$.  
-$q_{diff}$ is positive for cloudy points, negative for clear points, and zero 
-at the cloud surface, representing the moisture excess or deficiency relative 
-to the cloud surface.  
-
-The fractional distance between 
-the pyramid apex and base at which $q_{diff} = 0$ is calculated via linear 
-interpolation:
+The location of the triangles that cut the tetrahedrons are found by 
+calculating the fractional distance between connected tetrahedron vertexes at 
+which each variable is zero:
 \begin{equation}
 \label{eq:q_diff_interpolation}
 x = \frac{q_{diff}(x_1)}{q_{diff}(x_2) - q_{diff}(x_1)}.
 \end{equation}
-
-This calculation is then repeated for $\Delta\theta_v = \theta_v - 
-\overline{\theta_v}$, where $\theta_v$ is the virtual potential temperature in 
-Kelvins and $\overline{\theta_v}$ is the horizontal mean of the virtual 
-potential temperature.  The $x$ value that returns the smaller cloud volume is 
-taken to be the location of the cloud core surface, cutting the pyramid 
-parallel to the pyramid base.  
-
-
-
-
-The surface is defined in a similar way to the Marching Cubes algorithm 
-\citep{Lorensen1987}.  As each tetrahedron has four vertexes, each of which can
-either be cloudy or clear, there are 16 possible cases that must be considered. 
-Many of these cases share symmetries, reducing the number of independent cases 
-to four classes.  If the vertexes of a tetrahedron are all cloudy or all clear, 
-the cloud surface does not pass through the tetrahedron.  If only one of the 
-vertexes is clear (or conversely, only one is cloudy) than that corner of the 
-tetrahedron is cut by a triangle that intersects the tetrahedron edges where 
-$q_{diff}=0$ (or $\theta_v = 0$, depending on which results in a smaller cloud 
-volume), determined by linearly interpolating the values at the vertexes; this 
-accounts for eight of the cases.  The remaining six cases have two cloudy 
-vertexes two clear vertexes, and result in the tetrahedron being cut by two 
-triangles which share a common edge.
+This calculation is then repeated for $\Delta\theta_v$ and $w$.  The $x$ value 
+that returns the smaller cloud core volume is taken to be the location of the 
+cloud core surface.   Repeated application of this algoritm to each grid cell 
+results in a continuous surface that approximates the subgrid location of the 
+cloud core surface (Figure \ref{fig:tetrahedral_interpolation}, right panel).
 
 Once the geometry of the case is determined, the area of the cloudy portion of
-the model grid cell wall is calculated by dividing the cloudy area into 
+the model grid cell wall can be calculated by dividing the cloudy area into 
 triangles and summing the triangle areas
 \begin{equation}
 A = \frac{|(\mathbf{b - c}) \times (\mathbf{a - c})|}{2},
@@ -356,7 +364,9 @@ of the sub-tetrahedrons using
 V = \frac{|\mathbf{a - d} \cdot ((\mathbf{b - d}) \times (\mathbf{c - d}))|}{6},
 \end{equation}
 where $\mathbf{a}$, $\mathbf{b}$, $\mathbf{c}$, and $\mathbf{d}$ are the 
-position vectors of the vertices of the sub-tetrahedrons.
+position vectors of the vertices of the sub-tetrahedrons.  This results in 
+all the information needed to measure entrainment and detrainment via equation
+(\ref{eq:entrainment_detrainment}).
 
 %==============================================================================
 
