@@ -289,7 +289,7 @@ a scheme that relies on subdividing the grid cells into regular sub-cells,
 finding the location of the cloud surface within these sub-cells, and then 
 reassembling the cells to construct the location of the cloud core surface.
 Our interpolation method, which we refer to as the "tetrahedral interpolation"
-case, splits the cubic grid cell into six pyramids, then splits each pyramid 
+scheme, splits the cubic grid cell into six pyramids, then splits each pyramid 
 into eight tetrahedrons (Figure \ref{fig:tetrahedral_interpolation}, left 
 panel).  This results in forty-eight tetrahedrons, each composed of four 
 vertices located at the grid cell centre, the center of a grid cell wall, the 
@@ -315,8 +315,8 @@ deficiency relative to the cloud surface.  Similarily, we calculate $\Delta
 \theta_v = \theta_v - \overline{\theta_v}$, where the bar represents the 
 horizontal mean, to represent buoyancy excess or deficiency.  Vertical 
 velocity $w$ requires no new variable to be calculated, but as it is defined 
-at the center of the top and bottom of the grid cell, the interpolation 
-locations are slightly different.
+at the center of the top and bottom of the grid cell, we first interpolate 
+$w$ to the center of the grid cell for consistency.
 
 The cloud core surface itself is defined in a similar way to the Marching 
 Cubes algorithm \citep{Lorensen1987}.  Each tetrahedron has four vertexes, 
@@ -372,16 +372,16 @@ all the information needed to measure entrainment and detrainment via equation
 
 \section{Model Description}
 
-We have implemented both the tetrahedral surface interpolation scheme and the 
-time averaging scheme of \cite{Romps2010}  in the System for Atmospheric 
+We have implemented both our tetrahedral surface interpolation scheme and the 
+time averaging scheme of \cite{Romps2010} in the System for Atmospheric 
 Modelling \citep[SAM;][]{Khairoutdinov2003}, allowing the model to calculate 
-cloud core entrainment and detrainment at every time step.  We have run these 
-schemes in a standard GCSS Barbados Oceanographic and Meteorological 
-Experiment (BOMEX) LES simulation \citep{Holland1973, Siebesma2003}.  The 
-model was run with a domain extent of 6.4 km x 6.4 km in the horizontal and 
-3.2 km in the vertical.  Model cloud area, vertical velocity, and cloud core 
-entrainment diagnosed from bulk conserved tracer budgets agree well with the 
-results presented in \cite{Siebesma2003}.
+cloud core entrainment and detrainment via these two methods simeultaneously.
+We have run these schemes in a standard GCSS Barbados Oceanographic and 
+Meteorological Experiment (BOMEX) LES simulation \citep{Holland1973, 
+Siebesma2003}.  The model was run with a domain extent of 6.4 km x 6.4 km in 
+the horizontal and 3.2 km in the vertical.  Model cloud area, vertical 
+velocity, and cloud core entrainment diagnosed from bulk conserved tracer 
+budgets agree well with the results presented in \cite{Siebesma2003}.
 
 To examine the resolution dependence of our scheme, we ran three models: one at 
 25m grid spacing in all directions with a 1.5 second time step, one at 50m grid 
@@ -391,63 +391,87 @@ resolution model.  The models were each run for 6 hours, and the first
 three hours of simulation were discarded as the model was still adjusting into 
 steady-state.  15 minute averages were output for the terms of each of our 
 calculations.  Running the 25m resolution model with the tetrahedral surface 
-interpolation scheme resulted in a 26\% model slowdown.  
+interpolation scheme resulted in a 13\% model slowdown.  
 
 %==============================================================================
 
-\section{Comparison with the direct flux scheme of Romps}
+\section{Comparison with Romps}
 
-Next we compare our entrainment and detrainment values calculated directly from 
-model fluxes with values calculated from conserved bulk tracer budgets, which 
-form the basis of most LES calculations of cloud entrainment and detrainment in 
-the literature \citep{Siebesma2003, Rooy2008}.  
+We take the direct entrainment method of \cite{Romps2010}, which we shall 
+refer to as "Romps entrainment" to represent the true entrainment, when 
+averaged over a suitably long period, as it uses a minimal set of assumptions
+to perform its calculations.  We therefore use the Romps entrainment scheme in
+this section to evaluate the accuracy of our tetrahedral interpolation.
+
+Comparison of the average values produced by the two methods over three hours 
+of model time (Figure \ref{fig:direct_vs_romps}) shows good agreement in the 
+vertical profiles of both $E$ and $D$; however, the magnitude of the 
+tetrahedral entrainment and detrainment values are slightly higher than the 
+Romps value.  This is likely the result of errors in the estimate of the 
+velcity of the cloud surface in our tetrahedral scheme, which would tend to 
+result in overestimation of the entrainment and detrainment rates.  
+However, the tetrahedral scheme is vastly superior to using no interpolation, 
+which results in entrainment and detrainment values four times larger than 
+the Romps value (not shown).  
+
+There is similar agreement between $\epsilon = E/M$ and $\delta = D/M$, the 
+fraction entrainment and detrainment rates, where M is the total vertical 
+massflux within the cloud core in kg m$^{-2}$ s$^{-1}$ and $\epsilon$ and 
+$\delta$ have units of m$^{-1}$.  However, large deviations do occur near 
+cloud base and top. Some of this deviation results from small differences 
+between $E$ and $D$ which are magnified by small values of $M$.  However, at
+cloud base and top the Romps entrainment is actually larger than the
+tetrahedral entrainment.  This is due to underestimate of the cloud volume 
+by the tetrahedral interpolation in areas where clouds are small; we will 
+discuss this underestimate more fully in section 5.  
 
 %-----------------------------------------------------------------------------
 
 \subsection{Agreement with the continuity equation}
 
-The continuity equation for a turbulent plume, 
+While $E$ and $D$ are important for calculating changes in cloud properties 
+such as temperature and humidity, cloud mass continuity is actually 
+controlled by their difference, $E-D$.  Comparison of the tetrahedral values 
+of $E-D$ we have calculated with the the Romps and no interpolation schemes
+shows very close agreement (Figure \ref{fig:E_minus_D}).  Of these four 
+calculations, the no interpolation scheme is the most accurate measurement of
+continuity, as we calculate its fluxes using the model's MPDATA tracer 
+advection routine \citep{Smolarkiewicz1990; Khairoutdinov2003} without any 
+interpolation of the cloud surface.  The tetrahedral scheme is biased by the 
+redefinition of the cloud surface done by the method, while the Romps scheme 
+redefines the times at which entrainment and detrianment takes place.  
+
+* TK more comparison with final result *
+
+For comparison, we also calculate $E-D$ from the continuity equation for a 
+turbulent plume, 
 \begin{equation}
     \label{eq:continuity}
     \rho \frac{\partial a}{\partial t} 
-    + \frac{\partial M_c}{\partial z}
+    + \frac{\partial M}{\partial z}
     = E - D
 \end{equation},
-gives us a check on our calculated values of entrainment and detrainment; to 
-satisfy continuity, the difference between the amount of fluid entrained and 
-detrained by the clouds at a given height must equal the vertical gradient in 
-cloud mass flux plus the rate in change of the cloud area.  We calculate the 
-vertical gradient of mass flux in equation (\ref{eq:continuity}) by 
-interpolating vertical velocities from the edges to the center of each grid 
-cell, then averaging total mass flux within the clouds using these interpolated 
-velocities.  Fifteen minute average values of mass flux were output and the 
-vertical derivative taken via centered differencing.  Fifteen minute average 
-values of $\partial a/\partial t$ are calculated within the model as well.
+To satisfy continuity, the difference between the amount of fluid 
+entrained and detrained by the clouds at a given height must equal the 
+vertical gradient in cloud mass flux plus the rate in change of the cloud area.
+We calculate the vertical gradient of mass flux in equation 
+(\ref{eq:continuity}) by interpolating vertical velocities from the edges to 
+the center of each grid cell, then averaging total mass flux within the clouds 
+using these interpolated velocities.  Fifteen minute average values of mass 
+flux were output and the vertical derivative taken via centered differencing.  
+Fifteen minute average values of $\partial a/\partial t$ are calculated within 
+the model as well.  
 
-Comparison of the values of $E-D$ we have calculated with the continuity 
-equation shows our direct flux calculations agree with continuity fairly well
-(Figure \ref{fig:E_minus_D}), but diverge slightly between cloud base and 1 km
-height.  $E-D$ calculated using bulk tracer budgets agrees exactly with the
-mass divergence value over the entire column height (not shown).
-
-The small disagreement between the direct flux calculation and the continuity 
-equation values of $E-D$ are the result of two differences between the 
-calculations.  First, our surface interpolation scheme redefines the volume 
-over which the calculation takes place, and so necessarily will give slightly 
-different results.  This can be seen in the differences between the $E-D$ 
-values calculated from the direct flux without surface interpolation and the 
-direct flux with tetrahedral surface interpolation.
-
-Second, we take the disagreement between the continuity equation and $E-D$
-calculated via direct fluxes without surface interpolation to be the result of
-bias in the continuity equation calculation, as we calculate the direct flux in
-the model directly from the tracer advection routine.  The interpolation and
-centered differencing we use to calculate mass flux divergence will result in a
-slightly different estimate of the mass continuity than one obtains from direct
-model fluxes.  Despite these differences, our direct flux calculations 
-duplicate the overall shape of the $E-D$ curves calculated from continuity and 
-bulk conserved tracer calculations, despite large differences in the actual
-magnitudes of $E$ and $D$ in each case.
+Our direct flux calculations agree with continuity fairly well 
+(Figure \ref{fig:E_minus_D}), but diverge between cloud base and 1 km height.  
+We take this result to indicate that the interpolation and centered 
+differencing we use to calculate mass flux divergence for the continuity 
+equation results in a different estimate of mass continuity than the direct 
+model fluxes.  Thus suggests the value of $E-D$ is remarkably sensitive to 
+the details of the numerical scheme used to calculate the fluxes.  For 
+consistency with the underlying model numerics, we recommend these 
+calculations be implemented using the same advection scheme used by the 
+numerical model in which they are implemented.
 
 %-----------------------------------------------------------------------------
 
@@ -586,9 +610,7 @@ numerical model, subject to the caveats we have mentioned.
 
 We have shown that by interpolating the location of cloud surfaces in an LES
 model we have been able to calculate entrainment and detrainment rates directly 
-from model mass fluxes.  We therefore conclude that this scheme is suitable for 
-use in calculating entrainment and detrainment rates for individual clouds in 
-an LES model.
+from model mass fluxes. 
 
 %==============================================================================
 
