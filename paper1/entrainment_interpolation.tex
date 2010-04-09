@@ -34,10 +34,11 @@ width of a model grid cell.  Here we present a method for the subgrid
 interpolation of a cloud surface on a discrete numerical model grid.  This
 method is used to calculate entrainment and detrainment rates for an LES model,
 which are compared with rates calculated via the direct flux method of 
-\cite{Romps2010}.  The comparison suggests our method has small biases in 
-entrainment and detrainment values, but is capable of much finer temporal 
-resolution, making it suitable for entrainment and detrainment calculations of 
-individual clouds.
+\cite{Romps2010}.  The comparison shows good agreement between the two methods 
+as long as the model clouds are well resolved by the model grid spacing. 
+This limitation of our technique is compensated by the ability to resolve 
+fluxes on much finer temporal and spatial scales, making it suitable for 
+calculating entrainment and detrainment of individual clouds.
 }
 %
 \begin{document}
@@ -398,10 +399,10 @@ interpolation scheme resulted in a 13\% model slowdown.
 \section{Comparison with Romps}
 
 We take the direct entrainment method of \cite{Romps2010}, which we shall 
-refer to as "Romps entrainment" to represent the true entrainment, when 
-averaged over a suitably long period, as it uses a minimal set of assumptions
-to perform its calculations.  We therefore use the Romps entrainment scheme in
-this section to evaluate the accuracy of our tetrahedral interpolation.
+refer to as "Romps entrainment", to represent the true entrainment as it uses 
+a minimal set of assumptions to perform its calculations.  We therefore use 
+the Romps entrainment scheme in this section to evaluate the accuracy of our 
+tetrahedral interpolation.
 
 Comparison of the average values produced by the two methods over three hours 
 of model time (Figure \ref{fig:direct_vs_romps}) shows good agreement in the 
@@ -425,8 +426,6 @@ tetrahedral entrainment.  This is due to underestimate of the cloud volume
 by the tetrahedral interpolation in areas where clouds are small; we will 
 discuss this underestimate more fully in section 5.  
 
-%-----------------------------------------------------------------------------
-
 \subsection{Agreement with the continuity equation}
 
 While $E$ and $D$ are important for calculating changes in cloud properties 
@@ -436,12 +435,12 @@ of $E-D$ we have calculated with the the Romps and no interpolation schemes
 shows very close agreement (Figure \ref{fig:E_minus_D}).  Of these four 
 calculations, the no interpolation scheme is the most accurate measurement of
 continuity, as we calculate its fluxes using the model's MPDATA tracer 
-advection routine \citep{Smolarkiewicz1990; Khairoutdinov2003} without any 
+advection routine \citep{Smolarkiewicz1990, Khairoutdinov2003} without any 
 interpolation of the cloud surface.  The tetrahedral scheme is biased by the 
 redefinition of the cloud surface done by the method, while the Romps scheme 
-redefines the times at which entrainment and detrianment takes place.  
-
-* TK more comparison with final result *
+redefines the times at which entrainment and detrianment takes place.  Both 
+these schemes result in a more negative $E-D$ value than the no interpolation 
+scheme, with the tetrahedral interpolation having slightly less bias.
 
 For comparison, we also calculate $E-D$ from the continuity equation for a 
 turbulent plume, 
@@ -475,77 +474,117 @@ numerical model in which they are implemented.
 
 %-----------------------------------------------------------------------------
 
-\subsection{Correlation of bulk tracer and direct calculation methods}
+\subsection{Correlation between Romps and Tetrahedral methods}
 
-So far we have shown that our direct flux calculation produces entrainment and
-detrainment values that agree reasonably well with the values produced via 
-bulk tracer budgets corrected for the presence of the moist cloud shell.  
-However, this does not ensure that the same variability is displayed by the two 
-calculations.  To analyze the variability, we take the correlation of the 
-fifteen-minute averaged $E$ and $D$ values calculated via the two methods over 
-the three hour model run at each height to generate correlation profiles.  
-Additionally, we calculate correlations between our direct flux scheme and 
-the uncorrected bulk tracer method for comparison.  Heights at which the model 
-does not have clouds for the entire three hour period are excluded from the 
-calculation.  
+So far we have shown that our tetrahedral interpolation produces entrainment 
+and detrainment values that agree reasonably well with the Romps entrainment
+calculation.  However, this does not ensure that the same variability is 
+displayed by the two calculations.  To analyze the variability, we take the 
+correlation of the fifteen-minute averaged $\epsilon$ and $\delta$ values 
+calculated via the two methods over the three hour model run at each height 
+to generate correlation profiles.  We use $\epsilon = E/M$ and $\delta = D/M$ 
+to analyze the variability as $E$ and $D$ are both strongly correlated with 
+cloud volume; more cloud volume with the same entrainment velocity results in 
+larger entrainment.  Dividing by the mass flux removes this area dependance.
+Heights at which the model does not have clouds for the entire three hour 
+period are excluded from the calculation.  
 
-The result of these calculations shows correlations between the methods for 
-both $E$ and $D$ that are significant at the 99\% confidence level over most 
-of the cloud layer (Figure \ref{fig:correlations}).  Entrainment near cloud top
-and detrainment near cloud base show no correlation, but as this is where the 
-bulk tracer method generates negative values of $E$ and $D$, these values are 
-physically suspect anyways.  Entrainment shows a minimum in its correlation 
-slightly above cloudbase, which we attribute to the negative detrainment values 
-corrupting the bulk tracer estimates of entrainment.  At all levels, the 
-correction to the bulk tracer calculation increases the correlation with our 
-direct flux calculations, primarily in the detrainment. 
+Correlations between the Romps and tetrahedral interpolation methods for both 
+$\epsilon$ and $\delta$ are significant at the 99\% confidence level over most 
+of the cloud layer (Figure \ref{fig:correlations}).  Values near cloud 
+base and top show no correlation, which we would expect given the poor 
+agreement between the average values of $\epsilon$ and $\delta$ between the 
+two methods in these regions (Figure \ref{fig:direct_vs_romps}d and e).  We
+take these results to show general good agreement between our tetrahedral 
+interpolation scheme and the time averaging scheme of Romps over relatively 
+large time and space averages.  
 
-Fractional entrainment $\epsilon = E/M_c$ and detrainment $\delta = D/M_c$ show 
-little correlation between the direct flux and the bulk tracer method (not 
-shown), due to a very high correlation between $E$, $D$ and $M_c$.  This high 
-correlation means the timeseries of $E$, $D$ and $M_c$ have nearly identical 
-shapes, so dividing $E$ and $D$ by $M_c$ results in nearly constant values. The
-small variance that remains in $\epsilon$ and $\delta$ is essentially noise, 
-and shows our technique supports the parameterization E = $\epsilon M_c$ and 
-D = $\delta M_c$.
+\subsection{Behavior over different time and space scales}
 
-%------------------------------------------------------------------------------
+The Romps entrainment calculation relies on averaging over sufficiently long 
+time scales for several grid cells to complete an entrainment or detrainment 
+cycle.  The tetrahedral interpolation scheme, on the other hand, has no such 
+limitation.  For example, the tetrahedral interpolation values horizontally 
+averaged over the whole model domain at a given height show little change in 
+variability between instantaneous values, 1 minute average values, and 5 
+minute average values (Figure \ref{fig:averaging_convergence}).  The 
+Romps entrainment, on the other hand, shows jumps on the order of 50\% of the 
+mean from time step to time step.  Over 1 minute averages, the Romps 
+entrainment has variability similar to that shown by the tetrahedral 
+interpolation method without any averaging, and does not settle down to a 
+stable value until 5 minute averages are taken.
 
-\subsection{Statistical robustness}
-
-
-%------------------------------------------------------------------------------
+When the spatial variability of the two schemes are examined, Romps 
+entrainment shows even more erratic behavior, even when one minute average 
+values are taken (Figure \ref{fig:spatial_variability}).  Tetrahedral 
+entrainment values show a relatively smooth spatial distribution at the scale 
+of an individual cloud, while Romps entrainment values are sparse and on 
+average larger than the tetrahedral values.  This difference is the primary 
+advantage of the tetrahedral interpolation method; it allows instantaneous 
+measurements of entrainment and detrainment rates at the individual cloud 
+level.
 
 \subsection{Dependence on model resolution}
 
-\cite{Brown1999} found entrainment and detrainment depended on LES model 
-resolution surprisingly little.  Our entrainment and detrainment calculations 
-using the bulk tracer method without correcting for the cloud shell show a
-similar lack of resolution dependence (Figure \ref{fig:resolution_dependence}).
-However, both the direct flux calculation and the bulk tracer calculation 
-corrected for the influence of the cloud shell show steadily increasing values 
-as grid spacing decreases.  At 100m grid resolution, all three methods produce
-similar values.  At 25m and 50m resolution, the direct flux entrainment is 
-consistently smaller than the corrected bulk tracer entrainment, while the 
-detrainments agree quite well.  These results hold for fractional entrainment 
-$\epsilon$ and fraction detrainment $\delta$ values as well (not shown).  
+Both the Romps and tetrahedral entrainment calculations display relatively 
+stong dependence on model resolution, with $E$ and $D$ decreasing as grid 
+resolution becomes coarser (Figure \ref{fig:resolution_dependence}).  
+Furthermore, while $E$ and $D$ calculated via the two direct methods show good 
+agreement at 25m resolution, the tetrahedral interpolation method 
+systematically underestimates the values calculated by the Romps method as 
+grid spacing becomes coarser; at 100m resolution, the difference in the
+values exceeds 50\%.  Since poor estimation of motion of the cloud surface 
+relative to the air should on average result in an over-prediction of $E$ and
+$D$, a different error must be dominating the tetrahedral calculation.
 
-It appears that the constant values for $\epsilon$ and $\delta$ with increasing
-model resolution reported by \cite{Brown1999} are the result of compensating
-changes in the properties of the cloud shell as the entrainment and detrainment
-fluxes increase.  Essentially, as we move to finer grid spacings we resolve
-more turbulent recirculations moving fluid in and out of the clouds.  At the
-same time, horizontal gradients in bulk properties at the cloud edge are better
-resolved, reducing the impact of these greater fluxes on the mean properties of 
-clouds and environment.
+This error is likely related to a systematic underestimate of the cloud volume 
+as calculated by the tetrahedral interpolation method when estimating the 
+volume of a cloud that occupies a single model grid cell.  Consider such an 
+isolated cloud cell, surrounded by clear grid cells in the 2D plane (Figure 
+\ref{fig:interpolation_bias}).  For simplicity, instead of considering the 
+full cloud core calculation, let us consider simply the condensed water.
+Assume the cloud cell has a $q_{diff}$ value of 1 g kg$^{-1}$, and the clear 
+cells -1 g kg$^{-1}$.  The Romps calculation, in agreement with the model 
+assumptions, will treat this entire grid cell as containing cloud.
+
+The tetrahedral calculation, on the other hand, will underestimate the cloud 
+volume.  At the cell edge points, the $q_{diff}$ value will be averaged between
+adjacent cells, giving $q_diff = 0$ and placing the cloud surface at the grid 
+cell wall, exactly as expected.  At the cell corners, however, the four 
+surrounding $q_diff$ values average to give $q_diff = -0.5$, and interpolation 
+of this value between the corner and the cell center puts the cloud surface 
+at 2/3 the distance between the center and the corner.  This effect will occur 
+anytime a single cloud cell is present and multiple clear cells are averaged 
+to form interpolation values.
+
+Since there is less cloud volume with the interpolation, this results in less 
+entrainment and detrainment, since there is less cloud volume with which to 
+entrain or detrain.  However, this effect only becomes an issue when a 
+significant fraction of the cloud field has a spatial scale on the order of 
+the model grid spacing.  This can be seen by comparing vertical profiles of 
+the total cloud core fraction for the three model resolutions (Figure 
+\ref{fig:area_comparison}).  The 25m grid spacing model tetrahedral 
+interpolation volume shows very little underestimate compared to the no 
+interpolation cloud core fraction, but the 100m model interpolated volume is 
+reduced in size by 50\% of the uninterpolated value.
+
+This underestimate of the volume of isolated cloud cells is an inherent 
+feature of surface interpolation, since as a cloud evaporates, the 
+interpolated volume would decrease smoothly to zero.  Thus, clouds with a 
+volume on the order of the model grid spacing will always have their volume 
+underestimated by interpolation.  We have not been able to find a simple way 
+to correct for this, as the effect is non-linear and is not corrected simply 
+by scaling the entrainment values by the ratio of the interpolated to 
+non-interpolated cloud volumes.  Therefore, the tetrahedral interpolation 
+method must rely on having suffiencient grid resolution to minimize this effect.
 
 %==============================================================================
 
-\section{Discussion}
+\section{Discussion and Conclusions}
 
-The good agreement between our technique and the bulk tracer method corrected 
-for the presence of the cloud shell gives us confidence that our calculation is 
-a valid representation of the flux through the cloud surface.  However, as our 
+The good agreement between our technique and the Romps entrainment method at
+fine grid spacing gives us confidence that our calculation is a valid 
+representation of the flux through the cloud surface.  However, as our 
 method redefines the location of the cloud volume, there are interpretation 
 issues when comparing the fluxes calculated by the two methods.  For example, 
 consider a cloud that occupies a single grid cell.  Assume that over the course 
@@ -557,60 +596,43 @@ grid cell.  Our surface interpolation, however, will come to the opposite
 conclusion: the reduction of liquid water content will move the interpolated 
 cloud surface closer to the grid cell center, reducing the volume of the cloud 
 and thus detraining cloud fluid.  We believe effects like this explain why the 
-surface interpolation method estimates $E$ and $D$ values that are smaller than 
-those estimated via bulk conserved tracers at 100 m resolution; at this grid 
-spacing, nearly all the clouds occupy only a single grid cell in the horizontal.
-Which calculation is correct depends on which set of assumptions regarding the 
-subgridscale variability one prefers.  
+tetrahedral interpolation method estimates $E$ and $D$ values that are smaller 
+than those estimated via the Romps method at coarse grid resolution.
 
-At the same time, the entrainment or detrainment value one considers to be 
-correct will depend on the purpose for which they are used.  The correction to 
-the bulk tracer calculation due to the cloud shell has little bearing on the 
-entrainment and detrainment values needed for calculating cloud moisture and 
-energy in GCM parameterizations, which only have access to large-scale mean 
-bulk tracer values.  However, this correction may be important for calculating 
-fluxes of properties that have different radial dependencies than $q_t$ or $h$, 
-such as vertical momentum, which is negative in the shell \citep{Heus2008}, or 
-for aerosols whose chemical properties are altered by reactions in the presence 
-of liquid water \citep{Hoppel1994}.  In any case, the agreement between our 
-direct flux method and the bulk tracer method corrected for the influence of 
-the cloud shell suggests the shell correction removes a significant bias when 
-estimating the total mass exchange between clouds and environment.
+\citet{Romps2010} found that values of direct entrainment and detrainment were 
+significantly higher than values calculated via bulk tracer budgets: our 
+method supports this conclusion (at least at high enough grid resolution).  
+Romps interpreted the smaller tracer budget values to be the result of assuming
+all entrainment and detrainment occurs with fluid having the mean properties of
+the environment or the cloud core, respectively.  This difference between the 
+bulk tracer and direct entrainment calculations suggests that significant 
+recirculation occurs around the clouds, with an average air parcel entering 
+and leaving the cloud more than once.  
 
-Additionally, our scheme shows some benefits over the bulk tracer calculations. 
-At cloud base, the bulk tracer calculation show little entrainment occurring, 
-instead displaying a large negative entrainment; our scheme displays a large 
-entrainment and a large and positive detrainment at cloud base (Figure 
-\ref{fig:corrected_entrainment}).  On the other hand, at cloud top the bulk 
-tracer method calculates a negative entrainment, while our method calculates a 
-small positive value.  In both these cases our calculation generates a more 
-physically realistic result.  
+Furthermore, \cite{Brown1999} found entrainment and detrainment calculated via
+bulk tracer budgets, depended on LES model resolution surprisingly little, in 
+contrast to the strong resolution dependance shown by the direct fluxes.
+This suggests that changes in this recycling of cloudy air with model 
+resolution compensate the mass flux changes resulting in little apparent $E$ 
+and $D$ variability in the tracer budgets.  Both these effects suggest an 
+understanding of the behavior of the cloud shell may be important for accurate
+parameterization of cloud property exchanges.
 
-\cite{Romps2010} very recently created a complimentary technique to measure 
-entrainment and detrainment in an LES, which instead of interpolating the 
-location of the cloud surface in space, averages the surface fluxes over the 
-time needed for an entire grid cell to entrain or detrain.  Romps' values agree 
-quite well with the values we calculate from the bulk conserved tracers 
-corrected for the cloud shell, as well at those calculated from our technique 
-with tetrahedral interpolation.  Romps' technique has the advantage of making 
-no assumptions about the cloud surface and is therefore more consistent with 
-the LES model assumptions.  However, our method has the advantage of giving 
-instantaneous values for entrainment and detrainment, while Romps' gives 
-$\approx$30 second averages.  This makes our technique more useful for tracking 
-entrainment variability in individual clouds.
+We have shown that by interpolating the location of cloud surfaces in an LES
+model we have been able to calculate reasonable entrainment and detrainment 
+rates directly from model mass fluxes.  These fluxes agree well with the 
+direct entrainment method of Romps, with the caveat that the clouds must be 
+well resolved by the model grid spacing so as to minimize underestimate of the 
+cloud volume by the interpolation scheme.  This tetrahedral interpolation 
+scheme gives significant benefits over the Romps entrainment scheme over short 
+time and small spatial scales, generating statistically well-behaved results 
+suitable for use in examining entrainment and detrainment variability over the 
+life cycle of an individual cloud.
 
 Finally, we note that nothing in our technique is dependent on the shallow 
 cumulus cloud regeime, on indeed on clouds at all; it should be equally useful
 in calculating entrainment and detrainment through any material surface in a 
 numerical model, subject to the caveats we have mentioned.
-
-%==============================================================================
-
-\section{Conclusions}
-
-We have shown that by interpolating the location of cloud surfaces in an LES
-model we have been able to calculate entrainment and detrainment rates directly 
-from model mass fluxes. 
 
 %==============================================================================
 
@@ -699,7 +721,7 @@ correlation.}\label{fig:correlations}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc,angle=0]{./figures/averaging_convergence}\\ 
+  \noindent\includegraphics[width=39pc,angle=0]{./figures/averaging_convergence}\\ 
   \caption{Time variability of mean entrainment fields for a) tetrahedral 
   interpolation and b) direct entrainment from \cite{Romps2010}.
   }\label{fig:averaging_convergence}
