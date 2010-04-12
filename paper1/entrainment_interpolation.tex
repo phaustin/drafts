@@ -101,8 +101,6 @@ calculations of entrainment and detrainment}}}
 
 \section{Introduction}
 
-**TK** Add stuff about other entrainment problems
-
 The largest uncertainties in climate sensitivity estimates from Global 
 Circulation Model (GCM) simulations come from the subgridscale parameterization 
 of low clouds \citep{Colman2003,Bony2005,Webb2006}.  Specifically, 
@@ -117,11 +115,7 @@ cloud properties, the height of the cloud tops, the amount of heat and moisture
 the clouds transport upwards, and the heights at which the clouds deposit that 
 heat and moisture.  They also have effects on the vertical transport of 
 aerosols out of the boundary layer and the rate at which chemical reactions can 
-occur in those aerosols \citep{Barahona2007,Anldrejczuk2008}. A simple 
-entraining plume model is at the heart of many parameterizations of shallow and 
-deep convection, and a variety of approaches to calculate appropriate 
-entrainment and detrainment rates for these models have been proposed
-\citep{Lock2000,Bretherton2009,Siebesma2007}.
+occur in those aerosols \citep{Barahona2007,Anldrejczuk2008}.
 
 Large Eddy Simulation (LES) is an important tool used in the study of cloud 
 entrainment and detrainment. LES models achieve grid resolutions on the order 
@@ -143,10 +137,11 @@ Entrainment and detrainment rates are typically calculated in LES simulations
 by recording budgets of bulk conserved tracer variables, such as the total 
 humidity or the liquid water moist static energy, and inferring the amount of
 fluid exchange between cloud and clear air that is needed to explain the rate 
-at which that tracer is being vertically advected within the cloud field. These 
-budgets typically assume the clouds and the cloud environment are horizontally 
-homogeneous slabs; this is a much less accurate assumption on the level of an 
-individual cloud.
+at which that tracer is being vertically advected within the cloud field 
+\citep{Cuijpers1995}. These budgets typically assume the clouds and the cloud 
+environment are horizontally homogeneous slabs; this is a much less accurate 
+assumption on the level of an individual cloud, and this variability makes 
+bulk tracer calculations on this scale problematic.
 
 Alternatively, entrainment and detrainment could simply be calculated directly 
 from the LES velocity, pressure, humidity and temperature fields.  
@@ -173,19 +168,19 @@ $\Delta x$ is the model grid spacing and $\Delta t$ is the model time step.  The
 surface of the cloud only moves when a grid cell's humidity reaches saturation, 
 and when it does, an entire grid cell worth of fluid leaves or enters the cloud.
 
-\cite{Romps2010} very recently overcame this problem by averaging the surface 
+\cite{Romps2010} recently overcame this problem by averaging the surface 
 fluxes over the time needed for an entire grid cell to entrain or detrain.
 However, fine temporal and spatial resolution of entrainment and detrainment 
 variability is difficult to achieve with this method due to the long temporal 
 averages needed.  Here we present a method for calculation of the cloud 
 entrainment and detrainment rates that relies on interpolation of the subgrid 
-location of the cloud surface.  We believe this method can be used to produce 
-accurate estimates of the cloud entrainment and detrainment rates for 
-individual LES clouds.  In section 2 we describe this method, in section 3 we 
-describe the model configuration we used to test this method, in section 4 we 
-compare this calculation with entrainment and detrainment rates calculated 
-using \cite{Romps2010} direct entrainment calculation, in section 5 we 
-discuss our results, and in section 6 we present our conclusions.  
+location of the cloud surface.  This method can be used to produce accurate 
+estimates of the cloud entrainment and detrainment rates for individual LES 
+clouds.  In section 2 we describe this method, in section 3 we describe the 
+model configuration we used to test this method, in section 4 we compare this 
+calculation with entrainment and detrainment rates calculated using 
+\cite{Romps2010} direct entrainment calculation, and in section 5 we discuss 
+our results and present our conclusions.  
 
 %==============================================================================
 
@@ -722,39 +717,45 @@ correlation.}\label{fig:correlations}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=39pc,angle=0]{./figures/averaging_convergence}\\ 
-  \caption{Time variability of mean entrainment fields for a) tetrahedral 
-  interpolation and b) direct entrainment from \cite{Romps2010}.
+  \caption{Time variability of entrainment and detrainment horizontally 
+  averaged over the model domain at a height of one kilometer calculated via 
+  a) tetrahedral interpolation and b) Romps entrainment.
   }\label{fig:averaging_convergence}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=39pc,angle=0]{./figures/spatial_variability_1min}\\ 
-  \caption{Vertical cross-section of a cloud showing one minute averaged 
-  Entrainment (a, c) and Detrainment (b, d) fields calculated using our 
-  tetrahedral interpoation method (a, b) and Romps's time averaging method 
-  (c, d).
+  \caption{Vertical cross-section of a model cloud showing one minute averaged 
+  entrainment (a, c) and detrainment (b, d) calculated using tetrahedral 
+  interpoation (a, b) and Romps' time averaging method (c, d).
   }\label{fig:spatial_variability}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=40pc,angle=0]{./figures/resolution_dependence}\\
+  \noindent\includegraphics[width=39pc,angle=0]{./figures/resolution_dependence}\\
   \caption{Mean entrainment (top row) and detrainment (bottom row) calculated
-at 25m (left column), 50m (center column), and 100m (right column) grid 
-spacing using direct flux calculations with tetrahedral surface interpolation 
-(black line), bulk tracer calculations (thick grey line) and bulk tracer 
-calculations corrected for the presence of the moist cloud shell (thin grey 
-line).}\label{fig:resolution_dependence}
+  at 25m (left column), 50m (center column), and 100m (right column) grid 
+  spacing using direct flux calculations with tetrahedral surface interpolation 
+  (black line), bulk tracer calculations (thick grey line) and bulk tracer 
+  calculations corrected for the presence of the moist cloud shell (thin grey 
+  line).}\label{fig:resolution_dependence}
 \end{figure}
 
 \begin{figure}[t]
   \noindent\includegraphics[width=19pc,angle=0]{./figures/interpolation_bias}\\ 
-  \caption{Schematic showing interpolation bias which leads to underestimates
-  of cloud volume.
+  \caption{Schematic showing bias in the tetrahedral interpolation method 
+  which leads to underestimation of cloud volume.  Rightward pointing 
+  triangles represent u-velocity points, upward pointing triangles represent 
+  v-velocity points, and circles represent bulk tracer quantity points.
+  Black circles indicate cloudy points with total specific water 0.001 g 
+  kg$^{-1}$ above the saturated specific humidity, white circle indicate 
+  clear points with total specific water 0.001 g kg$^{-1}$ below the 
+  saturated specific humidity.
   }\label{fig:interpolation_bias}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=39pc,angle=0]{./figures/area_comparison}\\ 
+  \noindent\includegraphics[width=40pc,angle=0]{./figures/area_comparison}\\ 
   \caption{Profiles of cloud core fraction calculated without interpolation 
   (grey line) and with tetrahedral interpolation (black line) at 25m, 50m, 
   and 100m grid spacings.
