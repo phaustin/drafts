@@ -284,8 +284,8 @@ budgets.  \cite{Romps2010} derives tracer entrainment and detrainment to be:
 Here $e$ and $d$ are the local entrainment and detrainment through the cloud 
 surface in kg s$^{-1}$ m$^{-3}$, $\chi$ is the local tracer value, and
 $E_d = \overline{e}$ and $D_d = \overline{d}$ are the horizontally averaged 
-entrainment and detrainment values.  $e$ and $d$ are evaluated directly from 
-model mass fluxes via the relation
+entrainment and detrainment values, calculated directly from model mass 
+fluxes via the relation
 \begin{equation}
   \label{eq:romps_e_minus_d}
   e - d = \frac{\partial}{\partial t}(A\rho) 
@@ -340,6 +340,22 @@ any case is a far smaller correction than the factor of two difference between
 the values.
 
 %===================================================
+
+\section{Radial cloud structure}
+
+The bulk tracer calculations have one obvious source of bias: the assumption 
+that all fluid entrained or detrained from the cloud has the mean properties of 
+the environment or cloud, respectively.  
+
+Examination of the cloud core edge properties (cloud core model grid cells 
+that are horizontally adjacent to non-core cells) shows the cloud core edge has 
+nearly the same properties as the mean core, while the cloud core shell 
+properties (non-core cells that are horizontally adjacent to core cells) 
+are significantly different than mean environment properties (Figure 
+\ref{fig:shell_edge_profiles}).  This is in agreement with previous results 
+from both LES modelling and observations /citep{Heus2008}.
+
+
 
 \section{Correction of direct flux calculations}
 
@@ -416,28 +432,15 @@ We can immediately see this correction has two effects.  First, it reduces
 the direct entrainment by a factor of
 $(\chi_{c} - \chi_{se})/(\chi_{c} - \chi_{e})$ and the direct detrainment 
 by a factor of $(\chi_{sc} - \chi_{e})/(\chi_{c} - \chi_{e})$, to account for 
-the greater quantity of edge and shell air needed to balance the bulk tracer 
-tendency terms.  Second, the correction also adds a term to represent the 
-changes in the mean core and environment properties due to entraining parcels 
-moister than the environmental mean and detraining parcels dryer than the cloud 
-mean.  
+the smaller amount of mean cloud or environment air needed to balance the 
+bulk tracer tendency terms relative to edge or shell air.  Second, the 
+correction also reduces the direct entrainment by 
+$D_d(\chi_{c} - \chi_{sc})/(\chi_{c} - \chi_{e})$ and the direct detrainment 
+by $E_d(\chi_{se} - \chi_{e})/(\chi_{c} - \chi_{e})$, to account for changes 
+in the mean core and environment bulk tracer budgets due to entraining 
+parcels moister than the environmental mean and detraining parcels dryer than 
+the cloud mean.  
 
-
-
-These equations assume that fluid entraining into the cloud has the mean 
-properties of the cloud core environment is incorrect.  The errors induced by 
-this assumption can immediately be seen in the large negative bulk tracer 
-detrainment values near cloud base (Figure \ref{fig:siebesma_vs_romps}b).  
-These negative values occur because entrainment at cloud base is due to 
-thermodynamic changes instead of mechanical mixing.  Only the moistest 
-environmental parcels condense at cloud base to form clouds, and this means 
-that fluid entrained at cloud base is moister than the mean environment.  As 
-this moist condensing fluid essentially has the same properties as cloud base 
-air it does not drive changes in the mean cloud properties, and thus does not 
-appear as entrainment in equation (\ref{eq:siebesma_entrainment}).  However, the 
-removal of the moistest fluid from the environment does result in drying of 
-the environmental mean, and this drying is interpreted as negative 
-detrainment by equation (\ref{eq:siebesma_detrainment}).
 
 
 
@@ -447,19 +450,8 @@ detrainment by equation (\ref{eq:siebesma_detrainment}).
 
 %-----------------------------------------------------------------------------
 
-\section{Radial cloud structure}
 
-The bulk tracer calculations have one obvious source of bias: the assumption 
-that all fluid entrained or detrained from the cloud has the mean properties of 
-the environment or cloud, respectively.  
 
-Examination of the cloud core edge properties (cloud core model grid cells 
-that are horizontally adjacent to non-core cells) shows the cloud core edge has 
-nearly the same properties as the mean core, while the cloud core shell 
-properties (non-core cells that are horizontally adjacent to core cells) 
-are significantly different than mean environment properties (Figure 
-\ref{fig:shell_edge_profiles}).  This is in agreement with previous results 
-from both LES modelling and observations /citep{Heus2008}.
 
 
 
@@ -488,6 +480,22 @@ agreement with our direct flux calculations (Figure
 
 4. Eqt decomposition showing reynolds correlation magnitude
     relative error introduced by reynolds correlations
+
+
+These equations assume that fluid entraining into the cloud has the mean 
+properties of the cloud core environment is incorrect.  The errors induced by 
+this assumption can immediately be seen in the large negative bulk tracer 
+detrainment values near cloud base (Figure \ref{fig:siebesma_vs_romps}b).  
+These negative values occur because entrainment at cloud base is due to 
+thermodynamic changes instead of mechanical mixing.  Only the moistest 
+environmental parcels condense at cloud base to form clouds, and this means 
+that fluid entrained at cloud base is moister than the mean environment.  As 
+this moist condensing fluid essentially has the same properties as cloud base 
+air it does not drive changes in the mean cloud properties, and thus does not 
+appear as entrainment in equation (\ref{eq:siebesma_entrainment}).  However, the 
+removal of the moistest fluid from the environment does result in drying of 
+the environmental mean, and this drying is interpreted as negative 
+detrainment by equation (\ref{eq:siebesma_detrainment}).
 
 
 %==============================================================================
@@ -656,8 +664,8 @@ programming language.
 % Figure captions go below this illustration; Table captions go above tables
 
 \begin{figure}
-  \label{fig:siebesma_vs_romps}
-  \noindent\includegraphics[width=39pc]{./figures/siebesma_vs_romps}
+  \label{fig:shell_correction}
+  \noindent\includegraphics[width=39pc]{./figures/shell_correction}
   \caption{Mean profiles of a) entrainment and b) detrainment calculated 
   using the bulk tracer budget methods of \cite{Siebesma1995} (grey line) 
   and \cite{Romps2010} (black line), and c) the ratio of the values produced 
@@ -666,25 +674,25 @@ programming language.
 \end{figure}
 
 \begin{figure}
-  \label{fig:shell_edge_profiles}
-  \noindent\includegraphics[width=20pc]{./figures/shell_edge_profiles_core}
+  \label{fig:reynolds_correction}
+  \noindent\includegraphics[width=39pc]{./figures/reynolds_correction}
+  \caption{Comparison of mean a) entrainment and b) detrainment profiles 
+  calculated using uncorrected bulk tracer budgets (thin grey line), bulk
+  tracer budgets corrected for the presence of a moist cloud shell (thick grey
+  line), and direct flux calculations with tetrahedral surface interpolation 
+  (black line).  c) Ratio of corrected bulk tracer rates to the direct flux 
+  using tetrahedral interpolation rates of entrainment (black) and detrainment 
+  (grey).  d) and e) are the same as a) and b) but for the fractional 
+  entrainment and detrainment rates.}
+\end{figure}
+
+\begin{figure}
+  \label{fig:numerical_correction}
+  \noindent\includegraphics[width=39pc]{./figures/numerical_correction}
   \caption{Mean profiles of $q_t$ in the cloud core (thick grey line), core 
   edge (thin black line), core shell (thin grey line), and environment (thick 
   black line).
   }
-\end{figure}
-
-\begin{figure}
-  \label{fig:corrected_entrainment}
-  \noindent\includegraphics[width=39pc]{./figures/corrected_entrainment_core}
-  \caption{Comparison of mean a) entrainment and b) detrainment profiles 
-calculated using uncorrected bulk tracer budgets (thin grey line), bulk tracer 
-budgets corrected for the presence of a moist cloud shell (thick grey line), and
-direct flux calculations with tetrahedral surface interpolation (black line).
-c) Ratio of corrected bulk tracer rates to the direct flux using
-tetrahedral interpolation rates of entrainment (black) and detrainment (grey).
-d) and e) are the same as a) and b) but for the fractional entrainment and
-detrainment rates.}
 \end{figure}
 
 % ONE-COLUMN figure/table, including eps graphics
