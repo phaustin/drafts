@@ -217,20 +217,35 @@ air that is needed to balance vertical advection rates within the cloud field
 Alternatively, entrainment and detrainment can simply be calculated directly 
 from the LES velocity and tracer fields.  \cite{Romps2010} recently presented 
 a technique to directly measure entrainment and detrainment in this manner, 
-and found that direct measurement produced values twice as large as tracer 
-budget calculations.  Romps attributed this difference to the assumption made
-in bulk tracer calculations that the fluid exchanged between clouds and 
+and found that direct measurement produced values roughly twice as large as 
+tracer budget calculations.  Romps attributed this difference to the assumption 
+made in bulk tracer calculations that the fluid exchanged between clouds and 
 environment had the mean properties of the cloud or environment, respectively.
 
 Here we examine the sources of this factor of two discrepancy.  We show the 
-discrepancy can be explained by three effects: inconsistancies in the 
-numerical methods used in the two calculations, the presence of a moist shell 
-ofrecently detrained air surrounding the clouds, and Reynolds correlations 
-between the entrainment rates and the cloud bulk tracer values.
+discrepancy can be explained by three effects: the presence of a moist shell 
+of recently detrained air surrounding the clouds, Reynolds correlations 
+between the entrainment rates and the cloud bulk tracer values, and 
+inconsistancies in the numerical methods used in the two calculations.
 
-%==============================================================================
+%===================================================
 
-\section{Comparison of Siebesma and Romps bulk tracer calculations}
+\section{Model desccription}
+
+All calculations in this paper were made using the System for Atmospheric 
+Modelling \citep[SAM;][]{Khairoutdinov2003}, run with a standard GCSS Barbados 
+Oceanographic and Meteorological Experiment (BOMEX) LES simulation 
+\citep{Holland1973, Siebesma2003}.  The model was run on a 6.4 km x 6.4 km 
+horizontal x 3.2 km vertical domain at 25 meter grid resolution in all 
+directions.  The model was run for 6 hours, and the first three hours 
+of simulation were discarded; 15 minute averages were output for the terms 
+in each of our calculations.  We performed all entrainment and detrainment 
+calculations for both the total specific water ($q_t$, kg water kg$^{-1}$ air) 
+and the liquid water moist static energy ($h$, J kg$^{-1}$), but the results 
+are similar and we will confine our discussion to the entrainment and 
+detrainment inferred using $q_t$.
+
+\section{Correction of direct flux calculations}
 
 \cite{Siebesma1995} derive equations for entrainment and detrainment from a 
 simple entraining cloud plume based on conserved bulk tracer properties:
@@ -249,122 +264,39 @@ and
         + \rho (1-a) \frac{\partial \chi_e}{\partial t}
      - \rho (1-a) \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
 \end{equation}
-Here $\chi$ represents any conserved bulk tracer, such as total specific water 
-($q_t$, kg water kg$^{-1}$ air) or liquid water moist static energy 
-($h$, J kg$^{-1}$); $a$ is the fractional cloud core area; $M_c$ is vertical 
-cloud core mass flux (kg m$^{-2}$ s$^{-1}$); $w$ is vertical velocity 
-(m s$^{-1}$); $\rho$ is the density of the air in kg m$^{-3}$; $e$ and $c$ 
-sub- and super-scripts denote horizontally averaged values conditionally 
-sampled in the cloud environment and core; $forcing$ refers to forcings not 
-included in the other terms, such as radiation or subsidence; primed values 
-represent anomalies relative to the horizontal mean; overbars represent 
-horizontal averaging; and $E_{\chi}$ and $D_{\chi}$ are the horizontally 
-averaged bulk tracer entrainment into and detrainment out of the cloud core 
-in kg s$^{-1}$ m$^{-3}$.  Cloud core is defined here as model points that have 
-condensed water, upward vertical velocity, and are positively buoyant relative 
-to the horizontal mean.  Equations (\ref{eq:siebesma_entrainment}) and 
-(\ref{eq:siebesma_detrainment}) are essentially tracer budgets which balance 
-vertical fluxes and time tendencies of conserved tracers in the clouds against 
-horizontal exchanges.
+Here $\chi$ represents any conserved bulk tracer, such as $q_t$ or $h$; $a$ is 
+the fractional cloud core area; $M_c$ is vertical cloud core mass flux 
+(kg m$^{-2}$ s$^{-1}$); $w$ is vertical velocity (m s$^{-1}$); $\rho$ is the 
+density of the air in kg m$^{-3}$; $e$ and $c$ sub- and super-scripts denote 
+horizontally averaged values conditionally sampled in the cloud environment and 
+core; $forcing$ refers to forcings not included in the other terms, such as 
+radiation or subsidence; primed values represent anomalies relative to the 
+horizontal mean; overbars represent horizontal averaging; and $E_{\chi}$ and 
+$D_{\chi}$ are the horizontally averaged bulk tracer entrainment into and 
+detrainment out of the cloud core in kg s$^{-1}$ m$^{-3}$.  Cloud core is 
+defined here as model points that have condensed water, upward vertical 
+velocity, and are positively buoyant relative to the horizontal mean.  
+Equations (\ref{eq:siebesma_entrainment}) and (\ref{eq:siebesma_detrainment}) 
+are essentially tracer budgets which balance vertical fluxes and time 
+tendencies of conserved tracers in the clouds against horizontal exchanges.
 
-\cite{Romps2010} derives alternate equations equivalent to 
-(\ref{eq:siebesma_entrainment}) and (\ref{eq:siebesma_detrainment}) which use
-direct tracer flux calculations in place of horizontally averaged tracer 
-budgets.  \cite{Romps2010} derives tracer entrainment and detrainment to be:
-\begin{equation}
-  \label{eq:romps_entrainment}
-  E_{\chi}(\chi_{c} - \chi_{e}) = \chi_{c}(E_d-D_d) 
-                                - (\overline{e\chi} - \overline{d\chi})
-\end{equation}
-\begin{equation}
-  \label{eq:romps_detrainment}
-  D_{\chi}(\chi_{c} - \chi_{e}) = \chi_{e}(E_d-D_d) 
-                                - (\overline{e\chi} - \overline{d\chi})
-\end{equation}
-Here $e$ and $d$ are the local entrainment and detrainment through the cloud 
-surface in kg s$^{-1}$ m$^{-3}$, $\chi$ is the local tracer value, and
-$E_d = \overline{e}$ and $D_d = \overline{d}$ are the horizontally averaged 
-entrainment and detrainment values, calculated directly from model mass 
-fluxes via the relation
-\begin{equation}
-  \label{eq:romps_e_minus_d}
-  e - d = \frac{\partial}{\partial t}(A\rho) 
-        + \nabla \cdot (\rho \mathbf{u} A) 
-\end{equation}
-where A is unity at cloud core points and zero otherwise, and $\mathbf{u}$ is 
-velocity in m s$^{-1}$.  $e\chi - d\chi$ is calculated via 
-\begin{equation}
-  \label{eq:romps_echi_minus_dchi}
-  e\chi - d\chi = \frac{\partial}{\partial t}(\chi A \rho) 
-                + \nabla \cdot (\chi \rho \mathbf{u} A) 
-\end{equation}
-The values of $e - d$ and $e\chi - d\chi$ are furthermore averaged over the 
-length of time a grid cell experiences mass fluxes between the cloud and its 
-environment; positive $e-d$ values at the grid cell level are considered to 
-be $e$ and negative values, $d$.  Full details of this calculation can be 
-found in \cite{Romps2010}.
-
-We have implemented the direct entrainment calculation scheme of 
-\cite{Romps2010} in the System for Atmospheric Modelling 
-\citep[SAM;][]{Khairoutdinov2003}.  We have run this schemes in a standard 
-GCSS Barbados Oceanographic and Meteorological Experiment (BOMEX) LES 
-simulation \citep{Holland1973, Siebesma2003}.  The model was run on a 6.4 km 
-x 6.4 km horizontal x 3.2 km vertical domain at 25 meter grid resolution in 
-all directions.  The model was run for 6 hours, and the first three hours 
-of simulation were discarded; 15 minute averages were output for the terms 
-of each of our calculations.  We performed all calculations for both $q_t$ 
-and $h$, but the results are similar and we will confine our discussion to 
-the entrainment and detrainment inferred using $q_t$.  
-
-Expansion of the equations (\ref{eq:romps_entrainment}) and 
-(\ref{eq:romps_detrainment}) with (\ref{eq:romps_e_minus_d}) and 
-(\ref{eq:romps_echi_minus_dchi}) and applying suitable averaging shows these 
-equations to be formally identical to (\ref{eq:siebesma_entrainment}) and 
-(\ref{eq:siebesma_detrainment}).  Despite this, these two methods of 
-calculating $E_{\chi}$ and $D_{\chi}$ show average differences of 10-20\% 
-(Figure \ref{fig:siebesma_vs_romps}).
-
-We attribute these differences to numerical errors introduced by the 
-different discretization schemes used in each calculation.  For instance, 
-vertical gradients in the Siebesma method were calculated by finding 
-horizontally averaged profiles of model quantities, then taking centered 
-differences, while evaluating the divergence of $\chi \rho \mathbf{u} A$ in 
-the Romps calculation was done using SAM's much more elaborate MPDATA tracer 
-advection routine.  Since the Romps method of calculating $E_{\chi}$ and 
-$D_{\chi}$ is more consistent with SAM's numerics, we take this to be the 
-better representation of the bulk tracer calculation, and conclude that 
-bulk tracer calculations using the methods of \cite{Siebesma1995} likely 
-overestimate the true value.  However, this bias is in the opposite sense to 
-the difference between the bulk tracer and direct flux calculations, and in 
-any case is a far smaller correction than the factor of two difference between
-the values.
-
-%===================================================
-
-\section{Radial cloud structure}
-
-The bulk tracer calculations have one obvious source of bias: the assumption 
-that all fluid entrained or detrained from the cloud has the mean properties of 
-the environment or cloud, respectively.  
-
-Examination of the cloud core edge properties (cloud core model grid cells 
-that are horizontally adjacent to non-core cells) shows the cloud core edge has 
-nearly the same properties as the mean core, while the cloud core shell 
-properties (non-core cells that are horizontally adjacent to core cells) 
-are significantly different than mean environment properties (Figure 
-\ref{fig:shell_edge_profiles}).  This is in agreement with previous results 
-from both LES modelling and observations /citep{Heus2008}.
-
-
-
-\section{Correction of direct flux calculations}
-
+Equations (\ref{eq:siebesma_entrainment}) and (\ref{eq:siebesma_detrainment}) 
+have one obvious source of bias: the assumption that all fluid entrained or 
+detrained from the cloud has the mean properties of the environment or cloud, 
+respectively.  Examination of the cloud core edge properties (defined as cloud 
+core model grid cells that are horizontally adjacent to non-core cells) shows 
+the cloud core edge has nearly the same properties as the mean core, while the 
+cloud core shell properties (non-core cells that are horizontally adjacent to 
+core cells) are significantly different than mean environment properties 
+(Figure \ref{fig:shell_correction}a).  This is in agreement with previous 
+results from both LES modelling and observations \citep{Heus2008}.
+  
 Here we derive a correction to equations (\ref{eq:siebesma_entrainment}) and 
-(\ref{eq:siebesma_detrainment}) to account for the radial variation in cloud 
-properties.  We start our derivation by modifying equation (5.1) from 
-\cite{Siebesma1995}, replacing the mean cloud core and environment values of 
-the bulk tracers in the entrainment and detrainment terms with the cloud and 
-environment values at the cloud surface:
+(\ref{eq:siebesma_detrainment}) to account for the presence of this the moist 
+cloud shell and dry cloud edge.  We start our derivation by modifying equation 
+(5.1) from \cite{Siebesma1995}, replacing the mean cloud core and environment 
+values of the bulk tracers in the entrainment and detrainment terms with the 
+edge and shell properties:
 \begin{eqnarray}
   \label{eq:entrainment_derivation_1}
     \rho \frac{\partial a \chi_c}{\partial t} 
@@ -382,14 +314,17 @@ environment values at the cloud surface:
     + \rho (1 - a) \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
 \end{eqnarray}
 here we have replaced $\chi_e$ in the entrainment term with $\chi_{se}$, the 
-bulk tracer value immediately outside the cloud surface (the "shell"), and 
+bulk tracer value immediately outside the cloud surface (the shell), and 
 $\chi_c$ in the detrainment term with $\chi_{sc}$, the bulk tracer value 
-immediately inside the cloud surface (the "edge").
+immediately inside the cloud surface (the edge).  $E_d$ and $D_d$ are the 
+direct mass flux values of the entrainment and detrainment, in kg s$^{-1}$ 
+m$^{-3}$.
 
 Next we substitute in the continuity equation for a cloud plume,
 \begin{equation}
    \label{eq:continuity}
-   \rho \frac{\partial a}{\partial t} + \frac{\partial M_c}{\partial z} = E_d - D_d
+   \rho \frac{\partial a}{\partial t} 
+   + \frac{\partial M_c}{\partial z} = E_d - D_d
 \end{equation}
 This allows us to write:
 \begin{eqnarray}
@@ -413,18 +348,16 @@ Finally, we substitute in equations (\ref{eq:siebesma_entrainment}) and
 (\ref{eq:siebesma_detrainment}) for the bulk tracer tendency terms and 
 rearrange to get:
 \begin{equation}
-  \label{eq:inverted_entrainment}
+  \label{eq:corrected_entrainment}
     E_{\chi} = \frac{(\chi_{c} - \chi_{se})E_d - (\chi_{c} - \chi_{sc})D_d}
              {(\chi_{c} - \chi_{e})}
 \end{equation}
 \begin{equation}
-  \label{eq:inverted_detrainment}
+  \label{eq:corrected_detrainment}
     D_{\chi} = \frac{(\chi_{sc} - \chi_{e})D_d - (\chi_{se} - \chi_{e})E_d}
              {(\chi_{c} - \chi_{e})}
 \end{equation}
-These equations can be shown to be identical to (\ref{eq:romps_entrainment}) 
-and (\ref{eq:romps_detrainment}) under the assumption that 
-$\overline{e\chi} = E_d \chi_{se}$ and $\overline{d\chi} = D_d \chi_{sc}$.
+
 Note that under this correction $E_d-D_d = E_{\chi}-D_{\chi}$, preserving 
 mass continuity.
 
@@ -441,96 +374,149 @@ in the mean core and environment bulk tracer budgets due to entraining
 parcels moister than the environmental mean and detraining parcels dryer than 
 the cloud mean.  
 
+We have implemented the direct entrainment calculation scheme of 
+\cite{Romps2010} in SAM and use this method for the calculation of direct flux 
+values of entrainment and detrainment.  Comparison of these direct flux values 
+with the values inferred from bulk tracer budget calculations shows the 
+direct flux values are significatly larger than the bulk tracer values 
+(Figure \ref{fig:shell_correction}, b and c).  Correcting the direct flux 
+entrainemnt and detrainment values using equations 
+(\ref{eq:corrected_entrainment}) and (\ref{eq:corrected_detrainment}) results 
+in much better agreement with the bulk tracer calculations of entrainment and 
+detrainment .  Relative to the bulk tracer calculation, the corrected values 
+are still too large near cloud base and too small above cloud base; however, 
+the correction does duplicate the negative detrainment values near cloud base 
+that are typically produced by bulk tracer calculations.
 
+%==============================================================================
 
+\section{Correcting for Reynolds correlations}
 
-%-----------------------------------------------------------------------------
+Using the mean values of the cloud core edge and shell neglects the possibility 
+of Reynolds correlations between the entrainment or detrainment and the total 
+specific water values.  These can be evaluated using relations derived by 
+\cite{Romps2010}.  First, Romps defines the direct flux entrainment and 
+detrainment as:
+\begin{equation}
+  \label{eq:romps_e_minus_d}
+  e - d = \frac{\partial}{\partial t}(A\rho) 
+        + \nabla \cdot (\rho \mathbf{u} A) 
+\end{equation}
+Here $e$ and $d$ are the local entrainment and detrainment through the cloud 
+surface in kg s$^{-1}$ m$^{-3}$, $\mathbf{u}$ is the velocity of the air in 
+m s$^{-1}$, and $A$ is the "activity" of the fluid, where $A$ is one at "active" 
+cloud core points and zero otherwise.  The values of $e - d$ are averaged 
+over the length of time a grid cell experiences mass fluxes between an active 
+and an inactive point; positive $e-d$ values are then considered to be purely 
+$e$ and negative values, $d$.  Note that $E_d = \overline{e}$ and 
+$D_d = \overline{d}$.
 
+Next, Romps define the tracer flux to be:
+\begin{equation}
+  \label{eq:romps_echi_minus_dchi}
+  e\chi - d\chi = \frac{\partial}{\partial t}(\chi A \rho) 
+                + \nabla \cdot (\chi \rho \mathbf{u} A) 
+\end{equation}
+where $\chi$ is the local value of the bulk conserved tracer, and the same time 
+averaging applies as in equation (\ref{eq:romps_e_minus_d}).  Using these two 
+calculations we can define the effective tracer value of entraining parcels to 
+be:
+\begin{equation}
+  \label{eq:chi_re}
+  \chi_{re} = \frac{\overline{e\chi} }{E_d} 
+            = \chi_{se} + \frac{\overline{e' \chi'}}{E_d}
+\end{equation}
+and of detraining parcels to be:
+\begin{equation}
+  \label{eq:chi_rc}
+  \chi_{rc} = \frac{\overline{d\chi}}{D_d} 
+            = \chi_{sc} + \frac{\overline{d' \chi'}}{D_d}
+\end{equation}
+Thus, we can see the mean cloud edge and shell values should be modified by 
+the Reynolds correlations between entrainment and tracer values.
 
+The values of $\chi_{rc}$ and $\chi_{re}$ show significant deviations from 
+the mean edge and shell values (Figure \ref{fig:reynolds_correction}a).
+In general, the inclusion of Reynolds correlations decreases the effective 
+shell and core tracer values, indicating $q_t$ and $e$ or $d$ are typically 
+anticorrelated; more entrainment and detrainment occurs when $q_t$ values are 
+low, and less when $q_t$ values are high.  Applying these effective cloud edge 
+and shell $q_t$ values to equations (\ref{eq:corrected_entrainment}) and 
+(\ref{eq:corrected_detrainment}) results in much better agreement with the bulk 
+tracer calculations than simply using the mean edge and shell values 
+(Figure \ref{fig:reynolds_correction}b and c).  However, a small discrepancy 
+still remains to be explained.
 
-%-----------------------------------------------------------------------------
+%==============================================================================
 
+\section{Comparison of Siebesma and Romps bulk tracer calculations}
 
+\cite{Romps2010} derives alternate equations equivalent to 
+(\ref{eq:siebesma_entrainment}) and (\ref{eq:siebesma_detrainment}) which use
+direct tracer flux calculations in place of horizontally averaged tracer 
+budgets.  \cite{Romps2010} derives tracer entrainment and detrainment to be:
+\begin{equation}
+  \label{eq:romps_entrainment}
+  E_{\chi}(\chi_{c} - \chi_{e}) = \chi_{c}(E_d-D_d) 
+                                - (\overline{e\chi} - \overline{d\chi})
+\end{equation}
+\begin{equation}
+  \label{eq:romps_detrainment}
+  D_{\chi}(\chi_{c} - \chi_{e}) = \chi_{e}(E_d-D_d) 
+                                - (\overline{e\chi} - \overline{d\chi})
+\end{equation}
 
+Expansion of these equations with (\ref{eq:romps_e_minus_d}) and 
+(\ref{eq:romps_echi_minus_dchi}) and applying suitable averaging shows these 
+equations to be formally identical to (\ref{eq:siebesma_entrainment}) and 
+(\ref{eq:siebesma_detrainment}).  Despite this, these two methods of 
+calculating $E_{\chi}$ and $D_{\chi}$ show average differences of 10-20\%
+(Figure \ref{fig:numerical_correction}).  However, the direct flux entrainment 
+and detrainment, corrected using the effective cloud edge and shell values 
+including the effect of Reyonolds correlations, agrees exactly with the Romps
+bulk tracer calculation.
 
-
-
-
-
-Applying these corrections to the tracer calculations of entrainment and 
-detrainment roughly doubles the calculated values and results in much better 
-agreement with our direct flux calculations (Figure 
-\ref{fig:corrected_entrainment}).
-
-
-
-1. Derive equations relating tracer and direct E/D
-  Seibesma conversion
-  Romps conversion
-	Figure 1: siebesma vs romps error
-  10% differences between seibesma and Romps calculation methods
-
-2. Column profiles showing how large each tracer value is
-    Figure 2: tracer profiles
-    Shell values not the same as 'effective' values due to reynolds correlations
-    calculate mean $qt_se$ and $qt_sd$ to compare with spatial shell
-
-3. Compare conversion factors
-    Figure 3: correction using simply shell values, reynolds values
-
-4. Eqt decomposition showing reynolds correlation magnitude
-    relative error introduced by reynolds correlations
-
-
-These equations assume that fluid entraining into the cloud has the mean 
-properties of the cloud core environment is incorrect.  The errors induced by 
-this assumption can immediately be seen in the large negative bulk tracer 
-detrainment values near cloud base (Figure \ref{fig:siebesma_vs_romps}b).  
-These negative values occur because entrainment at cloud base is due to 
-thermodynamic changes instead of mechanical mixing.  Only the moistest 
-environmental parcels condense at cloud base to form clouds, and this means 
-that fluid entrained at cloud base is moister than the mean environment.  As 
-this moist condensing fluid essentially has the same properties as cloud base 
-air it does not drive changes in the mean cloud properties, and thus does not 
-appear as entrainment in equation (\ref{eq:siebesma_entrainment}).  However, the 
-removal of the moistest fluid from the environment does result in drying of 
-the environmental mean, and this drying is interpreted as negative 
-detrainment by equation (\ref{eq:siebesma_detrainment}).
-
+We attribute these differences to numerical errors introduced by the 
+different discretization schemes used in each calculation.  For instance, 
+vertical gradients in the Siebesma method were calculated by finding 
+horizontally averaged profiles of model quantities, then taking centered 
+differences, while evaluating the divergence of $\chi \rho \mathbf{u} A$ in 
+the Romps calculation was done using SAM's much more elaborate MPDATA tracer 
+advection routine.  Since the Romps method of calculating $E_{\chi}$ and 
+$D_{\chi}$ is more consistent with SAM's numerics, we take this to be the 
+better representation of the bulk tracer calculation, and conclude that 
+bulk tracer calculations using the methods of \cite{Siebesma1995} likely 
+overestimate the true value by 10-20\%.
 
 %==============================================================================
 
 \section{Discussion and Conclusion}
 
-Conclusions
-Seibesma underestimates 'tracer' e/d by 10\% due to w interp, derivatives
-Conversion between mass e/d and tracer e/d requires knowledge of cloud shell
-
-The entrainment or detrainment value one considers to be correct will depend on 
-the purpose for which they are used.  The correction to the bulk tracer 
-calculation due to the cloud shell has little bearing on the entrainment and 
-detrainment values needed for calculating cloud moisture and energy in GCM 
-parameterizations, which only have access to large-scale mean bulk tracer 
-values.  However, this correction may be important for calculating 
-fluxes of properties that have different radial dependencies than $q_t$ or $h$, 
-such as vertical momentum, which is negative in the shell \citep{Heus2008}, or 
-for aerosols whose chemical properties are altered by reactions in the presence 
-of liquid water \citep{Hoppel1994}.  In any case, the agreement between our 
-direct flux method and the bulk tracer method corrected for the influence of 
-the cloud shell suggests the shell correction removes a significant bias when 
-estimating the total mass exchange between clouds and environment.
-
-The bulk tracer calculations given by \cite{Siebesma1995} calculate the amount
-of fluid with the mean properties of cloud and environment that would need to
-be exchanged to balance advection and thermodynamic changes, not the true mass
-fluxes that occur between cloud and environment.  To calculate the actual mass
-fluxes the bulk tracer equations must at least be corrected for the effect of
-the moist shell of evaporated air around the cloud.  This correction increases
-entrainment and detrainment rates by a factor of 2-3.  This suggests that the
-presence of the moist cloud shell has a significant role in mediating fluxes
+We have shown it is possible to explain the differences between entrainment and 
+detrainment values calculated via bulk tracer budgets and direct flux 
+calculations by taking into account the properties of the cloud shell, the 
+effect of Reynolds correlations between fluxes and tracer values, and 
+accuracy differences in the numerical methods used by the two calculations.
+This suggests that the presence of the moist cloud shell, and indeed the 
+variability within this shell, has a significant role in mediating fluxes 
 between the clouds and the environment, and may be an important factor in 
 improving parameterizations of shallow convection.
 
+We can also conclude that the bulk tracer calculations given by 
+\cite{Siebesma1995} do not calculate the true mass fluxes that occur between 
+cloud and environment.  To calculate the actual mass fluxes the bulk tracer 
+equations must at least be corrected for the effect of the moist shell of 
+evaporated air around the cloud.
+
+Whether one cosiders the bulk tracer or direct flux values to be "correct" will 
+depend on the purpose for which they are used.  The bulk tracer entrainment and 
+detrainment values are more suited to calculating cloud moisture and energy 
+fluxes in GCM parameterizations, which only have access to large-scale mean 
+bulk tracer values.  On the other hand, the direct fluxes may be important for 
+calculating fluxes of properties that have different radial dependencies than 
+$q_t$ or $h$, such as vertical momentum, which is negative in the shell 
+\citep{Heus2008}, or for aerosols whose chemical properties are altered by 
+reactions in the presence of liquid water \citep{Hoppel1994}.  
 
 %%% End of body of article:
 
@@ -664,34 +650,45 @@ programming language.
 % Figure captions go below this illustration; Table captions go above tables
 
 \begin{figure}
-  \label{fig:shell_correction}
   \noindent\includegraphics[width=39pc]{./figures/shell_correction}
-  \caption{Mean profiles of a) entrainment and b) detrainment calculated 
-  using the bulk tracer budget methods of \cite{Siebesma1995} (grey line) 
-  and \cite{Romps2010} (black line), and c) the ratio of the values produced 
-  by the two methods for entrainment (black line) and detrainment (grey line).
+  \caption{Result of correcting direct entrainment values for the presence of 
+  the moist cloud shell.  a) Mean profiles of total specific water in the 
+  cloud core (thick black line), cloud core edge (thin black line), cloud core 
+  shell (thin grey line), and cloud core environemnt (thick grey line).  These 
+  total specific water values are used to correct values of b) entrainment and 
+  c) detrainment; shown are the direct flux calculation of \cite{Romps2010}
+  (thick grey line), the bulk tracer budget calculation of \cite{Siebesma1995} 
+  (thin grey line), and the direct flux calculation corrected by the mean 
+  core shell and edge values (black line).
   }
+  \label{fig:shell_correction}
 \end{figure}
 
 \begin{figure}
   \label{fig:reynolds_correction}
   \noindent\includegraphics[width=39pc]{./figures/reynolds_correction}
-  \caption{Comparison of mean a) entrainment and b) detrainment profiles 
-  calculated using uncorrected bulk tracer budgets (thin grey line), bulk
-  tracer budgets corrected for the presence of a moist cloud shell (thick grey
-  line), and direct flux calculations with tetrahedral surface interpolation 
-  (black line).  c) Ratio of corrected bulk tracer rates to the direct flux 
-  using tetrahedral interpolation rates of entrainment (black) and detrainment 
-  (grey).  d) and e) are the same as a) and b) but for the fractional 
-  entrainment and detrainment rates.}
+  \caption{Result of correcting direct entrainment values by the effective 
+  entrainment and detrainment total specific water values, which include the 
+  effects of Reynolds correlations between mass fluxes and humidity values.
+  a) Mean profiles of the effective total specific water value for 
+  the entrainment (black line) and detrainment (dotted line), overlaid on the 
+  mean core, edge, shell, and environment profiles (grey line).  These 
+  values are used to correct values of b) entrainment and c) detrainment; shown 
+  are the direct flux calculation of \cite{Romps2010} corrected by the mean 
+  core shell and edge values (thick grey line), the bulk tracer budget 
+  calculation of \cite{Siebesma1995} (thin grey line), and the direct flux 
+  calculation corrected by the effective core shell and edge values (black 
+  line).}
 \end{figure}
 
 \begin{figure}
   \label{fig:numerical_correction}
-  \noindent\includegraphics[width=39pc]{./figures/numerical_correction}
-  \caption{Mean profiles of $q_t$ in the cloud core (thick grey line), core 
-  edge (thin black line), core shell (thin grey line), and environment (thick 
-  black line).
+  \noindent\includegraphics[width=20pc]{./figures/numerical_correction}
+  \caption{Comparison of specific humidity a) entrainment and b) detrainment 
+  values calculated via the methods in \cite{Siebesma1995} (black line) and 
+  \cite{Romps2010} (grey line), and the direct flux calculation of Romps 
+  corrected by the effective entrainment and detrainment specific humidities
+  (dotted line).
   }
 \end{figure}
 

@@ -132,8 +132,7 @@ such comparisons show good agreement between LES and data.
 Several recent studies have looked at the life cycle of individual clouds taken 
 from LESs, trying to break the cloud field into its component parts 
 \citep{Zhao2005,Zhao2005a,Heus2009}.  Estimates of entrainment and detrainment 
-rates at the scale of an individual cloud could provide significant physical insight
-into the mixing process, but are 
+rates for individual clouds would be quite useful in these studies, but are 
 difficult to achieve. Entrainment and detrainment rates are typically 
 calculated in LES by recording budgets of bulk conserved tracer variables, 
 such as the total humidity or the liquid water moist static energy, and 
@@ -146,8 +145,7 @@ this variability makes bulk tracer calculations on this scale problematic.
 
 Alternatively, entrainment and detrainment could simply be calculated directly 
 from the LES velocity, pressure, humidity and temperature fields.  
-\cite{Siebesma1998}\footnote{Available from the author at
-\url{http://www.knmi.nl/~siebesma/PUBS/siebesma_98_shcu.pdf}} defines Entrainment and Detrainment as
+\cite{Siebesma1998} defines Entrainment and Detrainment as
 \begin{equation}
 E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
 \mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
@@ -714,7 +712,7 @@ Python programming language.
   \noindent
   \includegraphics[width=19pc,angle=0]{./figures/E_minus_D}\\
   \caption{Average profiles of entrainment minus detrainment calculated using 
-  the continuity equation (dashed line), direct fluxes with no surface 
+  the continuity equation (dotted line), direct fluxes with no surface 
   interpolation (grey line), the tetrahedral interpolation method
   (thick black line), and the Romps method (thin black line).
   }\label{fig:E_minus_D}
@@ -745,7 +743,9 @@ Python programming language.
   \noindent\includegraphics[width=39pc,angle=0]{./figures/spatial_variability_1min}\\ 
   \caption{Vertical cross-section of a model cloud showing one minute averaged 
   entrainment (a, c) and detrainment (b, d) calculated using the tetrahedral 
-  interpolation method (a, b) and the Romps method (c, d).
+  interpolation method (a, b) and the Romps method (c, d).  Greyscale indicates 
+  amount of entrainment or detrainment, lines show the region where condensed 
+  liquid water exists.
   }
   \label{fig:spatial_variability}
 \end{figure}
