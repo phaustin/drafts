@@ -199,7 +199,7 @@ lie within the cloud, encloses a cloud volume $V$ with surface $\mathbf{A}
 and detrainment over the cloud surface to be:
 \begin{equation}
 \label{eq:E_minus_D} 
-E - D = \int_C \rho ( \mathbf{u} -  \mathbf{u_i}) \cdot d\mathbf{C},
+E - D = \int_C \rho ( \mathbf{u_i} -  \mathbf{u}) \cdot d\mathbf{C},
 \end{equation}
 where $\rho$ is the air density in kg m$^{-3}$, $\mathbf{u}$ is the velocity
 of the air in m s$^{-1}$ and $\mathbf{u_i}$ is the velocity of the cloud 
@@ -227,8 +227,8 @@ get
 We then combine equations (\ref{eq:E_minus_D}) and (\ref{eq:leibnitz2}) to give:
 \begin{equation}
 \label{eq:step1} 
-      E - D = \int_C \rho \mathbf{u} \cdot d\mathbf{C} 
-            - \rho \frac{d}{dt}\int_{V(t)} dV.
+      E - D = \rho \frac{d}{dt}\int_{V(t)} dV
+            - \int_C \rho \mathbf{u} \cdot d\mathbf{C}.
 \end{equation}
 
 Next we apply the divergence theorem to simplify the flux integral through 
@@ -248,11 +248,11 @@ since $\mathbf{A}$ is the union of $\mathbf{C}$ and $\mathbf{W}$.  Substituting
 this into (\ref{eq:step1}) results in
 \begin{equation}
 \label{eq:entrainment_detrainment} 
-E - D = - \int_W \rho \mathbf{u} \cdot d\mathbf{W} - \rho \frac{dV}{dt}.
+E - D = \rho \frac{dV}{dt} + \int_W \rho \mathbf{u} \cdot d\mathbf{W}.
 \end{equation}
-Therefore, we can find the entrainment and detrainment by calculating the mass
-flux through the cloudy portion of the grid cell walls and the rate of change
-of the cloud volume inside the grid cell.  If equation $E - D$ is greater than 
+Therefore, we can find the entrainment and detrainment by calculating the rate 
+of change of the cloud volume inside the grid cell and the mass flux through 
+the cloudy portion of the grid cell walls.  If equation $E - D$ is greater than 
 zero, the total is applied to entrainment and if less than zero, to 
 detrainment.  This technique works equally well for flux through any isosurface 
 of a scalar quantity defined within the model, though slight modifications must

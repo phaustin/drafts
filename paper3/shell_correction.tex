@@ -233,17 +233,18 @@ inconsistancies in the numerical methods used in the two calculations.
 \section{Model desccription}
 
 All calculations in this paper were made using the System for Atmospheric 
-Modelling \citep[SAM;][]{Khairoutdinov2003}, run with a standard GCSS Barbados 
+Modeling \citep[SAM;][]{Khairoutdinov2003}, run with a standard GCSS Barbados 
 Oceanographic and Meteorological Experiment (BOMEX) LES simulation 
 \citep{Holland1973, Siebesma2003}.  The model was run on a 6.4 km x 6.4 km 
 horizontal x 3.2 km vertical domain at 25 meter grid resolution in all 
 directions.  The model was run for 6 hours, and the first three hours 
 of simulation were discarded; 15 minute averages were output for the terms 
-in each of our calculations.  We performed all entrainment and detrainment 
-calculations for both the total specific water ($q_t$, kg water kg$^{-1}$ air) 
-and the liquid water moist static energy ($h$, J kg$^{-1}$), but the results 
-are similar and we will confine our discussion to the entrainment and 
-detrainment inferred using $q_t$.
+in each of our calculations.  
+
+We have implemented the direct entrainment calculation scheme of 
+\cite{Romps2010} and a direct entrainment method of our own devising 
+\citep{Dawe2011} in SAM and use these methods for the calculation of direct flux 
+values of entrainment and detrainment.
 
 \section{Correction of direct flux calculations}
 
@@ -289,7 +290,7 @@ the cloud core edge has nearly the same properties as the mean core, while the
 cloud core shell properties (non-core cells that are horizontally adjacent to 
 core cells) are significantly different than mean environment properties 
 (Figure \ref{fig:shell_correction}a).  This is in agreement with previous 
-results from both LES modelling and observations \citep{Heus2008}.
+results from both LES modeling and observations \citep{Heus2008}.
   
 Here we derive a correction to equations (\ref{eq:siebesma_entrainment}) and 
 (\ref{eq:siebesma_detrainment}) to account for the presence of this the moist 
@@ -314,10 +315,10 @@ edge and shell properties:
     + \rho (1 - a) \left(\frac{\partial \bar{\chi}}{\partial t}\right)_{forcing}
 \end{eqnarray}
 here we have replaced $\chi_e$ in the entrainment term with $\chi_{se}$, the 
-bulk tracer value immediately outside the cloud surface (the shell), and 
+bulk tracer value immediately outside the cloud surface (the "cloud shell"), and 
 $\chi_c$ in the detrainment term with $\chi_{sc}$, the bulk tracer value 
-immediately inside the cloud surface (the edge).  $E_d$ and $D_d$ are the 
-direct mass flux values of the entrainment and detrainment, in kg s$^{-1}$ 
+immediately inside the cloud surface (the "cloud edge").  $E_d$ and $D_d$ are 
+the direct mass flux values of the entrainment and detrainment, in kg s$^{-1}$ 
 m$^{-3}$.
 
 Next we substitute in the continuity equation for a cloud plume,
@@ -374,19 +375,17 @@ in the mean core and environment bulk tracer budgets due to entraining
 parcels moister than the environmental mean and detraining parcels dryer than 
 the cloud mean.  
 
-We have implemented the direct entrainment calculation scheme of 
-\cite{Romps2010} in SAM and use this method for the calculation of direct flux 
-values of entrainment and detrainment.  Comparison of these direct flux values 
-with the values inferred from bulk tracer budget calculations shows the 
-direct flux values are significatly larger than the bulk tracer values 
+Comparison of the values inferred from bulk tracer budget calculations with 
+direct flux values calculated by the method of \cite{Romps2010} shows the 
+direct flux values are significantly larger than the bulk tracer values 
 (Figure \ref{fig:shell_correction}, b and c).  Correcting the direct flux 
-entrainemnt and detrainment values using equations 
+entrainment and detrainment values using equations 
 (\ref{eq:corrected_entrainment}) and (\ref{eq:corrected_detrainment}) results 
-in much better agreement with the bulk tracer calculations of entrainment and 
-detrainment .  Relative to the bulk tracer calculation, the corrected values 
-are still too large near cloud base and too small above cloud base; however, 
-the correction does duplicate the negative detrainment values near cloud base 
-that are typically produced by bulk tracer calculations.
+in much better agreement with the bulk tracer calculations.  Relative to the 
+bulk tracer calculation, the corrected values are still too large near cloud 
+base and too small above cloud base; however, the correction does duplicate the 
+negative detrainment values near cloud base that are typically produced by bulk 
+tracer calculations.
 
 %==============================================================================
 
@@ -436,15 +435,15 @@ Thus, we can see the mean cloud edge and shell values should be modified by
 the Reynolds correlations between entrainment and tracer values.
 
 The values of $\chi_{rc}$ and $\chi_{re}$ show significant deviations from 
-the mean edge and shell values (Figure \ref{fig:reynolds_correction}a).
+the mean edge and shell values (Figure \ref{fig:Reynolds_correction}a).
 In general, the inclusion of Reynolds correlations decreases the effective 
 shell and core tracer values, indicating $q_t$ and $e$ or $d$ are typically 
-anticorrelated; more entrainment and detrainment occurs when $q_t$ values are 
+anti-correlated; more entrainment and detrainment occurs when $q_t$ values are 
 low, and less when $q_t$ values are high.  Applying these effective cloud edge 
 and shell $q_t$ values to equations (\ref{eq:corrected_entrainment}) and 
 (\ref{eq:corrected_detrainment}) results in much better agreement with the bulk 
 tracer calculations than simply using the mean edge and shell values 
-(Figure \ref{fig:reynolds_correction}b and c).  However, a small discrepancy 
+(Figure \ref{fig:Reynolds_correction}b and c).  However, a small discrepancy 
 still remains to be explained.
 
 %==============================================================================
@@ -665,7 +664,7 @@ programming language.
 \end{figure}
 
 \begin{figure}
-  \label{fig:reynolds_correction}
+  \label{fig:Reynolds_correction}
   \noindent\includegraphics[width=39pc]{./figures/reynolds_correction}
   \caption{Result of correcting direct entrainment values by the effective 
   entrainment and detrainment total specific water values, which include the 

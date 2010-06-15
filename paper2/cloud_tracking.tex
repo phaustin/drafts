@@ -93,26 +93,74 @@ simulation model is presented.
 
 \section{Cloud Tracking}
 
-* Label all cloud core points
-* Find depth of point from surface of core
-* Find deepest core points, assign to cloudlets
-* Iteratively expand into next deepest points
-* Any points at that depth that are not in a cloudlet are assigned to new 
-    cloudlets
-* This allows clouds to merge and split
-* Once all the core points are selected, the shell points are joined into 
-    cloudlets as well.
+Dividing a cloud field up into individual clouds at a single moment in time is 
+a trivial matter: a cloudy point belongs to a given cloud if it is touching 
+that cloud.  However, tracking the resulting clouds from one time step to the 
+next is much more problematic, as a cloud is not a consistent physical object; 
+it is, rather, a series of processes.  A rising parcel of moist air may 
+condese, a parcel of air containing condensate may evaporate, and a cloud may 
+be split in two by air turbulence or collide with another cloud and merge into 
+one.  To be able to handle all of these processes, we adopt a more complex 
+definition of what constitutes an individual cloud.
 
-Then the cloudlets are joined into clouds.  There are several ways to do this,
-and the exact method used can be tailored to the problem beign studied.
+First, we define two cloud regions.  First is the cloud core, defined following 
+\cite{Siebesma1995} as all cloudy points which have positive buoyancy and 
+upward velocity.  Second is the cloud shell, which we define as all points 
+with a specific humidity $q_v$ (kg water vapor per kg dry air) one standard 
+deviation higher than the mean humidity at a given height, and a liquid-water
+moist static energy $h$ (J kg$^{-1}$) one standard deviation lower than the 
+mean $h$ at a given height.  In general, the core region is a subset of the 
+shell region.  The purpose of these two regions is to delinate cloud splits 
+and merges: if two cloud cores touch, the clouds are considered to have merged, 
+and if parts of a cloud seperate such that their shells no longer touch, the 
+clouds are considered to have split.  This definition makes clouds slightly 
+sticky, and ensures that clouds do not repeatedly split and merge as small 
+tendrils are torn from the main cloud mass and evaporate.
 
-At the first time step, cloudlets with touching core are joined into clouds
+next, we identify the distance of all core grid cells from the core surface--
+the "depth" into the cloud mass of the grid cell (Figure 1a).  We do 
+this by labeling all core grid cells directly adjactent to a non-core grid 
+cell with '1'; grid cells diagonally adjacent are ignored.  Then core cells 
+adjactent to the cells labelled '1' are labelled '2', and the process is 
+repeated until all core grid cells are labelled with their depth.
 
-At subsequent timesteps
- * cloudlets that overlap with a cloud at a previous timestep are assigned the same cloud number
- * then cloudlets with cores that touch the other clouds are joined
+Next, we divide the field up into "cloudlets", sub-units of the core which are 
+centered on points that are far from the core surface, using a process based 
+on ideas of crystal growth (Figure 1b).  First, we select one of the deepest 
+points in the core and assign it to a cloudlet.  Next, any points at the same 
+depth which are touching the cloudlet are absorbed into the cloudlet, until the 
+cloudlet is no longer touching unassigned points.  If there are still points at 
+the same depth they are not part of the cloudlet; a new point is selected, 
+assigned to a new cloudlet, and this process is repeated until all the deepest 
+grid cells are assigned to cloudlets.  Then the next-deepest points are 
+selected, and each cloudlet is expanded into these points.  Points that 
+could be assigned to more than one cloudlet go to the nearest cloudlet, or are 
+assigned randomly if two cloudlets are equally distant.  Points that remain 
+unassigned are added to new cloudlets in the same manner as the deepest points, 
+and the process is repeated until all core points are assigned to a cloudlet.
 
-Then from the graph formed, seperate out clusters.
+Once all the core points have been assigned to cloudlets, this process is 
+continued for the shell points in the same manner, until the shell points have 
+all been assigned to cloudlets as well.  Note that it is possible to have a 
+cloudlet that is composed entirely of shell points.  This process is repeated 
+for every saved model time step.
+
+Next, any cloudlets which have spatially connected cores in the first time step 
+are joined into clouds.  At subsequent time steps, cloudlets that spatially 
+overlap with a cloud at the previous timestep are assumed to be the same cloud.
+The cloudlet's position is corrected by calculating the cloudlet's mean 
+velocity and the distance the cloudlet would have moved over the time step is 
+removed.  If a cloudlet overlaps two or more clouds, the cloudlet is assigned 
+to the cloud with the greatest spatial overlap.  Any cloudlets that do not 
+overlap clouds in the previous time step are assumed to be new clouds.
+
+At this point merges and splits are performed.  Any clouds that have connected 
+cores are merged into a single cloud, with the largest cloud engulfing the 
+smaller clouds.  Any cloud which contains cloudlets that do not have connected
+shells are split into two clouds, with the largest sub-cloud being assigned to 
+the original cloud and the smaller sub-clouds becoming new clouds.  Then the 
+process of cloudlet assignment, merging, and splitting is repeated with the 
+next time step, until all cloudlets are assigned to a cloud.
 
 %==============================================================================
 
