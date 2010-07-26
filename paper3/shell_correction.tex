@@ -173,11 +173,15 @@ British Columbia, 6339 Stores Road, Vancouver, BC, V6T 1Z4, Canada.
 \begin{abstract}
 Direct measurements of entrainment and detrainment rates from LES model 
 cloud fields produce values twice as large as those produced from bulk 
-conserved tracer budget calculations.  This discrepancy is partly the 
-result of numerical errors, but mostly due to neglect of the influence of 
-the moistened cloud environment on the tracer budget calculations.  
-Correcting the entrainment and detrainment values to account for the effect 
-of the shell of moist air around the clouds corrects this over-estimate.  
+conserved tracer budget calculations.  This discrepancy is due to neglect of 
+the influence of the moistened cloud environment on the tracer budget 
+calculations.  Correcting the entrainment and detrainment values to account for 
+the effect of the shell of moist air around the clouds corrects this 
+over-estimate.  Estimates of effective entrainment and detrainment values for
+specific humidity and liquid water moist static energy agree well with
+conditional averages of cloud edge and shell values.  However, effective 
+entrainment values of vertical velocity show marked differences from the 
+vertical velocity present in the cloud shell.
 \end{abstract}
 
 %% ------------------------------------------------------------------------ %%
@@ -242,8 +246,7 @@ of simulation were discarded; 15 minute averages were output for the terms
 in each of our calculations.  
 
 We have implemented the direct entrainment calculation scheme of 
-\cite{Romps2010} and a direct entrainment method of our own devising 
-\citep{Dawe2011} in SAM and use these methods for the calculation of direct flux 
+\cite{Romps2010} in SAM and use this methods for the calculation of direct flux 
 values of entrainment and detrainment.
 
 \section{Correction of direct flux calculations}
@@ -393,9 +396,10 @@ tracer calculations.
 
 Using the mean values of the cloud core edge and shell neglects the possibility 
 of Reynolds correlations between the entrainment or detrainment and the total 
-specific water values.  These can be evaluated using relations derived by 
-\cite{Romps2010}.  First, Romps defines the direct flux entrainment and 
-detrainment as:
+specific water values.  However, calculating the tracer fluxes associated with 
+mass entrainment and detrainment is problematic.  \cite{Romps2010} gives 
+relations that attempt to evaluate the tracer fluxes via averaged budges.  
+First, Romps defines the direct flux entrainment and detrainment as:
 \begin{equation}
   \label{eq:romps_e_minus_d}
   e - d = \frac{\partial}{\partial t}(A\rho) 
@@ -407,7 +411,7 @@ m s$^{-1}$, and $A$ is the "activity" of the fluid, where $A$ is one at "active"
 cloud core points and zero otherwise.  The values of $e - d$ are averaged 
 over the length of time a grid cell experiences mass fluxes between an active 
 and an inactive point; positive $e-d$ values are then considered to be purely 
-$e$ and negative values, $d$.  Note that $E_d = \overline{e}$ and 
+$e$, and negative values, $d$.  Note that $E_d = \overline{e}$ and 
 $D_d = \overline{d}$.
 
 Next, Romps define the tracer flux to be:
@@ -416,29 +420,18 @@ Next, Romps define the tracer flux to be:
   e\chi - d\chi = \frac{\partial}{\partial t}(\chi A \rho) 
                 + \nabla \cdot (\chi \rho \mathbf{u} A) 
 \end{equation}
-where $\chi$ is the local value of the bulk conserved tracer, and the same time 
-averaging applies as in equation (\ref{eq:romps_e_minus_d}).  Using these two 
-calculations we can define the effective tracer value of entraining parcels to 
-be:
-\begin{equation}
-  \label{eq:chi_re}
-  \chi_{re} = \frac{\overline{e\chi} }{E_d} 
-            = \chi_{se} + \frac{\overline{e' \chi'}}{E_d}
-\end{equation}
-and of detraining parcels to be:
-\begin{equation}
-  \label{eq:chi_rc}
-  \chi_{rc} = \frac{\overline{d\chi}}{D_d} 
-            = \chi_{sc} + \frac{\overline{d' \chi'}}{D_d}
-\end{equation}
-Thus, we can see the mean cloud edge and shell values should be modified by 
-the Reynolds correlations between entrainment and tracer values.
+where $\chi$ is the local value of the bulk conserved tracer.  If $e-d$ from 
+equation (\ref{eq:romps_e_minus_d}) is positive the $e\chi - d\chi$ value is 
+assumed to all be $e\chi$, if negative, $d\chi$, and the same time 
+averaging applies as in equation (\ref{eq:romps_e_minus_d}).  
+
+
 
 The values of $\chi_{rc}$ and $\chi_{re}$ show significant deviations from 
 the mean edge and shell values (Figure \ref{fig:Reynolds_correction}a).
-In general, the inclusion of Reynolds correlations decreases the effective 
-shell and core tracer values, indicating $q_t$ and $e$ or $d$ are typically 
-anti-correlated; more entrainment and detrainment occurs when $q_t$ values are 
+The inclusion of Reynolds correlations decreases the effective shell and core 
+tracer values, indicating $q_t$ and $e$ or $d$ are typically anti-correlated; 
+more entrainment and detrainment occurs when $q_t$ values are 
 low, and less when $q_t$ values are high.  Applying these effective cloud edge 
 and shell $q_t$ values to equations (\ref{eq:corrected_entrainment}) and 
 (\ref{eq:corrected_detrainment}) results in much better agreement with the bulk 
@@ -678,17 +671,6 @@ programming language.
   calculation of \cite{Siebesma1995} (thin grey line), and the direct flux 
   calculation corrected by the effective core shell and edge values (black 
   line).}
-\end{figure}
-
-\begin{figure}
-  \label{fig:numerical_correction}
-  \noindent\includegraphics[width=20pc]{./figures/numerical_correction}
-  \caption{Comparison of specific humidity a) entrainment and b) detrainment 
-  values calculated via the methods in \cite{Siebesma1995} (black line) and 
-  \cite{Romps2010} (grey line), and the direct flux calculation of Romps 
-  corrected by the effective entrainment and detrainment specific humidities
-  (dotted line).
-  }
 \end{figure}
 
 % ONE-COLUMN figure/table, including eps graphics

@@ -9,6 +9,7 @@
 % DOUBLE SPACE VERSION FOR SUBMISSION TO THE AMS
 \documentclass[12pt]{article}
 \usepackage{ametsoc}
+\usepackage{amsmath}
 %
 % The following two commands will generate a single space, double column paper 
 % that closely matches an AMS journal page.  Uncomment these commands to 
@@ -101,7 +102,7 @@ calculations of entrainment and detrainment}}}
 
 \section{Introduction}
 
-The largest uncertainties in climate sensitivity estimates from Global 
+The largest uncertainties in climate sensitivity estimates from General 
 Circulation Model (GCM) simulations come from the subgrid-scale parameterization 
 of low clouds \citep{Colman2003,Bony2005,Webb2006}.  Specifically, 
 stratocumulus clouds and the transition regime from stratocumulus to trade 
@@ -123,7 +124,7 @@ of 10-100 m, well within the domain of the Kolmagorov -5/3 turbulence spectrum.
 This allows for a relatively simple turbulence model that captures the 
 important statistics of the subgrid-scale eddy fluxes and thus, an accurate 
 representation of the atmospheric physics of a domain $\approx$ 10 km$^{2}$, 
-which is enough to simulate a field of shallow clouds.  LES can be 
+which is large enough to simulate a field of shallow clouds.  LES can be 
 ground-truthed against results taken from field surveys such as the Barbados 
 Oceanographic and Meteorological Experiment \citep[BOMEX;][]{Holland1973} or 
 the Atmospheric Radiation Measurement \citep[ARM;][]{Brown2002} Program, and 
@@ -133,14 +134,14 @@ Several recent studies have looked at the life cycle of individual clouds taken
 from LESs, trying to break the cloud field into its component parts 
 \citep{Zhao2005,Zhao2005a,Heus2009}.  Estimates of entrainment and detrainment 
 rates for individual clouds would be quite useful in these studies, but are 
-difficult to achieve. Entrainment and detrainment rates are typically 
-calculated in LES by recording budgets of bulk conserved tracer variables, 
-such as the total humidity or the liquid water moist static energy, and 
-inferring the amount of fluid exchange between cloud and clear air that is 
-needed to explain the rate at which that tracer is being vertically advected 
-within the cloud field \citep{Siebesma1995}. These budgets typically assume 
-the clouds and the cloud environment are horizontally homogeneous slabs; this 
-is a much less accurate assumption on the level of an individual cloud, and 
+difficult to apply. Entrainment and detrainment rates for nonprecipitating 
+clouds are typically calculated in LES by recording budgets of bulk conserved 
+tracer variables, such as the total humidity or the liquid water moist static 
+energy, and inferring the amount of fluid exchange between cloud and clear air 
+that is needed to explain the rate at which that tracer is being vertically 
+advected within the cloud field \citep{Siebesma1995}. These budgets typically 
+assume the clouds and the cloud environment are horizontally homogeneous slabs; 
+this is a much less accurate assumption on the level of an individual cloud, and 
 this variability makes bulk tracer calculations on this scale problematic.
 
 Alternatively, entrainment and detrainment could simply be calculated directly 
@@ -170,12 +171,34 @@ cell's humidity reaches saturation, and when it does, an entire grid cell
 worth of fluid leaves or enters the cloud.
 
 \cite{Romps2010} recently overcame this problem by averaging the cloud surface 
-fluxes over the time needed for an entire grid cell to entrain or detrain.  
-The entrainment and detrainment values resulting from this method were 
-approximately twice as large as those from previous bulk tracer calculations, 
-suggesting bulk tracer calculations contain significant biases.  However, fine 
-temporal and spatial resolution of entrainment and detrainment variability is 
-difficult to achieve with this method due to the long temporal averages needed.
+fluxes over the time needed for an entire grid cell to entrain or detrain.   
+This is done by summing the ``activity source" at the cloud boundary, 
+\begin{equation}
+\label{eq:romps_activity}
+  \rho \frac{\partial}{\partial t}(\rho \mathcal{A}) 
+  + \nabla \cdot (\rho u \mathcal{A}),
+\end{equation}
+over the period in which the cloud surface is adjacent to a grid cell.  Here 
+$\rho$ is the air density in kg m$^{-3}$ and $\mathcal{A}$ is the ``activity" 
+of the air, a scalar field that is 1 inside the cloud and 0 outside.  The 
+$\rho \partial(\rho \mathcal{A}) / \partial t$ term here represents the motion 
+of the cloud surface, and the $\nabla \cdot (\rho u \mathcal{A})$ term 
+represents air advecting into or out of the cloud.  The activity can be easily 
+redefined to determine entrainment and detrainment for any material surface in 
+a numerical model; Romps used a definition similar to \cite{Siebesma1995}'s 
+cloud core in his calculations.  Once a grid cell is no longer adjacent to the 
+boundary between active and inactive air, the sign of the summed activity 
+source is evaluated.  If the summed activity source is positive, more mass has 
+been entering the region of active air than has been leaving, and the summed 
+activity source is considered to be entrainment.  Conversely, a negative sum 
+is considered to be detrainment.  (In this paper, we shall refer to this method 
+of summing the activity source to determine entrainment and detrainment as the 
+``Romps method".)  The entrainment and detrainment values resulting from this 
+method were approximately twice as large as those from previous bulk tracer 
+calculations, suggesting bulk tracer calculations contain significant biases.  
+However, fine temporal and spatial resolution of entrainment and detrainment 
+variability is difficult to achieve with this method due to the long temporal 
+averages needed.
 
 Here we present a method for calculation of the cloud entrainment and 
 detrainment rates that relies on interpolation of the subgrid location of 
@@ -191,12 +214,19 @@ our results and present our conclusions.
 
 \section{Method}
 
+Here we derive a method for the calculation of entrainment and detrainment
+fluxes through the surface of an arbitrary volume in a numerical model.  In our 
+work this is used to calculated mass exchange between cloud and environment, 
+but this method could be used to calculate mass flux into and out of any volume 
+of interest.  In order to maintain generality we do not yet specify how the 
+location of this cloud surface is determined.
+
 Consider a numerical model grid cell containing a cloud surface with normal 
-vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the cloud.  This 
-surface, combined with $\mathbf{W}$, the portion of the grid cell walls that 
-lie within the cloud, encloses a cloud volume $V$ with surface $\mathbf{A}
-= \mathbf{C} \cup \mathbf{W}$.  \cite{Siebesma1998} gives the net entrainment 
-and detrainment over the cloud surface to be:
+vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the surface (Figure 
+\ref{fig:gridcell_schematic}).  This surface, combined with $\mathbf{W}$, the 
+portion of the grid cell walls that lie within the cloud, encloses a cloud 
+volume $V$.  \cite{Siebesma1998} gives the net entrainment and detrainment over 
+the cloud surface to be:
 \begin{equation}
 \label{eq:E_minus_D} 
 E - D = \int_C \rho ( \mathbf{u_i} -  \mathbf{u}) \cdot d\mathbf{C},
@@ -208,13 +238,14 @@ over the surface of $\mathbf{C}$ and the time evolution of $\mathbf{C}$,
 neither of which is easily calculated in a numerical model.  Instead, we seek a
 simplified but equivalent calculation.
 
-To calculate the velocity of the cloud interface, we make use of the Leibnitz 
+To calculate the velocity of the cloud surface, we make use of the Leibnitz 
 Theorem:
 \begin{equation}
 \label{eq:leibnitz} 
 \frac{d}{dt}\int_{V(t)} \rho dV = 
   \int_{V(t)} \frac{\partial \rho}{ \partial t} dV 
-  + \int_{A(t)} \rho \mathbf{u_i}\cdot d\mathbf{A}.
+  + \int_{C(t)} \rho \mathbf{u_i}\cdot d\mathbf{C}
+  + \int_{W(t)} \rho \mathbf{u_i}\cdot d\mathbf{W}.
 \end{equation}
 Since the walls of the grid cell do not move, $\mathbf{u_i}$ is 0 over 
 $\mathbf{W}$.  If we also assume ${\partial \rho}/{ \partial t} \approx 0$, we
@@ -236,65 +267,81 @@ $\mathbf{C}$:
 \begin{equation}
 \label{eq:divergence} 
 \int_{V} \nabla \cdot (\rho \mathbf{u}) dV = 
-  \int_{A} \rho \mathbf{u}\cdot d\mathbf{A}
+  \int_{C} \rho \mathbf{u}\cdot d\mathbf{C}
++ \int_{W} \rho \mathbf{u}\cdot d\mathbf{W}
 \end{equation}
 Due to mass conservation, $\nabla \cdot (\rho \mathbf{u}) = 0$, which implies
 \begin{equation}
 \label{eq:divergence3} 
   \int_{C} \rho \mathbf{u}\cdot d\mathbf{C} = 
     - \int_{W} \rho \mathbf{u}\cdot d\mathbf{W}
-\end{equation}
-since $\mathbf{A}$ is the union of $\mathbf{C}$ and $\mathbf{W}$.  Substituting
-this into (\ref{eq:step1}) results in
+\end{equation}.
+Substituting this into (\ref{eq:step1}) results in
 \begin{equation}
 \label{eq:entrainment_detrainment} 
 E - D = \rho \frac{dV}{dt} + \int_W \rho \mathbf{u} \cdot d\mathbf{W}.
 \end{equation}
+Following \cite{Romps2010}, if (\ref{eq:entrainment_detrainment}) is positive,
+the result of this calculation is assumed to all be $E$, and if negative, $D$:  
+\begin{equation}
+\label{eq:max_ent} 
+E = \mathrm{max}\left(0, 
+    \rho \frac{dV}{dt} + \int_W \rho \mathbf{u} \cdot d\mathbf{W}\right)
+\end{equation}
+\begin{equation}
+\label{eq:max_det} 
+D = \mathrm{max}\left(0, 
+  - \rho \frac{dV}{dt} - \int_W \rho \mathbf{u} \cdot d\mathbf{W}\right).
+\end{equation}
 Therefore, we can find the entrainment and detrainment by calculating the rate 
 of change of the cloud volume inside the grid cell and the mass flux through 
-the cloudy portion of the grid cell walls.  If equation $E - D$ is greater than 
-zero, the total is applied to entrainment and if less than zero, to 
-detrainment.  This technique works equally well for flux through any isosurface 
-of a scalar quantity defined within the model, though slight modifications must
-be made for positive definite quantities.  In this paper we perform these 
-calculations for the cloud core, which we define following \cite{Siebesma1995} 
-as fluid having condensed liquid water, upward velocity, and positive buoyancy 
-relative to the horizontal mean.  
+the cloudy portion of the grid cell walls.
 
-Calculating the mass flux through the grid cell walls can be accomplished using 
-the numerical model's advection routine; this is trivial for a model using an 
-Arakawa C-grid, while interpolation can give fluxes for other grid 
-configurations.  We assume the mass flux is constant over the grid cell wall.  
+We assume the mass flux is constant over the grid cell wall; this makes 
+calculating mass fluxes trivial for a model using an Arakawa C-grid, while 
+interpolation can give fluxes for other grid configurations.  Expanding the 
+terms in (\ref{eq:entrainment_detrainment}) for an Arakawa C-grid type model
+with a horizontally uniform density gives:
+\begin{equation}
+\label{eq:explicit_term_expansion}
+\begin{split}
+E - D & = \rho_{(k)} \frac{dV_{(i, j, k)}}{dt} \\
+      & + \rho_{(k)} u_{(i+1,j,k)} W_{x(i+1, j, k)} 
+        - \rho_{(k)} u_{(i,j,k)} W_{x(i, j, k)} \\
+      & + \rho_{(k)} v_{(i,j+1,k)} W_{y(i, j+1, k)} 
+        - \rho_{(k)} v_{(i,j,k)} W_{y(i, j, k)} \\
+      & + 1/2 (\rho_{(k+1)} + \rho_{(k)}) w_{(i,j,k+1)} W_{z(i, j, k+1)} 
+        - 1/2 (\rho_{(k)} + \rho_{(k-1)}) w_{(i,j,k)} W_{z(i, j, k)}.
+\end{split}
+\end{equation}
 
 There are a multitude of interpolation schemes that can be used to determine 
-the cloud core volume and cell wall area in a numerical model.  The simplest 
-would be to assume that saturated grid cells with positive vertical velocity 
-and virtual potential temperature $\theta_v$ (K) greater than the horizontal 
-mean are completely filled with cloud core, and otherwise grid cells contain 
-no cloud core at all.  We refer to this as the "no interpolation" method.  
-Since the cloud core surface only moves when a whole grid cell undergoes 
-condensation or evaporation this will result in poor estimates of $dV/dt$ and
-$\mathbf{S}$, which will overestimate the entrainment and detrainment.  To 
-reduce this overestimate, we interpolate the location of the cloud surface at 
-each time step.  Next we describe the interpolation scheme we use for this 
-purpose.
+the cloud volume and cloudy gric wall area in a numerical model.  The simplest 
+would be to assume that cloudy grid cells are completely filled with cloud, 
+and otherwise grid cells contain no cloud at all.  We refer to this as the ``no 
+interpolation" method.  Since the cloud surface only moves when a whole grid 
+cell undergoes condensation or evaporation this will result in poor estimates 
+of $dV/dt$, $\mathbf{C}$ and $\mathbf{W}$, which will result in an overestimate 
+of the entrainment and detrainment.  To reduce this overestimate, we 
+interpolate the location of the cloud surface at each time step.  Next we 
+describe the interpolation scheme we use for this purpose.
 
 %-----------------------------------------------------------------------------
 
-\subsection{Cloud core surface interpolation}
+\subsection{Cloud surface interpolation}
 
 Several standard techniques exist for subgrid isosurface interpolation in the 
 field of computer visualization, such as the Marching Cubes algorithm 
 \citep{Lorensen1987}.  In the spirit of these techniques, we have implemented 
 a scheme that relies on subdividing the grid cells into regular sub-cells, 
 finding the location of the cloud surface within these sub-cells, and then 
-reassembling the cells to construct the location of the cloud core surface.
-Our interpolation scheme, which we refer to as the "tetrahedral interpolation"
-method, splits the cubic grid cell into six pyramids, then splits each pyramid 
-into eight tetrahedrons (Figure \ref{fig:tetrahedral_scheme}, left 
-panel).  This results in forty-eight tetrahedrons, each composed of four 
-vertices located at the grid cell center, the center of a grid cell wall, the 
-center of a grid cell edge, and a grid cell corner.
+reassembling the cells to construct the location of the cloud surface.  Our 
+interpolation scheme, which we refer to as ``tetrahedral interpolation", splits 
+the cubic grid cell into six pyramids, then splits each pyramid into eight 
+tetrahedrons (Figure \ref{fig:tetrahedral_scheme}, left panel).  This results in
+forty-eight tetrahedrons, each composed of four vertices located at the grid 
+cell center, the center of a grid cell wall, the center of a grid cell edge, 
+and a grid cell corner.
 
 Generally, model scalar quantities will be defined on only one of these 
 verticies, and so we must interpolate the surrounding grid to determine 
@@ -305,64 +352,41 @@ wall, we average the two values on opposite sides of the wall; at the grid
 cell edge, we average the four values around the edge; and at the corners, 
 we average the values of the eight cells surrounding each corner.
 
-To find the cloud core surface, we must find the location where the total 
-humidity equals the saturated humidity, the vertical velocity is zero and 
-$\theta_v$ is equal to the horizontal mean of $theta_v$.  First we define a 
-variable $q_{diff} = q_t - q_{sat}(T, p)$, where $q_t$ is the total specific 
-water content and $q_{sat}(T, p)$ is the saturated specific humidity, all in 
-kg water per kg$^{-1}$ of moist air.  $q_{diff}$ is positive for cloudy 
-points, negative for clear points, and zero at the cloud surface, representing 
-the moisture excess or deficiency relative to the cloud surface.  Similarly, 
-we calculate $\Delta \theta_v = \theta_v - \overline{\theta_v}$, where the bar 
-represents the horizontal mean, to represent buoyancy excess or deficiency.  
-Vertical velocity $w$ requires no new variable to be calculated, but as it is 
-defined at the center of the top and bottom of the grid cell, we first 
-interpolate $w$ to the center of the grid cell for consistency.
-
-The cloud core surface itself is defined in a similar way to the Marching 
-Cubes algorithm \citep{Lorensen1987}.  Each tetrahedron has four vertexes, 
-which can either be cloud core or environment, depending on the interpolated 
-values of $q_{diff}$, $\Delta \theta_v$, and $w$.  This results in 16 
-possible combinations of vertex values that must be considered.  For example,
-if the vertexes of a tetrahedron all contain cloud core, the entire 
-tetrahedron must contain cloud core, while if three vertexes are core and one 
-is environment, the cloud core surface must pass through the tetrahedron.
-Many of these cases share symmetries, reducing the number of independent cases 
-to four classes.  If the vertexes of a tetrahedron all contain cloud core or 
-environment, the surface does not pass through the tetrahedron; this accounts 
-for two of the cases.  If only one of the vertexes is clear (or conversely, 
-only one is cloudy) than that corner of the tetrahedron is cut by a triangle 
-representing the cloud core surface (Figure \ref{fig:tetrahedral_scheme}, 
-center panel); this accounts for eight of the cases.  The remaining six cases 
-have two vertexes containing cloud core and two vertexes containing 
-environment, and result in the tetrahedron being cut by two triangles which 
-share a common edge.
-
-The location of the triangles that cut the tetrahedrons are found by 
-calculating the fractional distance between connected tetrahedron vertexes at 
-which each variable is zero:
-\begin{equation}
-\label{eq:q_diff_interpolation}
-x = \frac{q_{diff}(x_1)}{q_{diff}(x_2) - q_{diff}(x_1)}.
-\end{equation}
-This calculation is then repeated for $\Delta\theta_v$ and $w$.  The $x$ value 
-that returns the smaller cloud core volume is taken to be the location of the 
-cloud core surface.   Repeated application of this algorithm to each grid cell 
-results in a continuous surface that approximates the subgrid location of the 
-cloud core surface (Figure \ref{fig:tetrahedral_scheme}, right panel).
+The cloud surface itself is defined in a similar way to the Marching Cubes 
+algorithm \citep{Lorensen1987}.  Each tetrahedron has four vertices, which can 
+either be inside or outside of the cloud.  This results in 16 possible 
+combinations of vertex values that must be considered.  Many of these cases 
+share symmetries, reducing the number of independent cases to three classes.  
+If only one of the tetrahedron vertices is cloudy (or conversely, only one is 
+clear) than that corner of the tetrahedron is cut by a triangle representing 
+the cloud surface (Figure \ref{fig:tetrahedral_scheme}, center panel, 
+upper left); this accounts for eight of the cases.  If two vertices are cloudy 
+and two vertices are clear, this results in the tetrahedron being cut by two 
+triangles which share a common edge (Figure \ref{fig:tetrahedral_scheme}, 
+center panel, upper right); this accounts for six of the cases.  Finally, if 
+the vertices of a tetrahedron are all cloudy or clear, the surface does not 
+pass through the tetrahedron (Figure \ref{fig:tetrahedral_scheme}, center 
+panel, bottom); this accounts for the remaining two cases.  The location of the 
+vertices of the triangles that cut the tetrahedron are found by linear 
+interpolation between cloudy and clear tetrahedron vertices.  Repeated 
+application of this algorithm to each grid cell results in a continuous surface 
+that approximates the subgrid location of the cloud surface (Figure 
+\ref{fig:tetrahedral_scheme}, right panel).
 
 Once the geometry of the case is determined, the area of the cloudy portion of
 the model grid cell wall can be calculated by dividing the cloudy area into 
-triangles and summing the triangle areas
+triangles and summing the triangle areas using the well known cross-product 
+area formula
 \begin{equation}
 A = \frac{|(\mathbf{b - c}) \times (\mathbf{a - c})|}{2},
 \end{equation}
 where $\mathbf{a}$, $\mathbf{b}$, $\mathbf{c}$ are the position vectors of the 
 vertices of the triangles.  Similarly, the volume of the cut tetrahedron is 
 calculated by subdividing it into smaller tetrahedrons, and summing the volumes 
-of the sub-tetrahedrons using
+of the sub-tetrahedrons using the triple-product volume formula 
+\citep{Harris1998}
 \begin{equation}
-V = \frac{|\mathbf{a - d} \cdot ((\mathbf{b - d}) \times (\mathbf{c - d}))|}{6},
+V = \frac{|(\mathbf{a - d}) \cdot ((\mathbf{b - d}) \times (\mathbf{c - d}))|}{6},
 \end{equation}
 where $\mathbf{a}$, $\mathbf{b}$, $\mathbf{c}$, and $\mathbf{d}$ are the 
 position vectors of the vertices of the sub-tetrahedrons.  This results in 
@@ -376,21 +400,55 @@ all the information needed to measure entrainment and detrainment via equation
 We have implemented both our tetrahedral surface interpolation scheme and the 
 time averaging scheme of \cite{Romps2010} in the System for Atmospheric 
 Modeling \citep[SAM;][]{Khairoutdinov2003}, allowing the model to calculate 
-cloud core entrainment and detrainment via these two methods simultaneously.
+entrainment and detrainment via these two methods simultaneously.  In this 
+paper we perform these calculations for the cloud core, which we define 
+following \cite{Siebesma1995} as fluid having condensed liquid water, upward 
+velocity, and positive buoyancy relative to the horizontal mean.  The cloud 
+core surface then is located where the total humidity equals the saturated 
+humidity, $T_v$ is equal to the horizontal mean of $T_v$, and the vertical 
+velocity is zero.
+
+In the tetrahedral method, finding the location where $q_t$ equals 
+$q_{sat}(T, p)$ is complicated by the non-linearity of $q_{sat}(T, p)$.  For 
+simplicity, we define a variable $q_{diff} = q_t - q_{sat}(T, p)$, where $q_t$ 
+is the total specific water content and $q_{sat} (T, p)$ is the saturated 
+specific humidity, all in kg water per kg of moist air.  $q_{diff}$ can be 
+thought of as the moisture excess or deficiency relative to the saturated 
+humidity, $q_{diff} = 0$ is the location where the total humidity equals the 
+saturated humidity.  Similarly, we calculate 
+$\Delta T_v = T_v - \overline{T_v}$ , where the bar represents the horizontal 
+mean, and $T_v$ is the virtual temperature in K, to represent buoyancy excess 
+or deficiency.  Vertical velocity $w$ requires no new variable to be calculated, 
+but as SAM is an Arakawa C-grid model, it is defined at the center of the top 
+and bottom of the grid cell instead of at its center.  Therefore, we first 
+interpolate $w$ to the center of the grid cell for consistency with location of 
+the specific humidity and virtual temperature.  To find the location of the 
+cloud core between a point that is in the core and a point that is outside the 
+core, the locations between these points where $q_{diff}$, $\Delta T_v$, and 
+$w$ are 0 are calculated, and the value that is closest to the cloud core point 
+is selected as the start of the region where all the cloud core criteria are 
+satisfied. 
+
+Since the Romps scheme relies on calculating the advection of active (that is, 
+cloud core) air, there are actually several ways this calculation can be 
+performed.  \cite{Romps2010} used a simple first-order upwind advection scheme; 
+we have implemented both this scheme and one based upon SAM's second-order 
+Multidimensional Positive Definite Advection Transport Algorithm (MPDATA) 
+routine \citep{Smolarkiewicz1990}.
+
 We have run these schemes in a standard GCSS Barbados Oceanographic and 
-Meteorological Experiment (BOMEX) LES \citep{Holland1973, Siebesma2003}.  
-The model was run with a domain extent of 6.4 km x 6.4 km in 
-the horizontal and 3.2 km in the vertical.  Model cloud area, vertical 
-velocity, and cloud core entrainment diagnosed from bulk conserved tracer 
-budgets agree well with the results presented in \cite{Siebesma2003} (not 
-shown).
+Meteorological Experiment (BOMEX) LES \citep{Holland1973, Siebesma2003}.  The 
+model was run with a domain extent of 6.4 km x 6.4 km in the horizontal and 
+3.2 km in the vertical.  Model cloud area, vertical velocity, and cloud core 
+entrainment diagnosed from bulk conserved tracer budgets agree well with the 
+results presented in \cite{Siebesma2003} (not shown).
 
 To examine the resolution dependence of our scheme, we ran three models: one at 
 25m grid spacing in all directions with a 1.5 second time step, one at 50m grid 
 spacing with a 3 second time step, and one at 100m grid spacing with a 6 second 
 time step.  For most of the results we present here we rely on the 25m 
 resolution model.  The models were each run for 6 hours, and the first 
-three hours of simulation were discarded as the model was still adjusting into 
+three hours of simulation were discarded as the model was still approaching
 steady-state.  15 minute averages were output for the terms of each of our 
 calculations.  Running the 25m resolution model with the tetrahedral surface 
 interpolation scheme resulted in a 13\% model slowdown.  
@@ -399,33 +457,31 @@ interpolation scheme resulted in a 13\% model slowdown.
 
 \section{Comparison with Romps}
 
-We take the direct entrainment method of \cite{Romps2010}, which we shall 
-refer to as the "Romps method", to represent the true entrainment as it uses 
-a minimal set of assumptions to perform its calculations.  We therefore use 
-the Romps method in this section to evaluate the accuracy of our tetrahedral 
-interpolation method.
+Here we compare our tetrahedral interpolation method with the Romps method 
+calculated using upwind advection and MPDATA advection.  Comparison of the 
+average values produced by the tetrahedral interpolation method and the Romps 
+method with MPDATA advection over three hours of model time (Figure 
+\ref{fig:direct_vs_romps}) shows good agreement in the vertical profiles of 
+both $E$ and $D$; however, the magnitude of the tetrahedral entrainment and 
+detrainment values are slightly higher than the Romps MPDATA value.  The Romps 
+method with upwind advection, however, gives results is about 50\% larger than 
+the tetrahedral method.  This difference is likely the result of larger 
+numerical errors in the first-order upwind scheme compared with the MPDATA 
+scheme, and is therefore an estimate of the influence of the numerical method 
+used on the values of $E$ and $D$.  In either case, the tetrahedral scheme is 
+vastly superior to using no interpolation, which results in entrainment and 
+detrainment values four times larger than the Romps MPDATA value (not shown).  
 
-Comparison of the average values produced by the two methods over three hours 
-of model time (Figure \ref{fig:direct_vs_romps}) shows good agreement in the 
-vertical profiles of both $E$ and $D$; however, the magnitude of the 
-tetrahedral entrainment and detrainment values are slightly higher than the 
-Romps value.  This is likely the result of errors in the estimate of the 
-velocity of the cloud surface in our tetrahedral scheme, which would tend to 
-result in overestimation of the entrainment and detrainment rates.  
-However, the tetrahedral scheme is vastly superior to using no interpolation, 
-which results in entrainment and detrainment values four times larger than 
-the Romps value (not shown).  
-
-There is similar agreement between $\epsilon = E/M$ and $\delta = D/M$, the 
-fraction entrainment and detrainment rates, where M is the total vertical 
-mass flux within the cloud core in kg m$^{-2}$ s$^{-1}$ and $\epsilon$ and 
-$\delta$ have units of m$^{-1}$.  However, large deviations do occur near 
-cloud base and top. Some of this deviation results from small differences 
-between $E$ and $D$ which are magnified by small values of $M$.  However, at
-cloud base and top the Romps method's entrainment is actually larger than the
-tetrahedral method's entrainment.  This is due to underestimate of the cloud 
-volume by the tetrahedral interpolation in areas where clouds are small; we 
-will discuss this underestimate more fully in section 5.  
+There is similar levels of agreement between $\epsilon = E/M$ and 
+$\delta = D/M$, the fraction entrainment and detrainment rates, where M is the 
+total vertical mass flux within the cloud core in kg m$^{-2}$ s$^{-1}$ and 
+$\epsilon$ and $\delta$ have units of m$^{-1}$.  However, large deviations do 
+occur near cloud base and top. Some of this deviation results from small 
+differences between $E$ and $D$ which are magnified by small values of $M$.  
+However, at cloud base and top the Romps method's detrainment is actually 
+larger than the tetrahedral method's detrainment.  This is due to underestimate 
+of the cloud volume by the tetrahedral interpolation in areas where clouds are 
+small; we will discuss this underestimate more fully in section 5.  
 
 \subsection{Agreement with the continuity equation}
 
@@ -440,39 +496,34 @@ turbulent plume:
     + \frac{\partial M}{\partial z}
     = E - D
 \end{equation}
-To satisfy continuity, the difference between the amount of fluid 
-entrained and detrained by the clouds at a given height must equal the 
-vertical gradient in cloud mass flux plus the rate in change of the cloud area.
-We calculate the vertical gradient of mass flux in equation 
-(\ref{eq:continuity}) by interpolating vertical velocities from the edges to 
-the center of each grid cell, then averaging total mass flux within the clouds 
-using these interpolated velocities.  Fifteen minute average values of mass 
-flux were output and the vertical derivative taken via centered differencing.  
-Fifteen minute average values of $\partial a/\partial t$ are calculated within 
-the model as well.  
+where $\rho$ is the density of air in kg m$^{-3}$, $a$ is the cloud fraction, 
+$M$ is the fractional vertical mass flux in kg m$^{-2}$ s$^{-1}$.  To satisfy 
+continuity, the difference between the amount of fluid entrained and detrained 
+by the clouds at a given height must equal the vertical gradient in cloud mass 
+flux plus the rate in change of the cloud area.  We calculate the vertical 
+gradient of mass flux in equation (\ref{eq:continuity}) by interpolating 
+vertical velocities from the edges to the center of each grid cell, then 
+averaging total mass flux within the clouds using these interpolated velocities.  
+Fifteen minute average values of mass flux were output and the vertical 
+derivative taken via centered differencing.  Fifteen minute average values of 
+$\partial a/\partial t$ are calculated within the model as well.  
 
 Comparison of the tetrahedral values of $E-D$ we have calculated with the
-Romps and no interpolation methods shows very close agreement (Figure 
+Romps and no interpolation methods shows reasonable agreement (Figure 
 \ref{fig:E_minus_D}).  Of these three calculations, the no interpolation method 
 is the most accurate measurement of $E-D$, as we calculate its values directly 
-from the model's MPDATA tracer advection routine 
-\citep{Smolarkiewicz1990,Khairoutdinov2003} without any modification of the 
-cloud surface.  The tetrahedral interpolation method is biased by the method's 
-redefinition of the cloud volume, while the Romps method's averaging redefines 
-the time at which entrainment and detrainment events take place.  Both these 
-schemes result in a more negative $E-D$ value than the no interpolation 
-scheme, with the tetrahedral interpolation having slightly less bias.
-
-Our direct flux calculations also agree with the continuity equation fairly 
-well (Figure \ref{fig:E_minus_D}), but diverge between cloud base and 1 km 
-height.  We take this result to indicate that the interpolation and centered 
-differencing we use to calculate mass flux divergence for the continuity 
-equation results in a different estimate of mass continuity than the direct 
-model fluxes.  Thus suggests the value of $E-D$ is remarkably sensitive to 
-the details of the numerical scheme used to calculate the fluxes.  For 
-consistency with the underlying model numerics, we recommend these 
-calculations be implemented using the same advection scheme used by the 
-numerical model in which they are implemented.
+from the model's velocity field without any modification of the cloud surface.
+This is confirmed by the close agreement between the no interpolation method 
+and the continuity equation.  Our direct flux calculations also agree with the 
+continuity equation fairly well (Figure \ref{fig:E_minus_D}), but diverge 
+between cloud base and 1 km height.  The tetrahedral interpolation method is 
+biased low by the method's redefinition of the cloud volume, while the Romps 
+method's averaging redefines the time at which entrainment and detrainment 
+events take place.  Both these schemes result in a less negative $E-D$ value 
+than the no interpolation scheme, with the tetrahedral interpolation having 
+slightly more bias.  Finally, we note that the $E-D$ that results from the 
+Romps upwind calculation (not shown) is essentially identical to the Romps 
+MPDATA calculation.
 
 %-----------------------------------------------------------------------------
 
@@ -484,22 +535,29 @@ Romps method.  However, this does not ensure that the same variability is
 displayed by the two calculations.  To analyze the variability, we take the 
 correlation of the fifteen-minute averaged $\epsilon$ and $\delta$ values 
 calculated via the two methods over the three hour model run at each height 
-to generate correlation profiles.  We use $\epsilon = E/M$ and $\delta = D/M$ 
-to analyze the variability as $E$ and $D$ are both strongly correlated with 
-cloud volume; more cloud volume with the same entrainment velocity results in 
-larger entrainment.  Dividing by the mass flux removes this area dependence.
-Heights at which the model does not have clouds for the entire three hour 
-period are excluded from the calculation.  
+to generate correlation profiles.  We do these calculations for both Romps 
+using upwind advection and Romps with MPDATA advection.  We use 
+$\epsilon = E/M$ and $\delta = D/M$ to analyze the variability as $E$ and $D$ 
+are both strongly correlated with cloud volume; more cloud volume with the same 
+entrainment velocity results in larger entrainment.  Dividing by the mass flux 
+removes this area dependence.  Heights at which the model does not have clouds 
+for the entire three hour period are excluded from the calculation.  
 
-Correlations between the Romps and tetrahedral interpolation methods for both 
-$\epsilon$ and $\delta$ are significant at the 99\% confidence level over most 
-of the cloud layer (Figure \ref{fig:correlations}).  Values near cloud 
-base and top show no correlation, which we would expect given the poor 
-agreement between the average values of $\epsilon$ and $\delta$ between the 
-two methods in these regions (Figure \ref{fig:direct_vs_romps}, d and e).  We
-take these results to show general good agreement between our tetrahedral 
-interpolation scheme and the time averaging scheme of Romps over relatively 
-large time and space averages.  
+Correlations between the Romps method using MPDATA advection and the 
+tetrahedral interpolation method for both $\epsilon$ and $\delta$ are 
+significant at the 99\% confidence level over most of the cloud layer (Figure 
+\ref{fig:correlations}).  Values near cloud base and top show no correlation, 
+which we would expect given the poor agreement between the average values of 
+$\epsilon$ and $\delta$ between the two methods in these regions (Figure 
+\ref{fig:direct_vs_romps}, d and e).  Correlations between Romps using the 
+upwind advection scheme and the tetrahedral interpolation method are similarly
+good for $\delta$, but $\epsilon$ is significantly less correlated above a 
+height of one km.  We take these results to show general good agreement between 
+our tetrahedral interpolation scheme and the time averaging scheme of Romps 
+with MPDATA advection over relatively large time and space averages.  Because 
+of the weak correlations in $\epsilon$ between the Romps method using upwind 
+advection and the tetrahedral method, we will confine the rest of our analysis 
+to comparisons with the Romps method with MPDATA advection.
 
 \subsection{Behavior over different time and space scales}
 
@@ -571,34 +629,35 @@ reduced in size by 50\% of the uninterpolated value.
 
 This underestimate of the volume of isolated cloud cells is an inherent 
 feature of surface interpolation, since as a cloud evaporates, the 
-interpolated volume would decrease smoothly to zero.  Thus, clouds with a 
-volume on the order of the model grid spacing will always have their volume 
-underestimated by interpolation.  We have not been able to find a simple way 
-to correct for this, as the effect is non-linear and is not corrected simply 
-by scaling the entrainment values by the ratio of the interpolated to 
-non-interpolated cloud volumes.  Therefore, the tetrahedral interpolation 
-method must rely on having sufficient grid resolution to minimize this effect.
+interpolated volume should decrease smoothly to zero.  Thus, clouds with a 
+volume on the order of the volume of a single model grid cell will always have 
+their volume underestimated by interpolation.  We have not been able to find a 
+simple way to correct for this, as the effect is non-linear and is not 
+corrected simply by scaling the entrainment values by the ratio of the 
+interpolated to non-interpolated cloud volumes.  Therefore, the tetrahedral 
+interpolation method must rely on having sufficient grid resolution to minimize 
+this effect.
 
 %==============================================================================
 
 \section{Discussion and Conclusions}
 
-The good agreement between our technique and the Romps method at fine grid 
-spacing gives us confidence that our calculation is a valid representation 
-of the flux through the cloud surface.  However, as our method redefines the 
-cloud volume, there are interpretation issues when comparing the fluxes 
-calculated by the two methods.  For example, consider a cloud that occupies a 
-single grid cell.  Assume that over the course of a model time step, the 
-liquid water content of the cloudy grid cell decreases, while advective 
-processes maintain the moisture in the grid cell's surroundings at a constant 
-value.  The Romps calculation will interpret this change as being the result 
-of entrainment of environmental air drying the fluid in the grid cell.  Our 
-surface interpolation, however, will come to the opposite conclusion: the 
-reduction of liquid water content will move the interpolated cloud surface 
-closer to the grid cell center, reducing the volume of the cloud and thus 
-detraining cloud fluid.  We believe effects like this explain why the 
-tetrahedral interpolation method estimates $E$ and $D$ values that are 
-smaller than those estimated via the Romps method at coarse grid resolution.
+The good agreement between our technique and the Romps method using MPDATA 
+advection at fine grid spacing gives us confidence that our calculation is a 
+valid representation of the flux through the cloud surface.  However, as our 
+tetrahedral interpolation redefines the cloud volume, there are interpretation 
+issues when comparing the fluxes calculated by the two methods.  We believe 
+effects like this explain why the tetrahedral interpolation method estimates 
+$E$ and $D$ values that are smaller than those estimated via the Romps method 
+at coarse grid resolution.
+
+Calculations of $E$ and $D$ with the Romps method using first-order upwind 
+advection results in significantly larger values than when using 
+second-order MPDATA advection.  We take this to be the result of larger 
+numerical diffusion in the upwind advection scheme.  This difference is quite 
+large, with the upwind advection giving values on the order of 50\% higher than 
+the MPDATA advection.  Thus suggests that the $E$ and $D$ values calculated by 
+the Romps method are very sensitive to the numerics used. 
 
 \citet{Romps2010} found that values of direct entrainment and detrainment were 
 significantly higher than values calculated via bulk tracer budgets: our 
@@ -623,15 +682,15 @@ exchanges.
 We have shown that by interpolating the location of cloud surfaces in an LES
 model we have been able to calculate reasonable entrainment and detrainment 
 rates directly from model mass fluxes.  These fluxes agree well with the 
-direct entrainment method of Romps, with the caveat that the clouds must be 
-well resolved by the model grid spacing so as to minimize underestimate of the 
-cloud volume by the interpolation scheme.  This tetrahedral interpolation 
-scheme gives significant benefits over the Romps method over short time and 
-small spatial scales, generating statistically well-behaved results suitable 
-for use in examining entrainment and detrainment variability over the life 
-cycle of an individual cloud.
+direct entrainment method of Romps using MPDATA advection, with the caveat that 
+the clouds must be well resolved by the model grid spacing so as to minimize 
+underestimate of the cloud volume by the interpolation scheme.  This 
+tetrahedral interpolation scheme gives significant benefits over the Romps 
+method over short time and small spatial scales, generating statistically 
+well-behaved results suitable for use in examining entrainment and detrainment 
+variability over the life cycle of an individual cloud.
 
-Finally, we note that nothing in our technique is dependent on the shallow 
+Finally, we reiterate that nothing in our technique is dependent on the shallow 
 cumulus cloud regime, on indeed on clouds at all; it should be equally useful
 in calculating entrainment and detrainment through any material surface in a 
 numerical model, subject to the caveats we have mentioned.
@@ -641,10 +700,12 @@ numerical model, subject to the caveats we have mentioned.
 
 \begin{acknowledgment}
 This paper benefited from helpful discussions with Fleur Couvreux and 
-Catherine Rio.  Support was provided by the Canadian Foundation for Climate 
-and Atmospheric Science through the Cloud Aerosol Feedback and Climate 
-network.  All figures were generated using the matplotlib library in the 
-Python programming language.
+Catherine Rio.  We also gratefully acknowledge the contributions of David 
+Romps and a second, anonymous peer reviewer, whose comments significantly 
+improved the clarity of this paper.  Support was provided by the Canadian 
+Foundation for Climate and Atmospheric Science through the Cloud Aerosol 
+Feedback and Climate network.  All figures were generated using the matplotlib 
+library in the Python programming language.
 \end{acknowledgment}
 
 % Use appendix}[A], {appendix}[B], etc. etc. in place of appendix 
@@ -681,18 +742,36 @@ Python programming language.
 
 \begin{figure}[t]
   \noindent
+  \includegraphics[width=19pc,angle=0]{./figures/gridcell_schematic}\\
+  \caption{Grid cell schematic showing geometry for the derivation of direct 
+entrainment and detrainment fluxes using a sub-grid scale interpolation of the 
+cloud surface location.  Vector $\mathbf{C}$ is normal to the cloud surface, 
+shown by the thick line.  Vector $\mathbf{W}$ is normal to the portion of the 
+grid cell walls occupied by cloud, shown by the dotted lines; $\mathbf{W_x}$ is 
+used to denote the $x$ direction grid cell surfaces, and $\mathbf{W_y}$ for the 
+$y$ direction surfaces.  These surfaces enclose a volume $V$, shown by the 
+shaded area.  $u$ and $v$ vectors represent the locations of the horizontal 
+velocities in the x and y direction for an Arakawa C-grid.}
+  \label{fig:gridcell_schematic}
+\end{figure}
+
+\begin{figure}[t]
+  \noindent
   \includegraphics[width=40pc,angle=0]{./figures/tetrahedral_scheme}\\
   \caption{Schematic representation of the tetrahedral interpolation 
   method.  Left panel shows the subdivision of the model grid cell into 
-  forty-eight tetrahedrons.  Center panel shows the interpolation of the cloud 
-  surface within a sub-tetrahedron between points at the four vertices of the 
-  tetrahedron.  Right panel shows a horizontal slice through the model's 
-  Arakawa C-grid.  Rightward pointing triangles represent u-velocity points, 
-  upward pointing triangles represent v-velocity points, circles represent 
-  bulk tracer quantities such as temperature or humidity, and x represents 
-  the location of the cloud surface interpolation points.  Dotted lines show 
-  the boundaries of the tetrahedral subdivision of the grid, and grey shading 
-  represents cloud volume.}
+  forty-eight tetrahedrons.  Center panel shows the three cases for 
+  interpolation of the cloud surface within a sub-tetrahedron between points at 
+  the four vertices of the tetrahedron; all other tetrahedron interpolation 
+  cases are variations on these three.  Black dots represent cloudy tetrahedron 
+  points, white dots represent clear tetrahedron points, and grey dots represent
+  the interpolated cloud position between cloudy-clear tetrahedron point pairs.  
+  Right panel shows a horizontal slice through the model's Arakawa C-grid.  
+  Rightward pointing triangles represent u-velocity points, upward pointing 
+  triangles represent v-velocity points, circles represent bulk tracer 
+  quantities such as temperature or humidity, and x represents the location of 
+  the cloud surface interpolation points.  Dotted lines show the boundaries of 
+  the tetrahedral subdivision of the grid, and shading represents cloud volume.}
   \label{fig:tetrahedral_scheme}
 \end{figure}
 
@@ -700,11 +779,13 @@ Python programming language.
   \noindent
   \includegraphics[width=40pc,angle=0]{./figures/direct_vs_romps}\\
   \caption{Comparison of mean model profiles of core a) entrainment and b) 
-  detrainment calculated using the Romps method (grey line) and the
-  tetrahedral interpolation method (black line).  c) Ratio of Romps 
-  method to tetrahedral interpolation method rates of entrainment 
-  (black) and detrainment (grey).  d) and e) are the same as a) and b) but 
-  for the fractional entrainment and detrainment rates.}
+  detrainment calculated using the tetrahedral interpolation method (black 
+  line), the Romps method with upwind advection (thin grey line) and the Romps 
+  method with MPDATA advection (thick grey line).  c) Ratio of Romps method to 
+  tetrahedral interpolation method rates of entrainment (black) and detrainment 
+  (grey).  Thin lines are the ratios for the Romps method with upwind advection
+  and thick lines are the ratios for MPDATA advection.  d) and e) are the same 
+  as a) and b) but for the fractional entrainment and detrainment rates.}
   \label{fig:direct_vs_romps}
 \end{figure}
 
@@ -713,8 +794,8 @@ Python programming language.
   \includegraphics[width=19pc,angle=0]{./figures/E_minus_D}\\
   \caption{Average profiles of entrainment minus detrainment calculated using 
   the continuity equation (dotted line), direct fluxes with no surface 
-  interpolation (grey line), the tetrahedral interpolation method
-  (thick black line), and the Romps method (thin black line).
+  interpolation (grey line), the tetrahedral interpolation method (thick black 
+  line), and the Romps method using MPDATA advection (thin black line).
   }\label{fig:E_minus_D}
 \end{figure}
 
@@ -723,8 +804,10 @@ Python programming language.
   \includegraphics[width=19pc,angle=0]{./figures/correlations}\\
   \caption{
   Profiles of the correlation between the Romps method and the
-  tetrahedral interpolation method for a) entrainment and b) detrainment.  
-  Dotted line shows the 99\% confidence level for a significant correlation.
+  tetrahedral interpolation method for a) entrainment and b) detrainment.  Grey 
+  lines show the correlation using upwind advection in the Romps method, Black 
+  lines show the correlation using MPDATA advection.  Dotted line shows the 
+  99\% confidence level for a significant correlation.
   }
   \label{fig:correlations}
 \end{figure}
@@ -734,7 +817,8 @@ Python programming language.
   \includegraphics[width=39pc,angle=0]{./figures/averaging_convergence}\\ 
   \caption{Time variability of entrainment and detrainment horizontally 
   averaged over the model domain at a height of one kilometer calculated via 
-  a) the tetrahedral interpolation method and b) the Romps method.
+  a) the tetrahedral interpolation method and b) the Romps method using MPDATA 
+  advection.
   }
   \label{fig:averaging_convergence}
 \end{figure}
@@ -743,9 +827,9 @@ Python programming language.
   \noindent\includegraphics[width=39pc,angle=0]{./figures/spatial_variability_1min}\\ 
   \caption{Vertical cross-section of a model cloud showing one minute averaged 
   entrainment (a, c) and detrainment (b, d) calculated using the tetrahedral 
-  interpolation method (a, b) and the Romps method (c, d).  Greyscale indicates 
-  amount of entrainment or detrainment, lines show the region where condensed 
-  liquid water exists.
+  interpolation method (a, b) and the Romps method using MPDATA advection (c, 
+  d).  Greyscale indicates amount of entrainment or detrainment, lines show the 
+  region where condensed liquid water exists.
   }
   \label{fig:spatial_variability}
 \end{figure}
@@ -755,8 +839,8 @@ Python programming language.
   \includegraphics[width=39pc,angle=0]{./figures/resolution_dependence}\\
   \caption{Mean entrainment (top row) and detrainment (bottom row) calculated
   at 25m (left column), 50m (center column), and 100m (right column) grid 
-  spacing using the Romps method (grey line) and the tetrahedral 
-  interpolation method (black line).
+  spacing using the Romps method with MPDATA advection (grey line) and the 
+  tetrahedral interpolation method (black line).
   }
   \label{fig:resolution_dependence}
 \end{figure}
