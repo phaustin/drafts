@@ -119,7 +119,7 @@ aerosols out of the boundary layer and the rate at which chemical reactions can
 occur in those aerosols \citep{Barahona2007,Anldrejczuk2008}.
 
 Large Eddy Simulation (LES) is an important tool used in the study of cloud 
-entrainment and detrainment. LES models achieve grid resolutions on the order 
+entrainment and detrainment. LES models apply grid resolutions on the order 
 of 10-100 m, well within the domain of the Kolmagorov -5/3 turbulence spectrum. 
 This allows for a relatively simple turbulence model that captures the 
 important statistics of the subgrid-scale eddy fluxes and thus, an accurate 
@@ -134,7 +134,7 @@ Several recent studies have looked at the life cycle of individual clouds taken
 from LESs, trying to break the cloud field into its component parts 
 \citep{Zhao2005,Zhao2005a,Heus2009}.  Estimates of entrainment and detrainment 
 rates for individual clouds would be quite useful in these studies, but are 
-difficult to apply. Entrainment and detrainment rates for nonprecipitating 
+difficult to achieve. Entrainment and detrainment rates for nonprecipitating 
 clouds are typically calculated in LES by recording budgets of bulk conserved 
 tracer variables, such as the total humidity or the liquid water moist static 
 energy, and inferring the amount of fluid exchange between cloud and clear air 
@@ -463,9 +463,9 @@ average values produced by the tetrahedral interpolation method and the Romps
 method with MPDATA advection over three hours of model time (Figure 
 \ref{fig:direct_vs_romps}) shows good agreement in the vertical profiles of 
 both $E$ and $D$; however, the magnitude of the tetrahedral entrainment and 
-detrainment values are slightly higher than the Romps MPDATA value.  The Romps 
-method with upwind advection, however, gives results is about 50\% larger than 
-the tetrahedral method.  This difference is likely the result of larger 
+detrainment values are about 15\% higher than the Romps MPDATA value.  The 
+Romps method with upwind advection, however, gives results is about 50\% larger 
+than the tetrahedral method.  This difference is likely the result of larger 
 numerical errors in the first-order upwind scheme compared with the MPDATA 
 scheme, and is therefore an estimate of the influence of the numerical method 
 used on the values of $E$ and $D$.  In either case, the tetrahedral scheme is 
@@ -475,13 +475,15 @@ detrainment values four times larger than the Romps MPDATA value (not shown).
 There is similar levels of agreement between $\epsilon = E/M$ and 
 $\delta = D/M$, the fraction entrainment and detrainment rates, where M is the 
 total vertical mass flux within the cloud core in kg m$^{-2}$ s$^{-1}$ and 
-$\epsilon$ and $\delta$ have units of m$^{-1}$.  However, large deviations do 
-occur near cloud base and top. Some of this deviation results from small 
-differences between $E$ and $D$ which are magnified by small values of $M$.  
-However, at cloud base and top the Romps method's detrainment is actually 
-larger than the tetrahedral method's detrainment.  This is due to underestimate 
-of the cloud volume by the tetrahedral interpolation in areas where clouds are 
-small; we will discuss this underestimate more fully in section 5.  
+$\epsilon$ and $\delta$ have units of m$^{-1}$.  Since the tetrahedral method 
+interpolation redefines the extent of the cloud core, we calculate seperate 
+values of $M$ for the Romps method and the tetrahedral method.  This results in 
+slightly smaller $M$ values for the tetrahedral calculation.  $\epsilon$ and 
+$\delta$ do show large deviations between the tetrahedral and Romps
+calculations near cloudbbase and top.  These deviations likely result from the 
+small cloud fractions at these heights, which both makes the statistical 
+sampling less robust and allows small differences between $E$ and $D$ to be 
+magnified by small values of $M$.  
 
 \subsection{Agreement with the continuity equation}
 
@@ -522,8 +524,8 @@ method's averaging redefines the time at which entrainment and detrainment
 events take place.  Both these schemes result in a less negative $E-D$ value 
 than the no interpolation scheme, with the tetrahedral interpolation having 
 slightly more bias.  Finally, we note that the $E-D$ that results from the 
-Romps upwind calculation (not shown) is essentially identical to the Romps 
-MPDATA calculation.
+Romps MPDATA calculation (not shown) is essentially identical to the Romps 
+upwind calculation.
 
 %-----------------------------------------------------------------------------
 
@@ -540,24 +542,22 @@ using upwind advection and Romps with MPDATA advection.  We use
 $\epsilon = E/M$ and $\delta = D/M$ to analyze the variability as $E$ and $D$ 
 are both strongly correlated with cloud volume; more cloud volume with the same 
 entrainment velocity results in larger entrainment.  Dividing by the mass flux 
-removes this area dependence.  Heights at which the model does not have clouds 
-for the entire three hour period are excluded from the calculation.  
+removes this area dependence.  Seperate $M$ values are calculated for the
+tetrahedral and Romps methods, to take into account the volume redefinition 
+that occurs in the tetrahedral method.  Heights at which the model does not 
+have clouds for the entire three hour period are excluded from the calculation.  
 
-Correlations between the Romps method using MPDATA advection and the 
-tetrahedral interpolation method for both $\epsilon$ and $\delta$ are 
-significant at the 99\% confidence level over most of the cloud layer (Figure 
-\ref{fig:correlations}).  Values near cloud base and top show no correlation, 
-which we would expect given the poor agreement between the average values of 
-$\epsilon$ and $\delta$ between the two methods in these regions (Figure 
-\ref{fig:direct_vs_romps}, d and e).  Correlations between Romps using the 
-upwind advection scheme and the tetrahedral interpolation method are similarly
-good for $\delta$, but $\epsilon$ is significantly less correlated above a 
-height of one km.  We take these results to show general good agreement between 
-our tetrahedral interpolation scheme and the time averaging scheme of Romps 
-with MPDATA advection over relatively large time and space averages.  Because 
-of the weak correlations in $\epsilon$ between the Romps method using upwind 
-advection and the tetrahedral method, we will confine the rest of our analysis 
-to comparisons with the Romps method with MPDATA advection.
+Correlations between the Romps method, using both upwind and MPDATA advection, 
+and the tetrahedral interpolation method for both $\epsilon$ and $\delta$ are 
+significant at the 95\% confidence level over most of the cloud layer (Figure 
+\ref{fig:correlations}).  $\delta$ shows nearly perfect correlation, while 
+$\epsilon$ is weaker but still significant.  Values near cloud base and top 
+show no correlation, which we would expect given the poor agreement between the 
+average values of $\epsilon$ and $\delta$ between the two methods in these 
+regions (Figure \ref{fig:direct_vs_romps}, c and d).  We take these results to 
+show general good agreement between our tetrahedral interpolation scheme and 
+the time averaging scheme of Romps over relatively large time and space 
+averages.
 
 \subsection{Behavior over different time and space scales}
 
@@ -642,14 +642,13 @@ this effect.
 
 \section{Discussion and Conclusions}
 
-The good agreement between our technique and the Romps method using MPDATA 
-advection at fine grid spacing gives us confidence that our calculation is a 
-valid representation of the flux through the cloud surface.  However, as our 
-tetrahedral interpolation redefines the cloud volume, there are interpretation 
-issues when comparing the fluxes calculated by the two methods.  We believe 
-effects like this explain why the tetrahedral interpolation method estimates 
-$E$ and $D$ values that are smaller than those estimated via the Romps method 
-at coarse grid resolution.
+The good agreement between our technique and the Romps method at fine grid 
+spacing gives us confidence that our calculation is a valid representation of 
+the flux through the cloud surface.  However, as our tetrahedral interpolation 
+redefines the cloud volume, there are interpretation issues when comparing the 
+fluxes calculated by the two methods.  We believe effects like this explain why 
+the tetrahedral interpolation method estimates $E$ and $D$ values that are 
+smaller than those estimated via the Romps method at coarse grid resolution.
 
 Calculations of $E$ and $D$ with the Romps method using first-order upwind 
 advection results in significantly larger values than when using 
@@ -682,13 +681,13 @@ exchanges.
 We have shown that by interpolating the location of cloud surfaces in an LES
 model we have been able to calculate reasonable entrainment and detrainment 
 rates directly from model mass fluxes.  These fluxes agree well with the 
-direct entrainment method of Romps using MPDATA advection, with the caveat that 
-the clouds must be well resolved by the model grid spacing so as to minimize 
-underestimate of the cloud volume by the interpolation scheme.  This 
-tetrahedral interpolation scheme gives significant benefits over the Romps 
-method over short time and small spatial scales, generating statistically 
-well-behaved results suitable for use in examining entrainment and detrainment 
-variability over the life cycle of an individual cloud.
+direct entrainment method of Romps, with the caveat that the clouds must be 
+well resolved by the model grid spacing so as to minimize underestimate of the 
+cloud volume by the interpolation scheme.  This tetrahedral interpolation 
+scheme gives significant benefits over the Romps method over short time and 
+small spatial scales, generating statistically well-behaved results suitable 
+for use in examining entrainment and detrainment variability over the life 
+cycle of an individual cloud.
 
 Finally, we reiterate that nothing in our technique is dependent on the shallow 
 cumulus cloud regime, on indeed on clouds at all; it should be equally useful
@@ -751,7 +750,7 @@ grid cell walls occupied by cloud, shown by the dotted lines; $\mathbf{W_x}$ is
 used to denote the $x$ direction grid cell surfaces, and $\mathbf{W_y}$ for the 
 $y$ direction surfaces.  These surfaces enclose a volume $V$, shown by the 
 shaded area.  $u$ and $v$ vectors represent the locations of the horizontal 
-velocities in the x and y direction for an Arakawa C-grid.}
+velocities in the $x$ and $y$ directions for an Arakawa C-grid.}
   \label{fig:gridcell_schematic}
 \end{figure}
 
@@ -780,11 +779,8 @@ velocities in the x and y direction for an Arakawa C-grid.}
   \includegraphics[width=40pc,angle=0]{./figures/direct_vs_romps}\\
   \caption{Comparison of mean model profiles of core a) entrainment and b) 
   detrainment calculated using the tetrahedral interpolation method (black 
-  line), the Romps method with upwind advection (thin grey line) and the Romps 
-  method with MPDATA advection (thick grey line).  c) Ratio of Romps method to 
-  tetrahedral interpolation method rates of entrainment (black) and detrainment 
-  (grey).  Thin lines are the ratios for the Romps method with upwind advection
-  and thick lines are the ratios for MPDATA advection.  d) and e) are the same 
+  line), the Romps method with upwind advection (dotted line) and the Romps 
+  method with MPDATA advection (grey line).  d) and e) are the same 
   as a) and b) but for the fractional entrainment and detrainment rates.}
   \label{fig:direct_vs_romps}
 \end{figure}
@@ -795,7 +791,7 @@ velocities in the x and y direction for an Arakawa C-grid.}
   \caption{Average profiles of entrainment minus detrainment calculated using 
   the continuity equation (dotted line), direct fluxes with no surface 
   interpolation (grey line), the tetrahedral interpolation method (thick black 
-  line), and the Romps method using MPDATA advection (thin black line).
+  line), and the Romps method using upwind advection (thin black line).
   }\label{fig:E_minus_D}
 \end{figure}
 
@@ -804,8 +800,8 @@ velocities in the x and y direction for an Arakawa C-grid.}
   \includegraphics[width=19pc,angle=0]{./figures/correlations}\\
   \caption{
   Profiles of the correlation between the Romps method and the
-  tetrahedral interpolation method for a) entrainment and b) detrainment.  Grey 
-  lines show the correlation using upwind advection in the Romps method, Black 
+  tetrahedral interpolation method for a) $\epsilon$ and b) $\delta$.  Black 
+  lines show the correlation using upwind advection in the Romps method, grey 
   lines show the correlation using MPDATA advection.  Dotted line shows the 
   99\% confidence level for a significant correlation.
   }
@@ -817,7 +813,7 @@ velocities in the x and y direction for an Arakawa C-grid.}
   \includegraphics[width=39pc,angle=0]{./figures/averaging_convergence}\\ 
   \caption{Time variability of entrainment and detrainment horizontally 
   averaged over the model domain at a height of one kilometer calculated via 
-  a) the tetrahedral interpolation method and b) the Romps method using MPDATA 
+  a) the tetrahedral interpolation method and b) the Romps method using upwind 
   advection.
   }
   \label{fig:averaging_convergence}
@@ -827,7 +823,7 @@ velocities in the x and y direction for an Arakawa C-grid.}
   \noindent\includegraphics[width=39pc,angle=0]{./figures/spatial_variability_1min}\\ 
   \caption{Vertical cross-section of a model cloud showing one minute averaged 
   entrainment (a, c) and detrainment (b, d) calculated using the tetrahedral 
-  interpolation method (a, b) and the Romps method using MPDATA advection (c, 
+  interpolation method (a, b) and the Romps method using upwind advection (c, 
   d).  Greyscale indicates amount of entrainment or detrainment, lines show the 
   region where condensed liquid water exists.
   }
@@ -839,7 +835,7 @@ velocities in the x and y direction for an Arakawa C-grid.}
   \includegraphics[width=39pc,angle=0]{./figures/resolution_dependence}\\
   \caption{Mean entrainment (top row) and detrainment (bottom row) calculated
   at 25m (left column), 50m (center column), and 100m (right column) grid 
-  spacing using the Romps method with MPDATA advection (grey line) and the 
+  spacing using the Romps method with upwind advection (grey line) and the 
   tetrahedral interpolation method (black line).
   }
   \label{fig:resolution_dependence}
