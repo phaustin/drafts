@@ -176,6 +176,94 @@ the clouds.
 E - D = \int_C \rho ( \mathbf{u} -  \mathbf{u_i}) \cdot d\mathbf{C},
 \end{equation}
 
+
+
+Consider a numerical model grid cell containing a cloud surface with normal 
+vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the surface and 
+has units of m$^2$.  This surface, combined with $\mathbf{W}$, the portion of 
+the grid cell walls that lie within the cloud in m$^2$, encloses a cloud volume 
+$V$ which has units of m$^3$.  \cite{Siebesma1998} gives the net entrainment and 
+detrainment over the cloud surface to be:
+\begin{equation}
+\label{eq:Echi_minus_Dchi} 
+E\chi - D\chi = \int_C \rho \chi ( \mathbf{u_i} -  \mathbf{u}) \cdot d\mathbf{C},
+\end{equation}
+where $\rho$ is the air density in kg m$^{-3}$, $\mathbf{u}$ is the velocity
+of the air in m s$^{-1}$ and $\mathbf{u_i}$ is the velocity of the cloud 
+interface in m s$^{-1}$.
+
+To calculate the velocity of the cloud surface, we make use of the Leibnitz 
+Theorem:
+\begin{equation}
+\label{eq:leibnitz} 
+\frac{d}{dt}\int_{V(t)} \rho \chi dV = 
+  \int_{V(t)} \frac{\partial \rho \chi}{ \partial t} dV 
+  + \int_{C(t)} \rho \chi \mathbf{u_i}\cdot d\mathbf{C}
+  + \int_{W(t)} \rho \chi \mathbf{u_i}\cdot d\mathbf{W}.
+\end{equation}
+Since the walls of the grid cell do not move, $\mathbf{u_i}$ is 0 over 
+$\mathbf{W}$.  If we also assume ${\partial \rho}/{ \partial t} \approx 0$ and 
+that $\rho$ is constant over a grid cell, we get
+\begin{equation}
+\label{eq:leibnitz2} 
+    \rho \frac{d}{dt}\int_{V(t)} \chi dV = 
+    \rho \int_{V(t)} \frac{\partial \chi}{ \partial t} dV 
+    + \int_{C(t)} \rho \chi \mathbf{u_i}\cdot d\mathbf{C}.
+\end{equation}
+We then combine equations (\ref{eq:Echi_minus_Dchi}) and (\ref{eq:leibnitz2}) to give:
+\begin{equation}
+\label{eq:step1} 
+      E\chi - D\chi = \rho \frac{d}{dt}\int_{V(t)} \chi dV
+                    - \rho \int_{V(t)} \frac{\partial \chi}{ \partial t} dV 
+                    - \int_C \rho \chi \mathbf{u} \cdot d\mathbf{C}.
+\end{equation}
+
+Next we apply the divergence theorem to simplify the flux integral through 
+$\mathbf{C}$:
+\begin{equation}
+\label{eq:divergence} 
+\int_{V} \nabla \cdot (\rho \chi \mathbf{u}) dV = 
+  \int_{C} \rho \chi \mathbf{u}\cdot d\mathbf{C}
++ \int_{W} \rho \chi \mathbf{u}\cdot d\mathbf{W}
+\end{equation}
+Substituting this into (\ref{eq:step1}) and assuming that $\chi$ is constant 
+over a grid cell results in
+\begin{equation}
+\label{eq:entrainment_detrainment} 
+E\chi - D\chi = \rho \chi \frac{dV}{dt} 
+              + \int_W \rho \chi \mathbf{u} \cdot d\mathbf{W} 
+              - V \nabla \cdot (\rho \chi \mathbf{u}).
+\end{equation}
+Finally, if $\chi$ is positive, $E\chi - D\chi$ is divided between $E\chi$ and 
+$D\chi$ as follows:  
+\begin{equation}
+\label{eq:max_ent} 
+E\chi = \mathrm{max}\left(0, \rho \chi \frac{dV}{dt} 
+                           + \int_W \rho \chi \mathbf{u} \cdot d\mathbf{W} 
+                           - V \nabla \cdot (\rho \chi \mathbf{u})\right)
+\end{equation}
+\begin{equation}
+\label{eq:max_det} 
+D\chi = \mathrm{max}\left(0, - \rho \chi \frac{dV}{dt} 
+                             - \int_W \rho \chi \mathbf{u} \cdot d\mathbf{W}
+                             + V \nabla \cdot (\rho \chi \mathbf{u})\right).
+\end{equation}
+and if $\chi$ is negative, $E\chi - D\chi$ is divided as:
+\begin{equation}
+\label{eq:max_ent} 
+E\chi = \mathrm{min}\left(0, - \rho \chi \frac{dV}{dt} 
+                             - \int_W \rho \chi \mathbf{u} \cdot d\mathbf{W} 
+                             + V \nabla \cdot (\rho \chi \mathbf{u})\right)
+\end{equation}
+\begin{equation}
+\label{eq:max_det} 
+D\chi = \mathrm{min}\left(0, \rho \chi \frac{dV}{dt} 
+                           + \int_W \rho \chi \mathbf{u} \cdot d\mathbf{W}
+                           - V \nabla \cdot (\rho \chi \mathbf{u})\right).
+\end{equation}
+
+
+
 \subsection{Cloud Surface Interpolation}
 
 \ref{fig:direct_vs_tracer}).

@@ -123,9 +123,9 @@ entrainment and detrainment. LES models apply grid resolutions on the order
 of 10-100 m, well within the domain of the Kolmagorov -5/3 turbulence spectrum. 
 This allows for a relatively simple turbulence model that captures the 
 important statistics of the subgrid-scale eddy fluxes and thus, an accurate 
-representation of the atmospheric physics of a domain $\approx$ 10 km$^{2}$, 
+representation of the atmospheric physics in a domain $\approx$ 10 km$^{2}$, 
 which is large enough to simulate a field of shallow clouds.  LES can be 
-ground-truthed against results taken from field surveys such as the Barbados 
+assessed against results taken from field surveys such as the Barbados 
 Oceanographic and Meteorological Experiment \citep[BOMEX;][]{Holland1973} or 
 the Atmospheric Radiation Measurement \citep[ARM;][]{Brown2002} Program, and 
 such comparisons show good agreement between LES and data.
@@ -149,56 +149,58 @@ from the LES velocity, pressure, humidity and temperature fields.
 \cite{Siebesma1998} defines Entrainment and Detrainment as
 \begin{equation}
 E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
-\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\rho\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
 \end{equation}
 \begin{equation}
 D = \frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) > 0}
-\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\rho\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
 \end{equation}
 where $E$ and $D$ are the entrainment and detrainment rates in kg m$^{-3}$ 
-s$^{-1}$, $u$ is the velocity of the air in m s$^{-1}$, $u_i$ is the velocity 
-of the cloud surface in m s$^{-1}$, A is the area of the cloud in m,
+s$^{-1}$, $\rho$ is the density of air in kg m$^{-3}$ s$^{-1}$, $\mathbf{u}$ is 
+the velocity of the air in m s$^{-1}$, $\mathbf{u_i}$ is the velocity of the 
+cloud surface in m s$^{-1}$, A is the area of the cloud in m, 
 $\mathbf{\hat{n}}$ is a unit vector directed out the cloud surface, and the 
-path integral is taken around the cloud surface at a constant vertical level.
+path integral is taken around the cloud surface at a constant vertical level.  
 However, the accuracy of this method applied to LES suffers from the need to 
 calculate the velocity of the air relative to the cloud surface.  In reality 
-these velocities are very nearly identical, \textasciitilde{} 1-2 m s$^{-1}$, 
+these velocities are very nearly identical, \textasciitilde{}1-2 m s$^{-1}$, 
 but the discrete nature of the LES model grid forces the modeled surface 
-velocity to be either 0 m s$^{-1}$ or $\Delta x / \Delta t \approx$ 
-15-30 m s$^{-1}$, where $\Delta x$ is the model grid spacing and $\Delta t$ 
-is the model time step.  The surface of the cloud only moves when a grid 
-cell's humidity reaches saturation, and when it does, an entire grid cell 
-worth of fluid leaves or enters the cloud.
+velocity to be either 0 m s$^{-1}$ or $\Delta x / \Delta t \approx$ 15-30 
+m s$^{-1}$, where $\Delta x$ is the model grid spacing and $\Delta t$ is the 
+model time step.  The surface of the cloud only moves when a grid cell's 
+humidity reaches saturation, and when it does, an entire grid cell worth of 
+fluid leaves or enters the cloud.
 
 \cite{Romps2010} recently overcame this problem by averaging the cloud surface 
 fluxes over the time needed for an entire grid cell to entrain or detrain.   
 This is done by summing the ``activity source" at the cloud boundary, 
 \begin{equation}
 \label{eq:romps_activity}
-  \rho \frac{\partial}{\partial t}(\rho \mathcal{A}) 
-  + \nabla \cdot (\rho u \mathcal{A}),
+  \frac{\partial}{\partial t}(\rho \mathcal{A}) 
+  + \nabla \cdot (\rho \mathbf{u} \mathcal{A}),
 \end{equation}
 over the period in which the cloud surface is adjacent to a grid cell.  Here 
-$\rho$ is the air density in kg m$^{-3}$ and $\mathcal{A}$ is the ``activity" 
-of the air, a scalar field that is 1 inside the cloud and 0 outside.  The 
-$\rho \partial(\rho \mathcal{A}) / \partial t$ term here represents the motion 
-of the cloud surface, and the $\nabla \cdot (\rho u \mathcal{A})$ term 
-represents air advecting into or out of the cloud.  The activity can be easily 
-redefined to determine entrainment and detrainment for any material surface in 
-a numerical model; Romps used a definition similar to \cite{Siebesma1995}'s 
-cloud core in his calculations.  Once a grid cell is no longer adjacent to the 
-boundary between active and inactive air, the sign of the summed activity 
-source is evaluated.  If the summed activity source is positive, more mass has 
-been entering the region of active air than has been leaving, and the summed 
-activity source is considered to be entrainment.  Conversely, a negative sum 
-is considered to be detrainment.  (In this paper, we shall refer to this method 
-of summing the activity source to determine entrainment and detrainment as the 
-``Romps method".)  The entrainment and detrainment values resulting from this 
-method were approximately twice as large as those from previous bulk tracer 
-calculations, suggesting bulk tracer calculations contain significant biases.  
-However, fine temporal and spatial resolution of entrainment and detrainment 
-variability is difficult to achieve with this method due to the long temporal 
-averages needed.
+$\mathcal{A}$ is the ``activity" of the air, a scalar field that is 1 inside 
+the cloud and 0 outside.  The $\partial(\rho \mathcal{A}) / \partial t$ term 
+here represents the motion of the cloud surface, and the 
+$\nabla \cdot (\rho \mathbf{u} \mathcal{A})$ term represents air advecting into 
+or out of the cloud.  The activity can be easily redefined to determine 
+entrainment and detrainment for any material surface in a numerical model; 
+Romps used a definition similar to \cite{Siebesma1995}'s cloud core criteria 
+(fluid with condensed liquid water, positive buoyancy, and upward velocity) in 
+his calculations.  Once a grid cell is no longer adjacent to the boundary 
+between active and inactive air, the sign of the summed activity source is 
+evaluated.  If the summed activity source is positive, more mass has been 
+entering the region of active air than has been leaving, and the summed 
+activity source is considered to be entrainment.  Conversely, a negative sum is 
+considered to be detrainment.  (In this paper, we shall refer to this method of 
+summing the activity source to determine entrainment and detrainment as the 
+``Romps method".)  Romps found entrainment and detrainment values resulting 
+from this method were approximately twice as large as those from previous bulk 
+tracer calculations, suggesting bulk tracer calculations contain significant 
+biases.  However, fine temporal and spatial resolution of entrainment and 
+detrainment variability is difficult to achieve with this method due to the 
+long temporal averages needed.
 
 Here we present a method for calculation of the cloud entrainment and 
 detrainment rates that relies on interpolation of the subgrid location of 
@@ -222,21 +224,22 @@ of interest.  In order to maintain generality we do not yet specify how the
 location of this cloud surface is determined.
 
 Consider a numerical model grid cell containing a cloud surface with normal 
-vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the surface (Figure 
-\ref{fig:gridcell_schematic}).  This surface, combined with $\mathbf{W}$, the 
-portion of the grid cell walls that lie within the cloud, encloses a cloud 
-volume $V$.  \cite{Siebesma1998} gives the net entrainment and detrainment over 
-the cloud surface to be:
+vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the surface and 
+has units of m$^2$ (Figure \ref{fig:gridcell_schematic}).  This surface, 
+combined with $\mathbf{W}$, the portion of the grid cell walls that lie within 
+the cloud in m$^2$, encloses a cloud volume $V$ which has units of m$^3$.  
+\cite{Siebesma1998} gives the net entrainment and detrainment over the cloud 
+surface to be:
 \begin{equation}
 \label{eq:E_minus_D} 
 E - D = \int_C \rho ( \mathbf{u_i} -  \mathbf{u}) \cdot d\mathbf{C},
 \end{equation}
 where $\rho$ is the air density in kg m$^{-3}$, $\mathbf{u}$ is the velocity
 of the air in m s$^{-1}$ and $\mathbf{u_i}$ is the velocity of the cloud 
-interface.  Calculating this integral requires knowledge of the velocity field
-over the surface of $\mathbf{C}$ and the time evolution of $\mathbf{C}$, 
-neither of which is easily calculated in a numerical model.  Instead, we seek a
-simplified but equivalent calculation.
+interface in m s$^{-1}$.  Calculating this integral requires knowledge of the 
+velocity field over the surface of $\mathbf{C}$ and the time evolution of 
+$\mathbf{C}$, neither of which is easily calculated in a numerical model.  
+Instead, we seek a simplified but equivalent calculation.
 
 To calculate the velocity of the cloud surface, we make use of the Leibnitz 
 Theorem:
@@ -316,7 +319,7 @@ E - D & = \rho_{(k)} \frac{dV_{(i, j, k)}}{dt} \\
 \end{equation}
 
 There are a multitude of interpolation schemes that can be used to determine 
-the cloud volume and cloudy gric wall area in a numerical model.  The simplest 
+the cloud volume and cloudy grid wall area in a numerical model.  The simplest 
 would be to assume that cloudy grid cells are completely filled with cloud, 
 and otherwise grid cells contain no cloud at all.  We refer to this as the ``no 
 interpolation" method.  Since the cloud surface only moves when a whole grid 
@@ -472,15 +475,15 @@ used on the values of $E$ and $D$.  In either case, the tetrahedral scheme is
 vastly superior to using no interpolation, which results in entrainment and 
 detrainment values four times larger than the Romps MPDATA value (not shown).  
 
-There is similar levels of agreement between $\epsilon = E/M$ and 
+There are similar levels of agreement between $\epsilon = E/M$ and 
 $\delta = D/M$, the fraction entrainment and detrainment rates, where M is the 
 total vertical mass flux within the cloud core in kg m$^{-2}$ s$^{-1}$ and 
 $\epsilon$ and $\delta$ have units of m$^{-1}$.  Since the tetrahedral method 
-interpolation redefines the extent of the cloud core, we calculate seperate 
+interpolation redefines the extent of the cloud core, we calculate separate 
 values of $M$ for the Romps method and the tetrahedral method.  This results in 
 slightly smaller $M$ values for the tetrahedral calculation.  $\epsilon$ and 
 $\delta$ do show large deviations between the tetrahedral and Romps
-calculations near cloudbbase and top.  These deviations likely result from the 
+calculations near cloud base and top.  These deviations likely result from the 
 small cloud fractions at these heights, which both makes the statistical 
 sampling less robust and allows small differences between $E$ and $D$ to be 
 magnified by small values of $M$.  
@@ -499,16 +502,16 @@ turbulent plume:
     = E - D
 \end{equation}
 where $\rho$ is the density of air in kg m$^{-3}$, $a$ is the cloud fraction, 
-$M$ is the fractional vertical mass flux in kg m$^{-2}$ s$^{-1}$.  To satisfy 
-continuity, the difference between the amount of fluid entrained and detrained 
-by the clouds at a given height must equal the vertical gradient in cloud mass 
-flux plus the rate in change of the cloud area.  We calculate the vertical 
-gradient of mass flux in equation (\ref{eq:continuity}) by interpolating 
-vertical velocities from the edges to the center of each grid cell, then 
-averaging total mass flux within the clouds using these interpolated velocities.  
-Fifteen minute average values of mass flux were output and the vertical 
-derivative taken via centered differencing.  Fifteen minute average values of 
-$\partial a/\partial t$ are calculated within the model as well.  
+and $M$ is the fractional vertical mass flux in kg m$^{-2}$ s$^{-1}$.  To 
+satisfy continuity, the difference between the amount of fluid entrained and 
+detrained by the clouds at a given height must equal the vertical gradient in 
+cloud mass flux plus the rate in change of the cloud area.  We calculate the 
+vertical gradient of mass flux in equation (\ref{eq:continuity}) by 
+interpolating vertical velocities from the edges to the center of each grid 
+cell, then averaging total mass flux within the clouds using these interpolated 
+velocities.  Fifteen minute average values of mass flux were output and the 
+vertical derivative taken via centered differencing.  Fifteen minute average 
+values of $\partial a/\partial t$ are calculated within the model as well.  
 
 Comparison of the tetrahedral values of $E-D$ we have calculated with the
 Romps and no interpolation methods shows reasonable agreement (Figure 
@@ -542,7 +545,7 @@ using upwind advection and Romps with MPDATA advection.  We use
 $\epsilon = E/M$ and $\delta = D/M$ to analyze the variability as $E$ and $D$ 
 are both strongly correlated with cloud volume; more cloud volume with the same 
 entrainment velocity results in larger entrainment.  Dividing by the mass flux 
-removes this area dependence.  Seperate $M$ values are calculated for the
+removes this area dependence.  Separate $M$ values are calculated for the
 tetrahedral and Romps methods, to take into account the volume redefinition 
 that occurs in the tetrahedral method.  Heights at which the model does not 
 have clouds for the entire three hour period are excluded from the calculation.  
@@ -610,7 +613,7 @@ The tetrahedral calculation, on the other hand, will underestimate the cloud
 volume.  At the cell edge points, the $q_{diff}$ value will be averaged between
 adjacent cells, giving $q_{diff} = 0$ and placing the cloud surface at the grid 
 cell wall, exactly as expected.  At the cell corners, however, the four 
-surrounding $q_{diff}$ values average to give $q_{diff} = -0.5 g kg^{-1}$, and 
+surrounding $q_{diff}$ values average to give $q_{diff}$ = -0.5 g kg$^{-1}$, and 
 interpolation of this value between the corner and the cell center puts the 
 cloud surface at 2/3 the distance between the center and the corner.  This 
 effect will occur anytime a single cloud cell is present and multiple clear 
@@ -690,18 +693,18 @@ for use in examining entrainment and detrainment variability over the life
 cycle of an individual cloud.
 
 Finally, we reiterate that nothing in our technique is dependent on the shallow 
-cumulus cloud regime, on indeed on clouds at all; it should be equally useful
+cumulus cloud regime, or indeed on clouds at all; it should be equally useful
 in calculating entrainment and detrainment through any material surface in a 
 numerical model, subject to the caveats we have mentioned.
 
 %==============================================================================
 
-
 \begin{acknowledgment}
 This paper benefited from helpful discussions with Fleur Couvreux and 
 Catherine Rio.  We also gratefully acknowledge the contributions of David 
 Romps and a second, anonymous peer reviewer, whose comments significantly 
-improved the clarity of this paper.  Support was provided by the Canadian 
+improved the clarity of this paper.  We thank Marat Khairoutdinov for making 
+SAM available for our research.  Support was provided by the Canadian 
 Foundation for Climate and Atmospheric Science through the Cloud Aerosol 
 Feedback and Climate network.  All figures were generated using the matplotlib 
 library in the Python programming language.
@@ -744,13 +747,13 @@ library in the Python programming language.
   \includegraphics[width=19pc,angle=0]{./figures/gridcell_schematic}\\
   \caption{Grid cell schematic showing geometry for the derivation of direct 
 entrainment and detrainment fluxes using a sub-grid scale interpolation of the 
-cloud surface location.  Vector $\mathbf{C}$ is normal to the cloud surface, 
-shown by the thick line.  Vector $\mathbf{W}$ is normal to the portion of the 
-grid cell walls occupied by cloud, shown by the dotted lines; $\mathbf{W_x}$ is 
-used to denote the $x$ direction grid cell surfaces, and $\mathbf{W_y}$ for the 
-$y$ direction surfaces.  These surfaces enclose a volume $V$, shown by the 
-shaded area.  $u$ and $v$ vectors represent the locations of the horizontal 
-velocities in the $x$ and $y$ directions for an Arakawa C-grid.}
+cloud surface location.  Vector $\mathbf{C}$ is normal to the arbitrary cloud 
+surface, shown by the thick line.  Vector $\mathbf{W}$ is normal to the portion 
+of the grid cell walls occupied by cloud, shown by the dotted lines; 
+$\mathbf{W_x}$ is used to denote the $x$ direction grid cell surfaces, and 
+$\mathbf{W_y}$ for the $y$ direction surfaces.  These surfaces enclose a volume 
+$V$, shown by the shaded area.  $u$ and $v$ vectors represent the locations of 
+the horizontal velocities in the $x$ and $y$ directions for an Arakawa C-grid.}
   \label{fig:gridcell_schematic}
 \end{figure}
 
@@ -824,7 +827,7 @@ velocities in the $x$ and $y$ directions for an Arakawa C-grid.}
   \caption{Vertical cross-section of a model cloud showing one minute averaged 
   entrainment (a, c) and detrainment (b, d) calculated using the tetrahedral 
   interpolation method (a, b) and the Romps method using upwind advection (c, 
-  d).  Greyscale indicates amount of entrainment or detrainment, lines show the 
+  d).  Grey scale indicates amount of entrainment or detrainment, lines show the 
   region where condensed liquid water exists.
   }
   \label{fig:spatial_variability}
