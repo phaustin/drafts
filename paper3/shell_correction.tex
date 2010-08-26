@@ -506,10 +506,10 @@ factors in equations (\ref{eq:corrected_entrainment}) and
 (\ref{eq:corrected_detrainment}).  Using the edge and shell values of $h$ for 
 $h_E$ and $h_D$ shows $A$ to have a much larger effect than $B$, due to the 
 larger difference between the shell and the environment than between the edge 
-and the core.  $E_d$ is reduced by .2 by the $A$ correction, while .45 of
+and the core.  $E_d$ is reduced by 0.2 by the $A$ correction, while 0.45 of
 $D_d$ is removed by $B$.  If instead we use $h_E = (E h)_d/E_d$ and 
 $h_D = (D h)_d/D_d$ in equations (\ref{eq:corrected_entrainment}) and 
-(\ref{eq:corrected_detrainment}), $A$ is unchanged but $B$ increases to .6.  
+(\ref{eq:corrected_detrainment}), $A$ is unchanged but $B$ increases to 0.6.  
 Calculations for $q_t$ values show nearly identical results (not shown).
 
 Vertical velocity shows very different relative profiles compared to
@@ -526,10 +526,10 @@ fluid entrained into the cloud core plume has negligible vertical momentum
 
 These differences indicate that Reynolds correlations are much more important 
 to the $w$ fluxes than the $q_t$ or $h$ fluxes.  Indeed, using the value 
-of $w$ in the shell to calculate term $A$ results in a value of only about 0.2, while
-using $w_E$ increased $A$ to 0.45.  Term $B$ shows much less sensitivity to the 
-Reynolds fluxes, but is still reduced by about 0.1 by substituting $w_D$ for the 
-edge value of $w$.
+of $w$ in the shell to calculate term $A$ results in a value of only about 0.2, 
+while using $w_E$ increased $A$ to 0.45.  Term $B$ shows much less sensitivity 
+to the Reynolds fluxes, but is still reduced by about 0.1 by substituting $w_D$ 
+for the edge value of $w$.
 
 %-------------------------------------------------------------------------
 
@@ -575,7 +575,7 @@ strong variability over the ARM diurnal cycle (Figure
 \ref{fig:shell_variability}).  Near cloud base and within the inversion, $A$ 
 is nearly one while $B$ is nearly zero.  As the clouds mix into the inversion 
 over the course of the day, the values evolve until at mid-cloud layer, $A$ 
-has values near .6 and $B$ near .2.  Performing this calculation with a fixed 
+has values near 0.6 and $B$ near 0.2.  Performing this calculation with a fixed 
 value of $({q_t}_c - {q_t}_e)$, to remove the possibility that these changes 
 are simply due to movement of the mean environment and core profiles, shows 
 similar results.  The shell is clearly an active player in the entrainment and 
@@ -769,8 +769,11 @@ Python programming language.
   \caption{Mean profiles of a) liquid-water moist static energy values for 
   entraining (black line) and detraining (dotted line) air, overlaid on the 
   mean core, edge, shell, and environment profiles (grey lines), and b) the 
-  resulting $(h_E - h_e)/(h_c - h_e)$ and $(h_c - h_D)/(h_c - h_e)$ profiles.  
-  c) and d) are the same as a) and b), but calculated for $w$. 
+  resulting $A_{shell} = (h_{shell} - h_e)/(h_c - h_e)$, 
+  $A_E = (h_E - h_e)/(h_c - h_e)$,  
+  $B_{edge} = (h_c - h_{edge})/(h_c - h_e)$, and
+  $B_D = (h_c - h_D)/(h_c - h_e)$ profiles.  c) and d) are the same 
+  as a) and b), but calculated for $w$. 
 }
   \label{fig:profile_plots}
 \end{figure}
