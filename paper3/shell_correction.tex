@@ -1,230 +1,114 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AGUtmpl.tex: this template file is for articles formatted with LaTeX2e,
-% Modified March 2009
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PREAMBLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% This template includes commands and instructions
-% given in the order necessary to produce a final output that will
-% satisfy AGU requirements.
+% The following two commands will generate a PDF that follows all the requirements for submission
+% and peer review.  Uncomment these commands to generate this output (and comment out the two lines below.)
 %
-% PLEASE DO NOT USE YOUR OWN MACROS
+% DOUBLE SPACE VERSION FOR SUBMISSION TO THE AMS
+\documentclass[12pt]{article}
+\usepackage{ametsoc}
 %
-% For more information on using the AGUTeX macro package,
-% see agudocs.tex or agudocs.pdf
+% The following two commands will generate a single space, double column paper that closely
+% matches an AMS journal page.  Uncomment these commands to generate this output (and comment
+% out the two lines above. FOR AUTHOR USE ONLY. PAPERS SUBMITTED IN THIS FORMAT WILL BE RETURNED
+% TO THE AUTHOR for submission with the correct formatting.
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TWO COLUMN JOURNAL PAGE LAYOUT FOR AUTHOR USE ONLY
+%%%%\documentclass[10pt]{article}
+%%%%\usepackage{ametsoc2col}
 %
-% All questions should be e-mailed to author.help@agu.org.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ABSTRACT
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Step 1: set the \documentclass
-%
-% The three options for article format are: two-column (default),
-% draft, for initial article submission; and galley for narrow
-% single columns.
-%
-% PLEASE USE THE DRAFT OPTION TO SUBMIT YOUR PAPERS
-% The draft option produces double spaced output
-%
-% Choose the journal abbreviation for the journal you are
-% submitting to:
-
-% jgrga JOURNAL OF GEOPHYSICAL RESEARCH
-% gbc   GLOBAL BIOCHEMICAL CYCLES
-% grl   GEOPHYSICAL RESEARCH LETTERS
-% pal   PALEOCEANOGRAPHY
-% ras   RADIO SCIENCE
-% rog   REVIEWS OF GEOPHYSICS
-% tec   TECTONICS
-% wrr   WATER RESOURCES RESEARCH
-% gc    GEOCHEMISTRY, GEOPHYSICS, GEOSYSTEMS
-
-% (If you are submitting to a journal other than jgrga,
-% substitute the initials of the journal for "jgrga" below)
-
-\documentclass[draft,grl]{agutex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% optional article formats author might want to use
-
-% To produce a galley version:
-% \documentclass[galley,jgrga]{AGUTeX}
-
-% To produce a two columned version:
-% \documentclass[jgrga]{AGUTeX}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% OPTIONAL:
-% To print your article using PostScript fonts, uncomment this:
-% \usepackage{agu-ps}
-% You many need to edit the top of agu-ps to use the names of the PS
-% fonts on your system.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% OPTIONAL:
-% To Create numbered lines:
-
-% If you don't already have lineno.sty, you can download it from
-% http://www.ctan.org/tex-archive/macros/latex/contrib/ednotes/
-% (or google lineno.sty ctan), available at TeX Archive Network (CTAN).
-% Take care that you always use the latest version.
-
-% To activate the commands, uncomment \usepackage{lineno}
-% and \linenumbers*[1]command, below:
-
-\usepackage{lineno}
-\linenumbers*[1]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Figures and Tables
-%
-
-% When submitting articles through the GEMS system:
-% COMMENT OUT ANY COMMANDS THAT INCLUDE GRAPHICS.
-% (See FIGURES section near the end of the file)
-
-
-%  Figures and Tables should be placed at the end of the article,
-%  after the references.
-%
-%  Uncomment the following command to include .eps files
-%  (comment out this line for draft format):
-\usepackage[dvips]{graphicx}
-%
-%    Uncomment the following command to allow illustrations to print
-%    when using Draft:
-\setkeys{Gin}{draft=false}
-%
-% Substitute one of the following for [dvips] above
-% if you are using a different driver program and want to
-% proof your illustrations on your machine:
-%
-% [xdvi], [dvipdf], [dvipsone], [dviwindo], [emtex], [dviwin],
-% [pctexps],  [pctexwin],  [pctexhp],  [pctex32], [truetex], [tcidvi],
-% [oztex], [textures]
-%
-% See how to enter figures and tables at the end of the article, after
-% references.
-%
-%% ------------------------------------------------------------------------ %%
-%
-%  ENTER PREAMBLE
-%
-%% ------------------------------------------------------------------------ %%
-
-% Author names in capital letters:
-\authorrunninghead{DAWE AND AUSTIN}
-
-% Shorter version of title entered in capital letters:
-\titlerunninghead{RECONCILING LES ENTRAINMENT}
-
-% Author mailing address: please repeat this command for
-% each author and alphabetize authors:
-
-\authoraddr{Philip H. Austin,
-Department of Earth and Ocean Sciences, University of
-British Columbia, 6339 Stores Road, Vancouver, BC, V6T 1Z4, Canada.
-(paustin@eos.ubc.ca)}
-
-\authoraddr{Jordan T. Dawe,
-Department of Earth and Ocean Sciences, University of
-British Columbia, 6339 Stores Road, Vancouver, BC, V6T 1Z4, Canada.
-(jdawe@eos.ubc.ca)}
-
-\begin{document}
-
-%% ------------------------------------------------------------------------ %%
-%
-%  TITLE
-%
-%% ------------------------------------------------------------------------ %%
-
-
-\title{The influence of the cloud shell on bulk tracer measurements of LES 
-cloud entrainment}
-%
-
-%% ------------------------------------------------------------------------ %%
-%
-%  AUTHORS AND AFFILIATIONS
-%
-%% ------------------------------------------------------------------------ %%
-
-
-%Use \author{\altaffilmark{}} and \altaffiltext{}
-
-% \altaffilmark will produce footnote;
-% matching altaffiltext will appear at bottom of page.
-% May use \\ to start a new line.
-
-\authors{Jordan T. Dawe\altaffilmark{1} and Philip H. Austin\altaffilmark{1}}
-
-\altaffiltext{1}{Department of Earth and Ocean Sciences, 
-                      University of British Columbia, Vancouver, BC, Canada}
-
-%% ------------------------------------------------------------------------ %%
-%
-%  ABSTRACT
-%
-%% ------------------------------------------------------------------------ %%
-
-% >> Do NOT include any \begin...\end commands within
-% >> the body of the abstract.
-
-\begin{abstract}
+% Enter your Abstract here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\myabstract}{
 Direct measurements of entrainment and detrainment rates from LES model 
 cloud fields produce values twice as large as those produced from bulk 
 conserved tracer budget calculations.  This difference can be explained by 
 three effects: the presence of a shell of moist air around the clouds, Reynolds 
 correlations between entrainment rates and tracer values, and numerical errors 
 in the calculation methods.  Correlations between the vertical momentum and the
-entrainment rate create stronger Reynolds fluxes for vertical momentum than for
-thermodynamic tracers, making the assumption that clouds entrain fluid with 
-zero vertical momentum incorrect.  Variability in the properties of the moist 
-cloud shell has strong impacts on entrainment values inferred from bulk tracer 
-calculations.  These effects indicate the dynamics of the cloud shell should be 
-included in parameterizations of cumulus clouds used in general circulation 
-models.
+entrainment rate create strong vertical momentum Reynolds fluxes, making the 
+assumption that clouds entrain fluid with zero vertical momentum incorrect.  
+Variability in the properties of the moist cloud shell has strong impacts on 
+entrainment values inferred from bulk tracer calculations.  These results 
+indicate the dynamics of the cloud shell should be included in 
+parameterizations of cumulus clouds used in general circulation models.
+}
+%
+\begin{document}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE
+%
+% Enter your TITLE here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{\large{The influence of the cloud shell on bulk tracer 
+measurements of LES cloud entrainment}}}
+%
+% Author names, with corresponding author information. 
+% [Update and move the \thanks{...} block as appropriate.]
+%
+\author{\textsc{Jordan T Dawe}
+				\thanks{\textit{Corresponding author address:} 
+				Jordan T Dawe, Department of Earth and Ocean Sciences, 
+                                University of British Columbia, 6339 Stores Road,
+                                Vancouver, BC, V6T 1Z4, Canada.
+				\newline{E-mail: jdawe@eos.ubc.ca}}\quad\textsc{and Philip H Austin}\\
+\textit{\footnotesize{Department of Earth and Ocean Sciences, University of 
+                      British Columbia, Vancouver, BC, Canada.}}
+}
+%
+% Formatting done here...Authors should skip over this.  See above for abstract.
+\ifthenelse{\boolean{dc}}
+{
+\twocolumn[
+\begin{@twocolumnfalse}
+\amstitle
+
+% Start Abstract (Enter your Abstract above.  Do not enter any text here)
+\begin{center}
+\begin{minipage}{13.0cm}
+\begin{abstract}
+	\myabstract
+	\newline
+	\begin{center}
+		\rule{38mm}{0.2mm}
+	\end{center}
 \end{abstract}
-
-%% ------------------------------------------------------------------------ %%
-%
-%  BEGIN ARTICLE
-%
-%% ------------------------------------------------------------------------ %%
-
-% The body of the article must start with a \begin{article} command
-%
-% \end{article} must follow the references section, before the figures
-%  and tables.
-
-\begin{article}
-
-%% ------------------------------------------------------------------------ %%
-%
-%  TEXT
-%
-%% ------------------------------------------------------------------------ %%
-
+\end{minipage}
+\end{center}
+\end{@twocolumnfalse}
+]
+}
+{
+\amstitle
+\begin{abstract}
+\myabstract
+\end{abstract}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MAIN BODY OF PAPER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-The rate at which air is entrained into and detrained from clouds
-affects cloud properties, cloud top height, and vertical transports of
-heat and moisture.  Proper simulation of these subgrid-scale effects
-in global climate and weather prediction models
-depends on the accurate parameterization of entrainment and
-detrainment \citep{Bechtold2008,Rougier2009,De_Rooy2010}.
+The rate at which air is entrained into and detrained from clouds affects cloud 
+properties, cloud top height, and vertical transports of heat and moisture.  
+Proper simulation of these subgrid-scale effects in General Circulation Models 
+(GCM) depends on the accurate parameterization of entrainment and detrainment 
+\citep{Bechtold2008,Rougier2009,De_Rooy2010}.
 
-Large Eddy Simulation (LES), is a primary tool used to study these dynamics.  
-LES entrainment and detrainment rates are typically calculated by recording 
-budgets of bulk conserved tracer variables and inferring the amount of fluid 
-exchange between the clouds and the surrounding air that is needed to balance 
-vertical advection rates within the cloud field.  These rates are then used in 
+Large Eddy Simulation (LES) is a primary tool used to study these dynamics.  
+LES entrainment and detrainment rates are typically calculated using budgets of 
+bulk conserved tracer variables to inferring the amount of fluid exchange 
+between the clouds and the surrounding air.  These rates are then used in 
 simple entraining plume parameterizations to evaluate sub-grid scale cloud 
-transports in GCMs.  \cite{Siebesma1995} derive the following equations for 
-entrainment and detrainment from a simple entraining cloud core plume, where 
-cloud core is defined as regions having condensed liquid water, positive 
-buoyancy, and upward vertical velocity:
+transports.  \cite{Siebesma1995} derive the following equations for 
+entrainment and detrainment from a cloud core plume, where cloud core is 
+defined as regions having condensed liquid water, positive buoyancy, and upward 
+vertical velocity:
 \begin{equation}
   \label{eq:siebesma_entrainment}
     E_{\phi}(\phi_c - \phi_e) = - M_c \frac{\partial \phi_c}{\partial z}
@@ -246,8 +130,8 @@ energy $h$ (J kg$^{-1}$), $a$ is the fractional cloud core area, $\rho$ is the
 density of the air in kg m$^{-3}$, $M_c$ is vertical cloud core mass flux 
 (kg m$^{-2}$ s$^{-1}$), $w$ is vertical velocity (m s$^{-1}$), $e$ and $c$ sub- 
 and super-scripts denote horizontally averaged values conditionally sampled in 
-the cloud environment and core, $forcing$ refers to tracer sources and sinks
-such as radiation or subsidence not included in the other terms, primed values 
+the cloud environment and core, $forcing$ refers to tracer sources and sinks,
+such as radiation or subsidence, not included in the other terms, primed values 
 represent anomalies relative to the horizontal mean, overbars represent 
 horizontal averaging, and $E_{\phi}(z)$ and $D_{\phi}(z)$ are the total bulk 
 tracer entrainment into and detrainment out of the cloud core in 
@@ -262,19 +146,18 @@ technique to measure entrainment and detrainment in this manner.  His equation (
         + \nabla \cdot (\rho \mathbf{u} \mathcal{A}) 
 \end{equation}
 Here $e(x,y,z)$ and $d(x,y,z)$ are the local entrainment and detrainment through 
-the cloud surface in kg s$^{-1}$ m$^{-3}$, $\mathbf{u}$ is the velocity of the 
-air in m s$^{-1}$, and $\mathcal{A}$ is the ``activity" of the fluid, where 
+the cloud core surface in kg s$^{-1}$ m$^{-3}$, $\mathbf{u}$ is the velocity of 
+the air in m s$^{-1}$, and $\mathcal{A}$ is the ``activity" of the fluid, where 
 $\mathcal{A}$ is one at ``active" cloud core points and zero otherwise.  The 
 values of $e - d$ are averaged over the time that a grid cell experiences mass 
 fluxes between an active and an inactive point, then positive $e-d$ values 
 are considered to be purely $e$, and negative values, $d$.  Summing these point 
-measurements horizontally allows one to calculate  $E_d(z)$ and $D_d(z)$, the 
-total directly calculated cloud core entrainment and detrainment in kg s$^{-1}$ 
-m$^{-3}$.
+measurements horizontally gives $E_d(z)$ and $D_d(z)$, the total directly 
+calculated cloud core entrainment and detrainment in kg s$^{-1}$ m$^{-3}$.
 
 Romps found that direct measurement of the fluxes produced values roughly twice 
 as large as tracer budget calculations.  Romps attributed this difference to 
-the bulk tracer calculation assumption that the fluid exchanged between clouds 
+the bulk tracer calculation assumption that fluid exchanged between clouds 
 and environment has the mean properties of the cloud or environment, 
 respectively.  The unlikeliness of this assumption is suggested by recent 
 studies of the dense, descending shell of moist air that forms around 
@@ -283,11 +166,11 @@ between clouds and environment must pass through this shell, it is likely that
 it plays an important role in entrainment and detrainment dynamics.
 
 Reconciling the direct flux and bulk tracer calculations is important if direct 
-flux calculations are to be used to inform GCM parameterizations.  Here we 
-examine the sources of the factor of two discrepancy between the methods.  We 
-show the discrepancy can be explained by three effects: the presence of the 
-moist shell, Reynolds correlations between the entrainment rates and the tracer 
-values, and numerical errors in the calculation methods.  We derive a 
+flux calculations are to inform GCM parameterizations.  Here we examine the 
+sources of the discrepancy between the methods.  We show the discrepancy is 
+explained by three effects: the presence of the moist shell, correlations 
+between the entrainment rates and the tracer values which cause Reynolds 
+fluxes, and numerical errors in the calculation methods.  We derive a 
 correction to convert between ``tracer" and ``direct" entrainment fluxes, and 
 then use this correction to evaluate the impact of variability in the moist 
 shell on bulk tracer entrainment and detrainment rates.
@@ -308,12 +191,12 @@ first three hours of simulation were discarded. The ARM run was performed on a
 7.68 km x 7.68 km x 4.5 km domain with 30 meter grid resolution.
 
 We have implemented the entrainment calculation scheme of \cite{Romps2010} in 
-SAM, allowing us to calculate entrainment and detrainment directly from model 
-mass fluxes.  These calculations were performed for fluxes into and out of the 
-cloud core.  \citet[eq. 4]{Romps2010} also presents a method for calculating tracer entrainment 
-rates in the same framework as (\ref{eq:romps_e_minus_d}), but neglects the effects of forcing and diffusion 
-terms.  These terms are significant for tracer quantities like vertical 
-momentum, so we add these effects in Romps's tracer equation:
+SAM, allowing us to calculate cloud core entrainment and detrainment directly 
+from model mass fluxes.  \citet[eq. 4]{Romps2010} also presents a method for 
+calculating tracer entrainment rates in the same framework as 
+(\ref{eq:romps_e_minus_d}), but neglects forcing and diffusion terms.  These 
+are significant for tracer quantities like vertical momentum, so we retain 
+these terms in Romps's tracer equation:
 \begin{equation}
   \label{eq:romps_ephi_minus_dphi}
   e\phi - d\phi = \frac{\partial}{\partial t}(\phi \mathcal{A} \rho) 
@@ -338,28 +221,19 @@ detrainment for the cloud ensemble in $[\phi]$ kg s$^{-1}$ m$^{-3}$.
 
 To quantify the effect of the moist cloud shell on entrainment and detrainment
 we define average or effective tracer values $\phi_E = (E\phi)_d / E_d$ and 
-$\phi_D = (D\phi)_d / D_d$.
-Examination of 
-these values from the BOMEX simulation using total specfic humidity as the
-tracer shows significant differences between 
+$\phi_D = (D\phi)_d / D_d$.  Examination of these values from the BOMEX 
+simulation using total specfic humidity shows significant differences between 
 $q_E$ and the environmental $q_t$ and between $q_D$ and the core $q_t$ (Figure 
 \ref{fig:Reynolds_correction}a), confirming that $q_E$ and $q_D$ differ from
-the mean environment and core values.  Near cloud base, $q_E$ and $q_D$ both 
-have $q_t$ values matching the core.  They separate within the cloud layer 
-below the inversion, with $q_E$ values roughly halfway between the core and 
-edge properties, and $q_D$ values halfway between $q_E$ and the core.  Near the 
-inversion, $q_E$ and $q_D$ again become relatively more core-like as the 
-environment rapidly dries.
+the mean environment and core values.
 
-Calculated $q_D$ values agree well with the mean ``cloud core edge" (cloud 
-core model grid cells that are nearest-neighbor adjacent to non-core cells) 
-$q_t$ values.  $q_E$ values, however, are moister than the mean ``cloud 
-core shell" (non-core model grid cells that are nearest-neighbor adjacent to 
-core cells) values.  This suggests that non-trivial Reynolds fluxes exist 
-between $q_E$ and $e$: more entrainment occurs when $q_t$ is larger than the 
-mean $q_t$ of the shell air, and less when $q_t$ is smaller.  This also implies 
-shell dynamics have an active role in the tracer fluxes between cloud and 
-environment.
+Calculated $q_D$ agrees well with the mean ``cloud core edge" (cloud core model 
+grid cells that are nearest-neighbor adjacent to non-core cells) $q_t$ values.  
+$q_E$, however, is moister than the mean ``cloud core shell" (non-core model 
+grid cells that are nearest-neighbor adjacent to core cells) values.  This 
+suggests that non-trivial Reynolds fluxes exist between $q_E$ and $e$: more 
+entrainment occurs when $q_t$ is larger than the mean $q_t$ of the shell air, 
+and less when $q_t$ is smaller.
 
 %-------------------------------------------------------------------------
 
@@ -488,7 +362,7 @@ are subject to numerical errors that reduce their accuracy.
 Since Reynolds correlations between $e$ and $q_t$ appear to have an important 
 effect on the measured moisture fluxes between cloud and environment, we now 
 examine energy fluxes, represented in SAM by the liquid water moist static 
-energy $h$ (units of J kg$^{-1}$) or the vertical momentum, represented in SAM 
+energy $h$ (units of J kg$^{-1}$) and the vertical momentum, represented in SAM 
 by the vertical velocity $w$ (units of m s$^{-1}$).
 
 Liquid water moist static energy shows a similar distribution of core, edge, 
@@ -513,7 +387,7 @@ $h_D = (D h)_d/D_d$ in equations (\ref{eq:corrected_entrainment}) and
 Calculations for $q_t$ values show nearly identical results (not shown).
 
 Vertical velocity shows very different relative profiles compared to
-$q_t$ and $h$.  First, there is a much wider spread in the $w$ values,
+$q_t$ and $h$.  There is a much wider spread in the $w$ values,
 with the shell having nearly zero vertical velocity and the edge being
 halfway between the core and the environment.  $w_D$ is again similar
 to the value of $w$ in the edge, but $w_E$ is much larger than $w$ in
@@ -522,7 +396,6 @@ the cloud layer.  This large positive value for $w_E$ is clearly inconsistent
 with the assumption made in many entraining plume models that 
 fluid entrained into the cloud core plume has negligible vertical momentum
 \citep{Simpson1969,Gregory2001,Siebesma2003}
-
 
 These differences indicate that Reynolds correlations are much more important 
 to the $w$ fluxes than the $q_t$ or $h$ fluxes.  Indeed, using the value 
@@ -549,14 +422,14 @@ of $e$ by the values of $q_t$ and $w$, respectively.
 
 Examination of these fields shows that, while $e$ and $eq_t$ have a very 
 similar spatial pattern, $ew$ is concentrated in regions where strong updrafts 
-are entering the cloud core (Figure \ref{fig:w_entrainment_example}).  The 
-reason for this can been seen by examining the buoyancy, condensed liquid water,
+enter the cloud core (Figure \ref{fig:w_entrainment_example}).  The reason for 
+this can been seen by examining the buoyancy, condensed liquid water,
 and vertical velocity fields that define the cloud core.  Of these three
-fields, buoyancy is the strongest constraint on the core.  This results in 
-areas far above cloud base where air has become negatively buoyant but 
+fields, buoyancy is the strongest constraint on the core.  However, regions 
+exist far above cloud base where air has become negatively buoyant but 
 maintains upward velocity and elevated moisture.  As this air continues to 
 rise more condensation occurs, which heats the updraft, makes it positively 
-buoyant, and thus entraining it into the core.  In this way, entrainment is 
+buoyant, and thus entrains it into the core.  In this way, entrainment is 
 positively correlated with both $q_t$ and $w$.  This process occurs fairly 
 often in our model cloud field, as evidenced both by our manual examination of 
 the output fields, and the size of the Reynolds flux terms in the mean 
@@ -576,179 +449,66 @@ strong variability over the ARM diurnal cycle (Figure
 is nearly one while $B$ is nearly zero.  As the clouds mix into the inversion 
 over the course of the day, the values evolve until at mid-cloud layer, $A$ 
 has values near 0.6 and $B$ near 0.2.  Performing this calculation with a fixed 
-value of $({q_t}_c - {q_t}_e)$, to remove the possibility that these changes 
-are simply due to movement of the mean environment and core profiles, shows 
-similar results.  The shell is clearly an active player in the entrainment and 
-detrainment fluxes.
+value of $({q_t}_c - {q_t}_e)$, to remove changes due to movement of the mean 
+environment and core profiles, shows similar results.  The shell is clearly an 
+active player in the entrainment and detrainment fluxes.
 
 %==============================================================================
 
 \section{Discussion and Conclusion}
 
-We have shown that it is possible to explain the differences between entrainment and 
-detrainment values calculated via bulk tracer budgets and direct flux 
-calculations by taking into account the properties of the cloud shell, the 
-effect of Reynolds correlations between fluxes and tracer values, and 
-accuracy differences in the numerical methods used by the two calculations.
-This suggests that the presence of the moist cloud shell, and indeed the 
-variability within this shell, has a significant role in mediating fluxes 
-between the clouds and the environment, and may be an important factor in 
-improving parameterizations of shallow convection.
+We have explained the differences between entrainment and detrainment values 
+calculated via bulk tracer budgets and direct flux calculations by taking into 
+account the properties of the cloud shell, the effect of Reynolds fluxes, and 
+differences in the numerical methods used by the two calculations.  This 
+suggests that the presence of the moist cloud shell has a significant role in 
+mediating fluxes between the clouds and the environment and may be an important 
+factor in improving parameterizations of shallow convection.
 
 Significant Reynolds fluxes are apparent in tracer and vertical momentum 
-entrainment fields.  These fluxes are the result of vertical advection of 
-moist but negatively buoyant air into a region where condensation causes 
-latent heating, making the air buoyant and entraining it into the core.
-However, this process is not unique to the definition of cloud core.  Similar 
-correlations appear when we perform these calculations for regions of
-condensed liquid water, as vertical advection can drive cloud condensation and 
-thus cause entrainment.
+entrainment.  These fluxes are the result of vertical advection of moist but 
+negatively buoyant air so that condensation causes latent heating, making the 
+air buoyant and entraining it into the core.  However, this process is not 
+unique to the definition of cloud core.  Similar correlations appear when we 
+perform these calculations for regions of condensed liquid water, as vertical 
+advection can drive cloud condensation and thus cause entrainment.
 
 Whether one considers the bulk tracer or directly calculated flux values to be 
 ``correct" will depend on the purpose for which they are used.  The bulk tracer 
-entrainment and detrainment values are well suited to calculating cloud moisture 
-and energy fluxes in GCM sub-grid scale parameterizations, which only have 
-access to large-scale mean bulk tracer values.  The influence of variability 
-in the cloud shell would then simply be incorporated into the parameterization 
-of the bulk tracer entrainment and detrainment values.  On the other hand, 
-direct fluxes may be needed for calculating fluxes of aerosols whose 
+values are well suited to calculating fluxes in GCM sub-grid scale 
+parameterizations, which only have access to large-scale values.  The influence 
+of variability in the cloud shell would then simply be incorporated into the 
+parameterization of the bulk tracer entrainment and detrainment values.  On the 
+other hand, direct fluxes may be needed for calculating fluxes of aerosols whose 
 chemical properties are altered by reactions in the presence of liquid water 
-\citep{Hoppel1994}.  
+\citep{Hoppel1994}.
 
-%%% End of body of article:
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional Appendix goes here
-%
-%%%%%%%%%%%%%%%%%
-% Geophysical Research Letters only allows an appendix without a letter.
-%% You can get this result with
-%  \section*{Appendix}
-%  or
-%  \section*{Appendix: Title}
-%%%%%%%%%%%%%%%%%
-%
-% \appendix resets counters and redefines section heads
-% but doesn't print anything.
-% After typing  \appendix
-%
-% \section{Here Is Appendix Title}
-% will print
-% Appendix A: Here Is Appendix Title
-%
-% \section*{Appendix}
-% will print
-% Appendix
-%
-% \section*{Appendix: Here Is Appendix Title}
-% will print
-% Appendix: Here Is Appendix Title
-%
-% For only 1 appendix \appendix \section{Appendix} is preferred.
-% which will print
-% Appendix A
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Optional Glossary or Notation section, goes here
-%
-%%%%%%%%%%%%%%
-% Glossary only allowed in Reviews of Geophysics
-% \section*{Glossary}
-% \paragraph{Term}
-% Term Definition here
-%
-%%%%%%%%%%%%%%
-% Notation -- End each entry with a period.
-% \begin{notation}
-% Term & definition.\\
-% Second Term & second definition.
-% \end{notation}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  ACKNOWLEDGMENTS
-
-\begin{acknowledgments}
+\begin{acknowledgment} 
 Support for this work was provided by the Canadian Foundation for Climate and 
 Atmospheric Science through the Cloud Aerosol Feedback and Climate network.
 We thank Marat Khairoutdinov for making SAM available to the cloud modeling 
 community.  All figures were generated using the matplotlib library in the 
 Python programming language.
-\end{acknowledgments}
+\end{acknowledgment}
 
-%% ------------------------------------------------------------------------ %%
-%
-%  REFERENCE LIST AND TEXT CITATIONS
-%
-% Either type in your references using
-% \begin{thebibliography}{}
-% \bibitem{}
-% Text
-% \end{thebibliography}
-%
-% Or,
-%
-% If you use BiBTeX for your References, please produce your .bbl
-% file and copy the contents into your paper here.
-%
-% Follow these steps:
-% 1. Run LaTeX on your LaTeX file.
-%
-% 2. Run BiBTeX on your LaTeX file.
-%
-% 3. Open the new .bbl file containing the reference list and
-%   copy all the contents into your LaTeX file here.
-%
-% 4. Comment out the old \bibliographystyle and \bibliography commands.
-%
-% 5. Run LaTeX on your new file before submitting.
-%
-% AGU does not want a .bib or a .bbl file, but asks that you
-% copy in the contents of your .bbl file here.
+% Use appendix}[A], {appendix}[B], etc. etc. in place of appendix if you have multiple appendixes.
+\ifthenelse{\boolean{dc}}
+{}
+{\clearpage}
 
+% Create a bibliography directory and place your .bib file there.
+\ifthenelse{\boolean{dc}}
+{}
+{\clearpage}
+\bibliographystyle{./ametsoc}
+\bibliography{./bibliography/shell_correction}
 
-%\begin{thebibliography}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliography{shell_correction}
-\bibliographystyle{agu}
-
-%\bibitem[{\textit{Kilby}(2008)}]{jskilby}
-%Kilby, J. S. (2008), Invention of the integrated circuit, {\it IEEE
-%Trans. Electron Devices,} \textit{23}, 648--650.
-
-%\bibitem[{\textit{Kilby et al.}(2008)}]{jskilbye}
-%Kilby, J. S., S. Smith, and R. Jones (2008), Invention of the
-%integrated circuit, {\it IEEE Trans. Electron Devices,} \textit{23},
-%648--650.
-
-%\end{thebibliography}
-
-%Reference citation examples:
-
-%...as shown by \textit{Kilby} [2008].
-%...has been shown [\textit{Kilby et al.}, 2008].
-
-%...as shown by \cite{jskilby}.
-%...has been shown \citep{jskilbye}.
-
-
-%% ------------------------------------------------------------------------ %%
-%
-%  END ARTICLE
-%
-%% ------------------------------------------------------------------------ %%
-
-\end{article}
-
-%% Enter Figures and Tables here:
-
-% When submitting articles through the GEMS system:
-% COMMENT OUT ANY COMMANDS THAT INCLUDE GRAPHICS.
-
-% Figure captions go below this illustration; Table captions go above tables
-
-\begin{figure}
-  \noindent\includegraphics[width=39pc]{./figures/reynolds_correction}
+\begin{figure}[t]
+  \noindent\includegraphics[width=39pc,angle=0]{./figures/reynolds_correction}\\
   \caption{Result of correcting direct entrainment values for the presence of 
   the moist cloud shell.  a) Mean profiles of the effective total specific 
   humidity values being entrained ($q_E$, black line), and detrained ($q_D$ dotted 
@@ -764,8 +524,8 @@ Python programming language.
   \label{fig:Reynolds_correction}
 \end{figure}
 
-\begin{figure}
-  \noindent\includegraphics[width=20pc]{./figures/profile_plots}
+\begin{figure}[t]
+  \noindent\includegraphics[width=19pc]{./figures/profile_plots}
   \caption{Mean profiles of a) liquid-water moist static energy values for 
   entraining (black line) and detraining (dotted line) air, overlaid on the 
   mean core, edge, shell, and environment profiles (grey lines), and b) the 
@@ -778,7 +538,7 @@ Python programming language.
   \label{fig:profile_plots}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[t]
   \noindent\includegraphics[width=39pc]{./figures/w_entrainment_example}
   \caption{Instantaneous vertical cross-section of cloud core mass entrainment 
   (a), humidity entrainment (b), vertical velocity entrainment (c), buoyancy 
@@ -789,196 +549,12 @@ Python programming language.
 \end{figure}
 
 
-\begin{figure}
-  \noindent\includegraphics[width=20pc]{./figures/shell_variability}
-  \caption{Variation in a) $({q_t}_E - {q_t}_e)/({q_t}_c - {q_t}_e)$ and b)
-  $({q_t}_c - {q_t}_D)/({q_t}_c - {q_t}_e)$ over the duration of the ARM model run.
+\begin{figure}[t]
+  \noindent\includegraphics[width=19pc]{./figures/shell_variability}
+  \caption{Variation in a) $(q_E - {q_t}_e)/({q_t}_c - {q_t}_e)$ and b)
+  $({q_t}_c - q_D)/({q_t}_c - {q_t}_e)$ over the duration of the ARM model run.
   }
   \label{fig:shell_variability}
 \end{figure}
 
-% ONE-COLUMN figure/table, including eps graphics
-%
-% \begin{figure}
-% \noindent\includegraphics[width=20pc]{samplefigure.eps}
-% \caption{Caption text here}
-% \end{figure}
-% \end{document}
-%
-% \begin{table}
-% \caption{}
-% \end{table}
-%
-% ---------------
-% TWO-COLUMN figure/table
-%
-% \begin{figure*}
-% \noindent\includegraphics[width=39pc]{samplefigure.eps}
-% \caption{Caption text here}
-% \end{figure*}
-%
-% \begin{table*}
-% \caption{Caption text here}
-% \end{table*}
-%
-% see below for how to make landscape figures or tables
-
-%%% End the article here:
-
 \end{document}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%% ------------------------------------------------------------------------ %%
-%
-%  IN-TEXT LISTS
-%
-%% ------------------------------------------------------------------------ %%
-
-% Do not use bulleted lists; enumerated lists are okay.
-% \begin{enumerate}
-% \item
-% \item
-% \item
-% \end{enumerate}
-
-%% ------------------------------------------------------------------------ %%
-%
-%  EQUATIONS
-%
-%% ------------------------------------------------------------------------ %%
-
-% Single-line equations are centered.
-
-% Math coded inside display math mode \[ ...\]
-% will not be numbered e.g.:
-% \[ x^2=y^2 + z^2\]
-
-% Math coded inside \begin{equation} and \end{equation} will
-% be automatically numbered e.g.:
-% \begin{equation}
-% x^2=y^2 + z^2
-% \end{equation}
-
-% IF YOU HAVE MULTI-LINE EQUATIONS, PLEASE
-% BREAK THE EQUATIONS INTO TWO OR MORE LINES
-% OF SINGLE COLUMN WIDTH (20 pc, 8.3 cm)
-% using double backslashes (\\).
-
-% To create multiline equations, use the
-% \begin{eqnarray} and \end{eqnarray} environment
-% as demonstrated below.
-\begin{eqnarray}
-  x_{1} & = & (x - x_{0}) \cos \Theta \nonumber \\
-        && + (y - y_{0}) \sin \Theta  \nonumber \\
-  y_{1} & = & -(x - x_{0}) \sin \Theta \nonumber \\
-        && + (y - y_{0}) \cos \Theta.
-\end{eqnarray}
-
-If you don't want an equation number, use the star form:
-\begin{eqnarray*}...\end{eqnarray*}
-
-% Break each line at a sign of operation
-% (+, -, etc.) if possible, with the sign of operation
-% on the new line.
-
-% Indent second and subsequent lines to align with
-% the first character following the equal sign on the
-% first line.
-
-% Use an \hspace{} command to insert horizontal space
-% into your equation if necessary. Place an appropriate
-% unit of measure between the curly braces, e.g.
-% \hspace{1in}; you may have to experiment to achieve
-% the correct amount of space.
-
-% There is another multiline equation environment:
-% \begin{aguleftmath}...\end{aguleftmath}
-% The equation is aligned left and the second line indents to
-% the width of a paragraph indent (AGU style)
-
-
-%% ------------------------------------------------------------------------ %%
-%
-%  EQUATION NUMBERING: COUNTER
-%
-%% ------------------------------------------------------------------------ %%
-
-% You may change equation numbering by resetting
-% the equation counter or by explicitly numbering
-% an equation.
-
-% To explicitly number an equation, type \eqnum{}
-% (with the desired number between the brackets)
-% after the \begin{equation} or \begin{eqnarray}
-% command.  The \eqnum{} command will affect only
-% the equation it appears with; LaTeX will number
-% any equations appearing later in the manuscript
-% according to the equation counter.
-%
-% To reset the equation counter, place the setcounter{equation}
-% command in front of your equation(s).
-%\setcounter{equation}{0}
-
-% Set the equation counter to 0 if the next
-% number needed is 1 or set it to 7 if the
-% next number needed is 8, etc.
-%
-% The \setcounter{equation} command does affect
-% equations appearing later in the manuscript.
-
-% If you have a multiline equation that needs only
-% one equation number, use a \nonumber command in
-% front of the double backslashes (\\) as shown in
-% the multiline equation above.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Landscape figure and table examples
-%
-% ---------------
-% Landscape (broadside) figure/table
-% (These objects will not display properly in draft mode, use galley.)
-%
-% ONE-COLUMN landscape figure and table
-%
-% \begin{landscapefigure}
-% \includegraphics[height=.75\mycolumnwidth,width=42pc]{samplefigure.eps}
-% \caption{Caption text here}
-% \end{landscapefigure}
-%
-% \begin{landscapetable}
-% \caption{Caption text here}
-% \begin{tabular*}{\hsize}{@{\extracolsep{\fill}}lcccc}
-% \tableline
-% ....
-% \tableline\\
-% \multicolumn5l{(a) Algorithms from Numerical Recipes}\\
-% \end{tabular*}
-% \tablenotetext{}{}
-% \tablecomments{}
-% \end{landscapetable}
-%
-% FULL-PAGE landscape figures and tables
-%
-% \begin{figure*}[p]
-% \begin{landscapefigure*}
-% illustration here
-% \caption{caption here}
-% \end{landscapefigure*}
-% \end{figure*}
-%
-% \begin{table}[p]
-% \begin{landscapetable*}
-% \caption{}
-% \begin{tabular*}{\textheight}{@{\extracolsep{\fill}}lccrrrcrrr}
-% ....
-% \end{tabular*}
-% \begin{tablenotes}
-% ...
-% \end{tablenotes}
-% \end{landscapetable*}
-% \end{table}
-%
