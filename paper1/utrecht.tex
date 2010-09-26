@@ -40,7 +40,7 @@ of boundary layer clouds.}
 
  %\frame{\frametitle{Table of contents}\tableofcontents} 
 
-\section{Intro}
+\section{Introduction}
 
 \frame{
   \frametitle{The problem: how do we represent this:}
@@ -58,7 +58,6 @@ Siebesma, 1998
 
 
 
-\section{Introduction}
 
 \begin{frame}
   \frametitle{Introduction}
@@ -84,6 +83,9 @@ of the cloud volume.
      
   \end{itemize}
 \end{frame}
+
+\section{Bulk entrainment}
+\label{sec:bulk-entrainment}
 
 \begin{frame}
   \frametitle{Bulk entrainment -- definitions}
@@ -165,6 +167,7 @@ to proceed, assume  $E_\phi$ = $E$ and $D_\phi$ = $D$, but $\dots$
 
 
 
+
 \begin{frame}
   \frametitle{Calculating bulk $E_\phi$ and $D_\phi$}
 
@@ -195,6 +198,10 @@ to proceed, assume  $E_\phi$ = $E$ and $D_\phi$ = $D$, but $\dots$
 
 \end{frame}
 
+\section{Direct entrainment: Romps}
+\label{sec:direct-entr-romps}
+
+
 \begin{frame}
   \frametitle{Romps time-averaged direct calculation for $E_d$ and $D_d$}
 
@@ -212,7 +219,7 @@ and 0 otherwise \pause
 \item To get the direct $E_d(z)$ and $D_d(z)$:
 
   \begin{itemize}
-  \item Average $e - d$ over the time required to a grid cell to change state
+  \item Average $e - d$ over the time required for a grid cell to change state
   \item Label positive  $e-d$  as $e$, negative $e-d$ as  $d$
   \item Sum $e$ and $d$ over $(x,y)$ to get  $E_d(z)$ and and $D_d(z)$.
   \end{itemize} \pause
@@ -226,6 +233,9 @@ $E_\phi$ and $D_\phi$, and depend on the tracer type
 
 \end{frame}
 
+\section{Direct entrainment: tetrahedral}
+\label{sec:direct-entr-tetr}
+
 \begin{frame}
 \frametitle{Direct calculations using cloud surface interpolation}
 
@@ -233,7 +243,7 @@ $E_\phi$ and $D_\phi$, and depend on the tracer type
 \begin{overpic}[tics=20,width=0.6\textwidth]{gridcell_schematic}
 \put(85,40){
 \begin{minipage}{0.5\textwidth}
-Start with the net entrainment and reorganize:
+Start with the net entrainment and derive:
  \begin{equation*}
 \begin{lgathered}
   E - D = \int_C \rho ( \mathbf{u_i} -  \mathbf{u}) \cdot d\mathbf{C} \hfill\\
@@ -271,9 +281,20 @@ $q_v$, $q_s$, $T_v$ and $w$.
 
 \begin{frame}
 \frametitle{Good agreement between Romps and tetrahedral}
-\includegraphics[width=0.7\textwidth]{direct_vs_romps}
+\begin{overpic}[tics=20,width=0.7\textwidth]{direct_vs_romps}
+\put(100,80){
+\begin{minipage}{0.5\textwidth}
+$E_d$, $D_d$
+\end{minipage}
+}
+\put(100,35){
+\begin{minipage}{0.5\textwidth}
+$\epsilon_d$, $\delta_d$
+\end{minipage}
+}
+\end{overpic}
 
-but there's some dependence on numerics (advection scheme)
+but there's some dependence on numerics (\small note advection scheme differences)
 \end{frame}
 
 \begin{frame}
@@ -281,11 +302,83 @@ but there's some dependence on numerics (advection scheme)
 \includegraphics[width=1.0\textwidth]{resolution_dependence}
 \end{frame}
 
-
 \begin{frame}
 \frametitle{Because the interpolation biases single gridcell cloud area}
 \includegraphics[width=0.8\textwidth]{interpolation_bias}
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Tetrahedal fluxes can be used for $E_d/D_d$ snapshots}
+\includegraphics[width=1.0\textwidth]{averaging_convergence.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{$E_d/D_d$ spatial variability, 1 minute average}
+
+\begin{overpic}[tics=20,width=0.7\textwidth]{spatial_variability_1min.png}
+\put(100,80){
+\begin{minipage}{0.5\textwidth}
+Tetrahedral
+\end{minipage}
+}
+n\put(100,35){
+\begin{minipage}{0.5\textwidth}
+Romps
+\end{minipage}
+}
+\end{overpic}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Linking direct and bulk entrainment rates}
+\includegraphics[width=\textwidth]{mass_radius.jpg}
+
+\mbox{Core:  $w > 0$, $\Delta T_v > 0$, $q_l > 0$}\\
+\mbox{Edge: outermost core gridcell}\\
+\mbox{Shell: Innermost environment gridcell}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{converting $E_d$ to $E_\phi$}
+\begin{overpic}[tics=20,width=0.5\textwidth]{reynolds_correctionA}
+\put(75,60){
+\begin{minipage}{0.6\textwidth}
+Define shell and edge tracer values $q
+
+\begin{equation*}
+  \begin{lgathered}
+  q_E = (E \phi)_d/E_d\\
+  q_D =  (D \phi)_d/D_d
+  \end{lgathered}
+\end{equation*}
+
+These values will differ\\
+from $q_c$ and $q_e$, the \\
+mean cloud and enviornment q
+$~$ \\
+Can show that:
+  
+\begin{equation*}
+\begin{lgathered}
+    E_{\phi} = E_d - E_d\frac{q_{shell} - q_e}{q_{c} - q_{e}}\\
+             - D_d\frac{q_c - q_{edge}}{q_{c} - q_{e}}
+\end{lgathered}
+\end{equation*}
+
+
+\end{minipage}
+}
+
+\end{overpic}
+
+
+\end{frame}
+
+
 
 
 \begin{frame}
@@ -309,10 +402,6 @@ but there's some dependence on numerics (advection scheme)
 \includegraphics[width=0.8\textwidth]{area_comparison}
 \end{frame}
 
-\begin{frame}
-\frametitle{figure 10}
-\includegraphics[width=0.8\textwidth]{reynolds_correction}
-\end{frame}
 
 
 \begin{frame}
