@@ -85,16 +85,18 @@ TEXT
 
 All LES calculations in this paper were made using the System for Atmospheric 
 Modeling \citep[SAM;][]{Khairoutdinov2003}.  SAM is an anelastic LES 
-Two model runs were performed, 
-configured as standard Global Energy and Water Cycle Experiment (GEWEX) 
-Cloud System Studies \citep[GCSS;][]{Randall2003} experiments: a Barbados 
-Oceanographic and Meteorological Experiment \citep[BOMEX;][]{Siebesma2003} run,
-and an Atmospheric Radiation Measurement Study \citep[ARM;][]{Brown2002} run. 
+
+Two model runs were performed, configured as standard Global Energy and Water
+Cycle Experiment (GEWEX) Cloud System Studies \citep[GCSS;][]{Randall2003}
+experiments: a Barbados Oceanographic and Meteorological Experiment 
+\citep[BOMEX;][]{Siebesma2003} run, and an Atmospheric Radiation Measurement
+Study \citep[ARM;][]{Brown2002} run. 
 
 \subsection{BOMEX}
 
-BOMEX simulates a trade-wind cumulus cloud field that was observed over the 
-ocean near Bermuda
+BOMEX simulates a trade-wind cumulus cloud field observed over ocean near 
+Bermuda
+
 The BOMEX run was performed on a 6.4 km x 6.4 km horizontal x 3.2 km vertical 
 domain with 25 meter grid resolution in all directions for 6 hours, and the 
 first three hours of simulation were discarded. 
@@ -110,92 +112,99 @@ grid resolution.
 \section{Cloud Tracking}
 
 Dividing a cloud field up into individual clouds at a single moment in time is 
-a trivial matter.  Tracking the resulting clouds from one time step to the 
-next is much more problematic, as a cloud is not a consistent physical object; 
-it is, rather, a series of processes.  A rising parcel of moist air may 
-condese, a parcel of air containing condensate may evaporate, and a cloud may 
-be split in two by air turbulence or collide with another cloud and merge into 
-one.  To be able to handle all of these processes, we adopt a more complex 
+a trivial matter of finding connected cloudy regions.  Tracking the resulting 
+clouds from one time step to the next is more problematic, as a cloud is not a 
+consistent physical object.  It is, rather, a series of processes: A rising 
+parcel of moist air may condense, a parcel of air containing condensate may 
+evaporate, and a cloud may merge with another cloud or split into multiple 
+clouds.  To be able to handle all of these processes, we adopt a more complex 
 definition of what constitutes an individual cloud.
 
-We begin by defining two cloud regions.  First is the cloud core, defined following 
-\cite{Siebesma1995} as all cloudy points which have positive buoyancy and 
-upward velocity.  Second is the cloud plume, the total region of air that has 
-been influenced by the cloud.  We define this region following the work of 
-\cite{Couvreaux2010} via a numerical tracer that is emitted at the surface and 
-subsequently decays exponentially with a one minute time constant.  A point is 
-considered to be in the plume if the tracer value of that point is larger than 
-one standard deviation above the mean tracer value at the current model height.
-Additionally, the tracer must exceed five precent of the value of the tracer 
-standard deviation integrated from the surface to the current height.  Unlike 
-Couvreaux et al., however, we do not require these plume points to be moving 
-upward or to have condensed liquid water.
+We begin by defining two cloud regions.  First is the cloud core, defined 
+following \cite{Siebesma1995} as all cloudy points which have positive 
+buoyancy and upward velocity.  Second is the cloud plume, the region of air 
+that is moving upward due to the cloud.  We define this region following the 
+work of \cite{Couvreaux2010} via a numerical tracer that is emitted at the 
+surface and subsequently decays exponentially with a one minute time constant.  
+A point is considered to be in the plume if the tracer value of that point is 
+larger than one standard deviation above the mean tracer value at the current 
+model height.  Additionally, the tracer must exceed five precent of the value 
+of the tracer standard deviation integrated from the surface to the current 
+height.  Unlike Couvreaux et al., we do not require upper-level plume points 
+to have condensed liquid water.  Finally, we force the core region to be a 
+subset of the plume by setting all core points to also be plume points.
 
-In general, the core region is a subset of the plume region.  The purpose of 
-these two regions is to determine when a cloud splits and merges: if two cloud 
-cores touch, the clouds are considered to have merged, and if parts of a cloud 
-seperate such that their plumes no longer touch, the clouds are considered to 
-have split.  This definition makes clouds slightly ``sticky'', ensuring that 
-clouds do not rapidly split and merge as small tendrils are torn from the main 
-cloud mass and evaporate.
+Next, we divide the cloud field into ``cloudlets" by assigning any core points 
+which are nearest-neighbour adjacent to the same cloudlet.  These core 
+cloudlets are then expanded into nearest-neighbour connected plume points 
+until all plume points that are connected to a core are assigned to a 
+cloudlet.  Remaining plume points are then divided into plume cloudlets which 
+have no cores.  This process is repeated for every saved model time step.
 
-Next, we identify the distance of all core grid cells from the core surface--
-the "depth" into the cloud mass of the grid cell (Fig. 
-\ref{fig:cloudfinder_instructions}a).  We do this by labeling all core grid 
-cells directly adjactent to a non-core grid cell with '1'; grid cells 
-diagonally adjacent are ignored.  Then core cells adjactent to the cells 
-labelled '1' are labelled '2', and the process is repeated until all core grid 
-cells are labelled with their depth.
+These cloudlets are then assigned to belong to clouds.  For the first time step,
+we simply assign each cloudlet to a seperate cloud.  At subsequent time steps,
+cloudlets that spatially overlap with a cloud at the previous timestep are
+assumed to be the same cloud.  The cloudlet's position is corrected for
+advection using the mean velocity of the cloudlet's core (if core points are
+present in the cloudlet) or plume (if they are not), multiplied by the time
+between model output saves.
 
-Next, we divide the field up into "cloudlets", sub-units of the core which are 
-centered on points that are far from the core surface, using a process based 
-on ideas of crystal growth (Fig. \ref{fig:cloudfinder_instructions}b).  First, 
-we select one of the deepest points in the core and assign it to a cloudlet.  
-Next, any points at the same depth which are touching the cloudlet are absorbed 
-into the cloudlet, until the cloudlet is no longer touching unassigned points.  
-If there are still points at the same depth they are not part of the cloudlet; 
-a new point is selected, assigned to a new cloudlet, and this process is 
-repeated until all the deepest grid cells are assigned to cloudlets.  Then the 
-next-deepest points are selected, and each cloudlet is expanded into these 
-points.  Points that could be assigned to more than one cloudlet go to the 
-nearest cloudlet, or are assigned randomly if two cloudlets are equally 
-distant.  Points that remain unassigned are added to new cloudlets in the same 
-manner as the deepest points, and the process is repeated until all core points 
-are assigned to a cloudlet.
+Four kinds of overlap are possible: core points in the cloudlet may overlap 
+core points in a previous time step cloud (core-core); cloudlet core may 
+overlap plume points (core-plume); plume may overlap core (plume-core); and 
+plume may overlap plume (plume-plume).  Several kinds of overlap may occur 
+simultaneously, so we define a heirarchy of connection types and check each 
+in turn.  The strongest connection type is core-core, followed by core-plume,
+then plume-plume.  Plume-core connections are ignored, which prevents 
+connections between newly formed core cloudlets and leftover plume from 
+a dissipating cloud.  Conversely, allowing core-plume connections lets us 
+associate newly created cloud cores with plumes rising through the sub-cloud 
+layer.  Only the strongest connection type present for a given cloudlet is 
+considered: if a cloudlet has core-core connections, any core-plume or 
+plume-plume connections are ignored, and if there are core-plume connections,
+plume-plume connections are ignored.  Finally, a cloudlet may connect to more
+than one cloud, which is used to identify merges and splits.
 
-Once all the core points have been assigned to cloudlets, this process is 
-continued for the plume points in the same manner, until the plume points have 
-all been assigned to cloudlets as well.  Note that it is possible to have a 
-cloudlet that has no core points.  This process is repeated for every saved 
-model time step.
-
-Next, any cloudlets which have spatially connected cores in the first time step 
-are joined into clouds.  At subsequent time steps, cloudlets that spatially 
-overlap with a cloud at the previous timestep are assumed to be the same cloud.
-The cloudlet's position is corrected by calculating the cloudlet's mean 
-velocity and the distance the cloudlet would have moved over the time step is 
-removed.  If a cloudlet overlaps two or more clouds, the cloudlet is assigned 
-to the cloud with the greatest spatial overlap.  Any cloudlets that do not 
-overlap clouds in the previous time step are assumed to be new clouds.
-
-At this point merges and splits are performed.  Any clouds that have connected 
-cores are merged into a single cloud, with the largest cloud engulfing the 
-smaller clouds.  Any cloud which contains cloudlets that do not have connected
-plumes are split into two clouds, with the largest sub-cloud being assigned to 
-the original cloud and the smaller sub-clouds becoming new clouds.  Then the 
-process of cloudlet assignment, merging, and splitting is repeated with the 
-next time step, until all cloudlets are assigned to a cloud.
-
-Once the clouds are all assigned, any cloud that is present for less than 
-five minutes is flagged as noise and analyzed seperately from the rest of 
-the clouds.  The remaining clouds are formed into a network graph, and 
-connected subgraphs are assumed to be a single coherent cloud structure.  This 
-step is neccessary to handle events where a cloud splits in two, but then 
-merges back together at a later time step.
+Any cloudlet which overlaps more than one previous time step cloud is 
+considered to be the result of a merge between the two clouds.  In this case 
+the cloudlet is assigned to the cloud with the largest overlap, and the 
+other overlapping clouds are assumed to have merged with the largest overlap
+cloud.  Next, clouds that connect to more than one cloudlet are considered for
+splitting.  Splits occur only if a cloud contains more than one cloudlet whose
+plume is in contact with the ground, with the largest cloudlet being assigned 
+to the original cloud and the smaller sub-clouds becoming new clouds. 
+Cloudlets which are not connected to the ground are assigned to the nearest
+ground-connected cloudlet, measured from the centroids of the cloudlets.  
+Any cloudlets that do not overlap clouds in the previous time step are assumed
+to be new clouds.  This process of cloudlet assignment, merging, splitting, and 
+creation is repeated for each time step until all cloudlets are assigned to a
+cloud.
+  
+Once the cloudlets are all assigned to a cloud, any cloud that has cloud core points for less than five minutes is flagged as noise.  If any merge or split 
+events occured over these clouds' short lifetimes, the noise cloud is rejoined 
+to the cloud it split from or merged into.  This prevents clouds that split
+then immediately re-merge with their parent cloud, and decaying cloud detritus 
+above cloudbase, from being counted as discrete cloud objects.  Remaining 
+noise clouds are separated from the main cloud database and considered to be a mixture of ``mistakes" in the tracking algorithm and short-lived, dynamically forced clouds at cloud base.
 
 %==============================================================================
 
 \section{Tracked Cloud Statistics}
+
+First we examine the population statistics of the tracked cloud ensembles we 
+have isolated with our tracking algorithm for the BOMEX and ARM GCSS cases.
+
+\subsection{BOMEX}
+
+Over the 3 hour BOMEX run
+
+\subsection{ARM}
+
+TEXT
+
+%==============================================================================
+
+\section{Cloud Initiation}
 TEXT
 
 \subsection{BOMEX}
@@ -203,7 +212,6 @@ TEXT
 
 \subsection{ARM}
 TEXT
-
 
 \conclusions
 %% \conclusions[modified heading if necessary]
@@ -283,18 +291,27 @@ programming language.
 %% ONE-COLUMN TABLE
 
 %t
-%\begin{table}[t]
-%\caption{TEXT}
-%\vskip4mm
-%\centering
-%\begin{tabular}{column = lcr}
-%\tophline
+\begin{table}[t]
+\caption{Lifecycle statistics of tracked clouds}
+\vskip4mm
+\centering
+\begin{tabular}{llcr}
+\tophline
+&&BOMEX&ARM\\
+\middlehline
+Total Clouds&&1183&1320\\
+Starts\\
+&Broken&59&n/a\\
+&Split&339&319\\
+&New&785&1001\\
+Ends\\
+&Broken&39&n/a\\
+&Merge&51&61\\
+&Decay&1093&1259\\
 
-%\middlehline
-
-%\bottomhline
-%\end{tabular}
-%\end{table}
+\bottomhline
+\end{tabular}
+\end{table}
 
 
 %% TWO-COLUMN TABLE
