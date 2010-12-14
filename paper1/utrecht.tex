@@ -160,7 +160,7 @@ to proceed, assume  $E_\phi$ = $E$ and $D_\phi$ = $D$, but $\dots$
 
 \pause
 \begin{itemize}
-\item So entrained/detrained air properities differ from $\phi_e$, $\phi_c$ 
+\item So entrained/detrained air proprieties differ from $\phi_e$, $\phi_c$ 
 \end{itemize}
 
 \end{frame}
@@ -309,7 +309,7 @@ but there's some dependence on numerics (\small note advection scheme difference
 
 
 \begin{frame}
-\frametitle{Tetrahedal fluxes can be used for $E_d/D_d$ snapshots}
+\frametitle{Tetrahedral fluxes can be used for $E_d/D_d$ snapshots}
 \includegraphics[width=1.0\textwidth]{averaging_convergence.png}
 \end{frame}
 
@@ -330,6 +330,8 @@ Romps
 \end{overpic}
 \end{frame}
 
+\section{Linking direct and bulk entrainment}
+\label{sec:linking-direct-bulk}
 
 
 \begin{frame}
@@ -345,10 +347,28 @@ Romps
 \begin{frame}
 \frametitle{converting $E_d$ to $E_\phi$}
 \begin{overpic}[tics=20,width=0.5\textwidth]{reynolds_correctionA}
-\put(75,60){
-\begin{minipage}{0.6\textwidth}
-Define shell and edge tracer values $q
+\put(82,50){
+\begin{minipage}{0.5\textwidth}
+Define shell and edge tracer values $q_{shell}$ and $q_{edge}$.
 
+These values will differ\\
+from $q_c$ and $q_e$, the \\
+mean cloud core and environment vapor values
+
+Can show that:
+
+\vspace{-20pt}  
+\begin{equation*}
+\begin{lgathered}
+    E_{\phi} = E_d - E_d\frac{q_{shell} - q_e}{q_{c} - q_{e}}\\
+             - D_d\frac{q_c - q_{edge}}{q_{c} - q_{e}}
+\end{lgathered}
+\end{equation*}
+
+Alternatively, use conditional averages to include Reynolds
+correlations
+
+\vspace{-20pt}  
 \begin{equation*}
   \begin{lgathered}
   q_E = (E \phi)_d/E_d\\
@@ -356,18 +376,6 @@ Define shell and edge tracer values $q
   \end{lgathered}
 \end{equation*}
 
-These values will differ\\
-from $q_c$ and $q_e$, the \\
-mean cloud and enviornment q
-$~$ \\
-Can show that:
-  
-\begin{equation*}
-\begin{lgathered}
-    E_{\phi} = E_d - E_d\frac{q_{shell} - q_e}{q_{c} - q_{e}}\\
-             - D_d\frac{q_c - q_{edge}}{q_{c} - q_{e}}
-\end{lgathered}
-\end{equation*}
 
 
 \end{minipage}
@@ -382,43 +390,96 @@ Can show that:
 
 
 \begin{frame}
-\frametitle{figure 3}
-\includegraphics[width=0.8\textwidth]{E_minus_D}
+\frametitle{Corrected fluxes restore bulk tracer profile}
+\includegraphics[width=0.8\textwidth]{reynolds_correctionBC}
+
+The $q_E$ / $q_D$ underestimate of $E$ and $D$ arises from differencing two large quantities:
+$q_c(E_d-D_d)$ and $(E q)_d - (D q)_d$. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Vertical momentum}
+\begin{overpic}[tics=20,width=0.5\textwidth]{w_profile}
+\put(82,50){
+\begin{minipage}{0.5\textwidth}
+When we  modify the entrainment calculation
+to account for negative and positive $w$,
+we find $w_E$, the Reynold's correlated
+mean entrained vertical velocity $> 0$ and
+nearly as large as $w_D$.
+
+\end{minipage}
+}
+
+\end{overpic}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why is is the cloud entraining positive $w$?}
+
+\includegraphics[width=\textwidth]{w_entrainment_example}
+
+Updrafts produce newly buoyant parcels well above cloudbase.
+\end{frame}
+
+
+\section{Summary}
+\label{sec:summary}
+
+
+\begin{frame}
+  \frametitle{ Summary}
+
+  \begin{itemize}
+  \item Two new techniques to  directly calculate entrainment show
+entrainment rates roughly two times higher than bulk values. \pause
+\item Much of the difference between bulk and direct calculations is
+due to the influence of the heterogeneous cloud shell/edge, but
+Reynolds correlations also play a significant role, particularly
+for momentum (see our JAS submission) \pause
+\item Tetrahedral interpolation can be applied to individual clouds,
+and rapidly changing boundary layers, 
+either over a cloud life cycle or in a snapshot. \pause
+
+\item The interpolation technique is applicable in general to any
+flow through a material surface in a three-dimensional model.
+
+  \end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
-\frametitle{figure 4}
+  \frametitle{Thanks to:}
+
+  \begin{itemize}
+  \item Marat for providing SAM
+  \item Support from the Canadian Foundation for Climate and Atmospheric Science
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Romps - tetrahedral correlation}
 \includegraphics[width=0.8\textwidth]{correlations}
 \end{frame}
 
 
-
-
-
-
 \begin{frame}
-\frametitle{figure 9}
-\includegraphics[width=0.8\textwidth]{area_comparison}
-\end{frame}
-
-
-
-\begin{frame}
-\frametitle{figure 11}
-\includegraphics[width=0.8\textwidth]{profile_plots}
+\frametitle{static energy}
+\includegraphics[width=0.4\textwidth]{profile_plots}
 \end{frame}
 
 
 \begin{frame}
-\frametitle{figure 12}
-\includegraphics[width=0.8\textwidth]{w_entrainment_example}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{figure 13}
-\includegraphics[width=0.8\textwidth]{shell_variability}
+\frametitle{ARM diurnal}
+\includegraphics[width=0.5\textwidth]{shell_variability}
 \end{frame}
 
 
