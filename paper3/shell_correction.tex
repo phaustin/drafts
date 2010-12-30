@@ -24,18 +24,19 @@
 % Enter your Abstract here
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\myabstract}{
-Direct measurements of entrainment and detrainment rates from LES model 
-cloud fields produce values twice as large as those produced from bulk 
-conserved tracer budget calculations.  This difference can be explained by 
-three effects: the presence of a shell of moist air around the clouds, Reynolds 
-correlations between entrainment rates and tracer values, and numerical errors 
-in the calculation methods.  Correlations between the vertical momentum and the
-entrainment rate create strong vertical momentum Reynolds fluxes, making the 
-assumption that clouds entrain fluid with zero vertical momentum incorrect.  
-Variability in the properties of the moist cloud shell has strong impacts on 
-entrainment values inferred from bulk tracer calculations.  These results 
-indicate the dynamics of the cloud shell should be included in 
-parameterizations of cumulus clouds used in general circulation models.
+Direct measurements of rates of entrainment into and detrainment from cloud 
+cores obtained from LES model cloud fields produce values twice as large as 
+those produced from bulk conserved tracer budget calculations.  This difference 
+can be explained by three effects: the presence of a shell of moist air around 
+the cloud cores, Reynolds correlations between entrainment rates and tracer 
+values, and numerical errors in the calculation methods.  Correlations between 
+the vertical momentum and the entrainment rate create strong vertical momentum 
+Reynolds fluxes, making the assumption that clouds entrain fluid with zero 
+vertical momentum incorrect.  Variability in the properties of the moist 
+cloud shell has strong impacts on entrainment values inferred from bulk 
+tracer calculations.  These results indicate the dynamics of the cloud shell 
+should be included in parameterizations of cumulus clouds used in general 
+circulation models.
 }
 %
 \begin{document}
@@ -94,21 +95,21 @@ measurements of LES cloud entrainment}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-The rate at which air is entrained into and detrained from clouds affects cloud 
-properties, cloud top height, and vertical transports of heat and moisture.  
-Proper simulation of these subgrid-scale effects in General Circulation Models 
-(GCM) depends on the accurate parameterization of entrainment and detrainment 
-\citep{Bechtold2008,Rougier2009,De_Rooy2010}.
+The rate at which air is entrained into and detrained from cumulus clouds 
+affects cloud properties, cloud top height, and vertical transports of heat 
+and moisture.  Proper simulation of these subgrid-scale effects in General 
+Circulation Models (GCM) depends on the accurate parameterization of 
+entrainment and detrainment \citep{Bechtold2008,Rougier2009,De_Rooy2010}.
 
-Large Eddy Simulation (LES) is a primary tool used to study these dynamics.  
+Large Eddy Simulation (LES) is the primary tool used to study these dynamics.  
 LES entrainment and detrainment rates are typically calculated using budgets of 
 bulk conserved tracer variables to inferring the amount of fluid exchange 
 between the clouds and the surrounding air.  These rates are then used in 
 simple entraining plume parameterizations to evaluate sub-grid scale cloud 
 transports.  \cite{Siebesma1995} derive the following equations for 
-entrainment and detrainment from a cloud core plume, where cloud core is 
-defined as regions having condensed liquid water, positive buoyancy, and upward 
-vertical velocity:
+entrainment and detrainment of mass from a cloud core plume, where cloud core 
+is defined as regions having condensed liquid water, positive buoyancy, and 
+upward vertical velocity:
 \begin{equation}
   \label{eq:siebesma_entrainment}
     E_{\phi}(\phi_c - \phi_e) = - M_c \frac{\partial \phi_c}{\partial z}
@@ -133,44 +134,48 @@ and super-scripts denote horizontally averaged values conditionally sampled in
 the cloud environment and core, $forcing$ refers to tracer sources and sinks,
 such as radiation or subsidence, not included in the other terms, primed values 
 represent anomalies relative to the horizontal mean, overbars represent 
-horizontal averaging, and $E_{\phi}(z)$ and $D_{\phi}(z)$ are the total bulk 
-tracer entrainment into and detrainment out of the cloud core in 
-kg s$^{-1}$ m$^{-3}$.  
+horizontal averaging, and $E_{\phi}(z)$ and $D_{\phi}(z)$ are the total mass
+entrainment into and detrainment from the cloud core inferred from the bulk tracer 
+budget, in kg s$^{-1}$ m$^{-3}$.  
 
-Alternatively, entrainment and detrainment can be calculated directly from the 
+Alternatively, entrainment and detrainment of mass can be calculated directly from the 
 LES velocity and tracer fields.  \cite{Romps2010} recently presented a 
-technique to measure entrainment and detrainment in this manner.  His equation (2) is:
+technique to measure local (grid scale) mass entrainment $e(x,y,z)$ and detrainment 
+$d(x,y,z)$.  Summing these point measurements horizontally gives $E_d(z)$ and $D_d(z)$,
+the total  mass entrained into and detrained from the cloud core field in 
+kg s$^{-1}$ m$^{-3}$, where the $d$ subscript indicates these quantities were 
+calculated directly from the model velocity and tracer fields.  His equation (2) is:
 \begin{equation}
   \label{eq:romps_e_minus_d}
   e - d = \frac{\partial}{\partial t}(\mathcal{A}\rho) 
         + \nabla \cdot (\rho \mathbf{u} \mathcal{A}) 
 \end{equation}
-Here $e(x,y,z)$ and $d(x,y,z)$ are the local entrainment and detrainment through 
-the cloud core surface in kg s$^{-1}$ m$^{-3}$, $\mathbf{u}$ is the velocity of 
-the air in m s$^{-1}$, and $\mathcal{A}$ is the ``activity" of the fluid, where 
-$\mathcal{A}$ is one at ``active" cloud core points and zero otherwise.  The 
-values of $e - d$ are averaged over the time that a grid cell experiences mass 
-fluxes between an active and an inactive point, then positive $e-d$ values 
-are considered to be purely $e$, and negative values, $d$.  Summing these point 
-measurements horizontally gives $E_d(z)$ and $D_d(z)$, the total directly 
-calculated cloud core entrainment and detrainment in kg s$^{-1}$ m$^{-3}$.
+Here $e$ and $d$ are the local entrainment and detrainment of mass through the 
+cloud core surface in kg s$^{-1}$ m$^{-3}$, $\mathbf{u}$ is the velocity of the 
+air in m s$^{-1}$, and $\mathcal{A}$ is the ``activity" of the fluid, where 
+$\mathcal{A}$ is one at cloud core points and zero otherwise.  The values of 
+$e - d$ are averaged over the time that a grid cell experiences mass fluxes between 
+an active and an inactive point, then positive $e-d$ values are considered to be 
+purely $e$, and negative values, $d$.  
 
 Romps found that direct measurement of the fluxes produced values roughly twice 
 as large as tracer budget calculations.  Romps attributed this difference to 
 the bulk tracer calculation assumption that fluid exchanged between clouds 
 and environment has the mean properties of the cloud or environment, 
-respectively.  The unlikeliness of this assumption is suggested by recent 
-studies of the dense, descending shell of moist air that forms around 
-trade-wind cumulus clouds \citep{Heus2008, Wang2010}.  Since fluid exchanges 
-between clouds and environment must pass through this shell, it is likely that 
-it plays an important role in entrainment and detrainment dynamics.
+respectively.  Recent studies of the dense, descending shell of moist air that 
+forms around trade-wind cumulus clouds \citep{Heus2008, Wang2010} suggest that 
+the cloud shell properties are strongly different than the core or environment 
+properties, bolstering Romps' hypothesis.  Since fluid exchanges between clouds and
+environment must pass through this shell, it is likely that it plays an important 
+role in entrainment and detrainment dynamics.
 
 Reconciling the direct flux and bulk tracer calculations is important if direct 
 flux calculations are to inform GCM parameterizations.  Here we examine the 
-sources of the discrepancy between the methods.  We show the discrepancy is 
-explained by three effects: the presence of the moist shell, correlations 
-between the entrainment rates and the tracer values which cause Reynolds 
-fluxes, and numerical errors in the calculation methods.  We derive a 
+sources of the discrepancy in entrainment and detrainment values calculated via 
+bulk tracer budgets and directly from model fluxes.  We show that the discrepancy 
+is explained by three effects: the presence of the moist shell, correlations 
+between local entrainment rates and tracer values which cause Reynolds fluxes, 
+and numerical errors in the calculation methods.  We derive a 
 correction to convert between ``tracer" and ``direct" entrainment fluxes, and 
 then use this correction to evaluate the impact of variability in the moist 
 shell on bulk tracer entrainment and detrainment rates.
@@ -186,52 +191,62 @@ Cloud System Studies \citep[GCSS;][]{Randall2003} experiments: a Barbados
 Oceanographic and Meteorological Experiment \citep[BOMEX;][]{Siebesma2003} run,
 and an Atmospheric Radiation Measurement Study \citep[ARM;][]{Brown2002} run. 
 The BOMEX run was performed on a 6.4 km x 6.4 km horizontal x 3.2 km vertical 
-domain with 25 meter grid resolution in all directions for 6 hours, and the 
-first three hours of simulation were discarded. The ARM run was performed on a 
-7.68 km x 7.68 km x 4.5 km domain with 30 meter grid resolution.
+domain with 25 meter grid size in all directions for 6 hours, and the first 
+three hours of simulation were discarded. The ARM run was performed on a 
+7.68 km x 7.68 km x 4.5 km domain with 30 meter grid size.
 
 We have implemented the entrainment calculation scheme of \cite{Romps2010} in 
-SAM, allowing us to calculate cloud core entrainment and detrainment directly 
-from model mass fluxes.  \citet[eq. 4]{Romps2010} also presents a method for 
-calculating tracer entrainment rates in the same framework as 
-(\ref{eq:romps_e_minus_d}), but neglects forcing and diffusion terms.  These 
-are significant for tracer quantities like vertical momentum, so we retain 
-these terms in Romps's tracer equation:
+SAM, allowing us to calculate the mass of air entrained into and detrained from
+cloud core directly from model $\rho$, $\mathbf{u}$, and $\mathcal{A}$.  
+\citet[eq. 4]{Romps2010} also presents a method for calculating local 
+entrainment and detrainment rates for any model variable in the same framework 
+as (\ref{eq:romps_e_minus_d}), but neglects forcing and diffusion terms.  
+These terms are significant for quantities like vertical momentum, so we modify 
+Romps's equation to include their effects:
 \begin{equation}
   \label{eq:romps_ephi_minus_dphi}
   e\phi - d\phi = \frac{\partial}{\partial t}(\phi \mathcal{A} \rho) 
                 + \nabla \cdot (\phi \rho \mathbf{u} \mathcal{A})
                 - \mathcal{A}S_\phi
 \end{equation}
-where $S_\phi$ is any non-advective source term for $\phi$, in units of 
-$[\phi]$ s$^{-1}$.  This equation is then averaged in the same way as equation 
-(\ref{eq:romps_e_minus_d}), but since $\phi$ can be negative, negative 
-entrainment fluxes are now possible.  If the average value of $\phi$ over the 
-period of flux averaging is positive, then positive $e\phi-d\phi$ values are 
-considered to be purely $(e\phi)(x,y,z)$, and negative values, 
-$(d\phi)(x,y,z)$.  However, if $\phi$ is negative then positive $e\phi-d\phi$ 
+where $S_\phi$ is any non-advective source or sink term for $\phi$, such as 
+precipitation for $q_t$ or radiation for $h$, in units of $[\phi]$ s$^{-1}$.  
+As with equation (\ref{eq:romps_e_minus_d}), $e\phi$ and $d\phi$ must be 
+horizontally summed to give the total tracer entrained into or detrained out 
+of the cloud ensemble, but since $\phi$ can be negative, it is possible for 
+entrainment to reduce and for detrainment to increase the tracer quantity 
+in the cloud core.  To accomodate this effect, if the average value of $\phi$ 
+is positive over the time that a grid cell experiences mass fluxes between an 
+active and an inactive point, then positive $e\phi-d\phi$ values are 
+considered to be purely $(e\phi)(x,y,z)$, and negative values, $(d\phi)(x,y,z)$.  
+However, if the average of $\phi$ is negative, then positive $e\phi-d\phi$ 
 values are considered to be purely $(d\phi)(x,y,z)$, and negative values, 
-$(e\phi)(x,y,z)$.  Horizontal summation then gives $(E\phi)_d(z)$ and 
-$(D\phi)_d(z)$, the total directly calculated tracer entrainment and 
-detrainment for the cloud ensemble in $[\phi]$ kg s$^{-1}$ m$^{-3}$.
+$(e\phi)(x,y,z)$.  Horizontal summation of $(e\phi)$ and $(d\phi)$ then 
+gives $(E\phi)_d(z)$ and $(D\phi)_d(z)$, the total entrainment and detrainment 
+of tracer for the cloud ensemble in $[\phi]$ kg s$^{-1}$ m$^{-3}$, where the 
+$d$ subscript indicates these quantities were calculated directly from the 
+model velocity and tracer fields.
 
 %===================================================
 
 \section{The Cloud Shell}
 
-To quantify the effect of the moist cloud shell on entrainment and detrainment
-we define average or effective tracer values $\phi_E = (E\phi)_d / E_d$ and 
-$\phi_D = (D\phi)_d / D_d$.  Examination of these values from the BOMEX 
-simulation using total specfic humidity shows significant differences between 
-$q_E$ and the environmental $q_t$ and between $q_D$ and the core $q_t$ (Figure 
-\ref{fig:Reynolds_correction}a), confirming that $q_E$ and $q_D$ differ from
-the mean environment and core values.
+To quantify the effect of the moist cloud shell on bulk tracer budget 
+estimates of entrainment and detrainment of mass we define the average 
+or effective tracer value at which entrainment occurs to be 
+$\phi_E = (E\phi)_d / E_d$ and the effective tracer value at which 
+detrainment occurs to be $\phi_D = (D\phi)_d / D_d$.  Examination of 
+these values from the BOMEX simulation using total specfic humidity shows 
+significant differences between $q_E$ and the environmental $q_t$ and 
+between $q_D$ and the core $q_t$ (Figure \ref{fig:Reynolds_correction}a), 
+confirming that $q_E$ and $q_D$ differ from the mean environment and 
+core values.
 
 Calculated $q_D$ agrees well with the mean ``cloud core edge" (cloud core model 
 grid cells that are nearest-neighbor adjacent to non-core cells) $q_t$ values.  
 $q_E$, however, is moister than the mean ``cloud core shell" (non-core model 
 grid cells that are nearest-neighbor adjacent to core cells) values.  This 
-suggests that non-trivial Reynolds fluxes exist between $q_E$ and $e$: more 
+suggests that non-trivial correlations exist between $q_E$ and $e$: more 
 entrainment occurs when $q_t$ is larger than the mean $q_t$ of the shell air, 
 and less when $q_t$ is smaller.
 
@@ -242,7 +257,7 @@ and less when $q_t$ is smaller.
 Here we derive a correction to equations (\ref{eq:siebesma_entrainment}) and 
 (\ref{eq:siebesma_detrainment}) to account for the presence of the moist cloud 
 shell and dry cloud edge, allowing us to convert between ($E_d, D_d$) and 
-($E_\phi, D_\phi$).  We start our derivation by modifying equation (5.1) from
+($E_\phi, D_\phi$).  We start our derivation by modifying equations (5.1) from
 \cite{Siebesma1995}:
 \begin{eqnarray}
   \label{eq:entrainment_derivation_1}
@@ -262,7 +277,7 @@ shell and dry cloud edge, allowing us to convert between ($E_d, D_d$) and
 \end{eqnarray}
 Here we have replaced $\phi_e$ in the entrainment term with $\phi_E$ and 
 $\phi_c$ in the detrainment term with $\phi_D$, where $\phi_E$ and $\phi_D$ are 
-the bulk tracer value of the air being entrained and detrained, respectively.
+the bulk tracer values of the air being entrained and detrained, respectively.
 
 Next we substitute into (\ref{eq:entrainment_derivation_1}) and
 (\ref{eq:detrainment_derivation_1}) the continuity equation for a cloud plume,
@@ -317,14 +332,14 @@ tracer calculation, the corrected $E_{q_t}$ values are still too large near
 cloud base.  However, the correction does duplicate the negative $D_{q_t}$ 
 values near cloud base that are typically produced by bulk tracer calculations.
 
-Including the effect of Reynolds correlations by using $q_E = (E q_t)_d/E_d$ 
-and $q_D = (D q_t)_d/D_d$ decreases the corrected $E_d$ and $D_d$ values even 
-further (Figure \ref{fig:Reynolds_correction}, b and c).  This reduces the 
-correction agreement with the bulk tracer calculation over most of the cloud 
-layer, but also reduces the large entrainment values near cloud base, improving 
-the overall shape of the fluxes.  Still, the entrainment values corrected by 
-$q_E$ and $q_D$ are about half the magnitude of the Siebesma bulk tracer 
-values.
+Also including the effect of correlations between entrainment and tracer values 
+by using $q_E = (E q_t)_d/E_d$ and $q_D = (D q_t)_d/D_d$ decreases the corrected 
+$E_d$ and $D_d$ values even further (Figure \ref{fig:Reynolds_correction}, b and 
+c).  This reduces the correction agreement with the bulk tracer calculation over 
+most of the cloud layer, but also reduces the large entrainment values near cloud 
+base, improving the overall shape of the fluxes.  Still, the entrainment values 
+corrected by $q_E$ and $q_D$ are about half the magnitude of the Siebesma bulk 
+tracer values.
 
 This overcorrection is the result of numerical errors due to the discrete 
 grid on which the LES fluxes are calculated.  To show this, we use alternate 
@@ -410,13 +425,14 @@ for the edge value of $w$.
 
 The source of these Reynolds fluxes, and the reason they affect $w$ more than 
 $q_t$ or $h$, can be seen by comparing instantaneous snapshots of the model 
-values $e$, $e_{q_t}$, and $e_w$.  Since \cite{Romps2010} method of calculating 
+values of mass entrainment $e$, moisture entrainment $e{q_t}$, and vertical 
+velocity entrainment $e{w}$.  Since the \cite{Romps2010} method of calculating 
 $e$ and $d$ requires long time averages over the period that the cloud surface
 is adjacent to a grid cell, it is unfortunately unsuitable for calculating 
-instantaneous fields.  Instead, we use an alternative method we have devised 
+instantaneous fields.  Instead, we use an alternative method that we have devised 
 that substitutes spatial interpolation for time averaging \citep{Dawe2011}.  
 This alternative method results in slightly smaller values of $e$ and $d$ than 
-are produced by Romps' method, but the two calculations show good agreement in 
+those produced by Romps' method, but the two calculations show good agreement in 
 variability. $eq_t$ and $ew$ are calculated simply by multiplying the value 
 of $e$ by the values of $q_t$ and $w$, respectively.
 
@@ -439,9 +455,9 @@ profiles.
 
 \subsection{Shell Variability}
 
-Finally we ask whether variability of the shell and edge properties has an 
-impact on the measured variability in the bulk tracer calculations of $E$ and 
-$D$.  To do this we turn to the ARM run, and simply look at the variability in 
+Finally we ask whether temporal variability of the shell and edge properties 
+has an impact on the bulk tracer calculations of $E$ and $D$.  To do this we 
+turn to the ARM run, and simply look at the temporal variability in 
 $A = (q_E - {q_t}_e)/({q_t}_c - {q_t}_e)$ and 
 $B = ({q_t}_c - q_D)/({q_t}_c - {q_t}_e)$.  These quantities indeed show 
 strong variability over the ARM diurnal cycle (Figure 
@@ -457,10 +473,10 @@ active player in the entrainment and detrainment fluxes.
 
 \section{Discussion and Conclusion}
 
-We have explained the differences between entrainment and detrainment values 
-calculated via bulk tracer budgets and direct flux calculations by taking into 
-account the properties of the cloud shell, the effect of Reynolds fluxes, and 
-differences in the numerical methods used by the two calculations.  This 
+We have explained the differences between values of entrainment and detrainment 
+of mass calculated via bulk tracer budgets and direct flux calculations by taking 
+into account the properties of the cloud shell, the effect of Reynolds fluxes, 
+and differences in the numerical methods used by the two calculations.  This 
 suggests that the presence of the moist cloud shell has a significant role in 
 mediating fluxes between the clouds and the environment and may be an important 
 factor in improving parameterizations of shallow convection.
