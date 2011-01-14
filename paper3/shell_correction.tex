@@ -461,11 +461,11 @@ same.  Furthermore, the Siebesma calculation neglects tracer diffusion.
 These effects are likely small, but the exact amount of error they 
 induce is difficult to evaluate.
 
-\cite{Romps2010} presents an alternate method of calculating bulk tracer
-budget entrainment and detrainment values (Romps' equations (11) and (12))
-using the direct mass and $\phi$ entrainment/detrainment rates and mean 
-profiles of $\phi_{core}$ and $\phi_{env}$ to calculate vertical advection 
-and time tendency budgets:
+\cite{Romps2010} presents an alternative to Siebesma method of calculating 
+bulk tracer budget entrainment and detrainment values (Romps' equations (11) 
+and (12)) which uses the direct mass and $\phi$ entrainment/detrainment rates 
+and mean profiles of $\phi_{core}$ and $\phi_{env}$ to calculate vertical
+advection and time tendency budgets:
 \begin{equation}
   \label{eq:romps_bulk_entrainment}
     E_{\phi R}(\phi_{core} - \phi_{env}) = \phi_{core}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
@@ -568,11 +568,11 @@ water moist static energy $h$ and vertical velocity $w$ with those produced
 using total specific moisture $q_t$.
 
 Liquid water moist static energy shows a similar relative distribution of 
-core, edge, shell, environment, entrain and detrain properties when compared 
-to $q_t$, indicating a tight coupling between these variables in the cloud
-dynamics.  Because these properties are so tightly coupled, the transformed 
-$E_{hT}$ and $D_{hT}$ values are nearly identical to the $E_{qT}$ and 
-$D_{qT}$ (not shown).
+core, edge, shell, environment, entrained, and detrained properties when 
+compared to $q_t$, indicating a tight coupling between these variables in 
+the cloud dynamics.  Because these properties are so tightly coupled, the
+transformed $E_{hT}$ and $D_{hT}$ values are nearly identical to the $E_{qT}$ 
+and $D_{qT}$ (not shown).
 
 Vertical velocity shows very different relative profiles compared to
 $q_t$ and $h$ (Fig. \ref{fig:Reynolds_correction_w}a).  There is a much wider spread in the $w$ values, with the shell having nearly zero vertical velocity 
@@ -750,9 +750,7 @@ values and local entrainment rates.  These correlations are the result of
 upward advection of negatively buoyant, humidity saturated air so that
 condensation causes latent heating, making the air buoyant and entraining it 
 into the core.  These effects suggest that the moist cloud shell has a
-significant role in mediating fluxes between the clouds and the environment 
-and may be an important factor in improving parametrization of shallow 
-convection.
+significant role in mediating fluxes between the clouds and the environment. 
 
 Direct entrainment and detrainment calculations should be used to help 
 improve our understanding of the dynamics of cloud mass exchanges and 
@@ -760,7 +758,9 @@ radial variation in cloud properties, with an eye to folding these effects
 into the simplest cloud parametrization possible.  This should include 
 using the behavior of various tracers to produce different $E$ and $D$ 
 values for $q_t$ and $h$ than for $w$, and possibly other cloud properties 
-as well.
+as well.  Doing so has the potential to improve GCM parametrization of the 
+magnitude and variability of mass and tracer exchanges between clouds and
+their environment.
 
 \begin{acknowledgment} 
 Support for this work was provided by the Canadian Foundation for Climate and 
