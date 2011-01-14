@@ -776,6 +776,137 @@ programming language.
 \ifthenelse{\boolean{dc}}
 {}
 {\clearpage}
+\begin{appendix}
+
+\section*{
+  \begin{center}Table of Entrainment Notation(Primary heading)\end{center}
+}
+
+\begin{table}[t]
+\caption{List of Symbols}\label{t1}
+\begin{center}
+\begin{tabular}{lllr}
+\hline\hline
+Symbol & Units & Definition & First Occurance\\
+\hline
+ $E$, $D$              
+    & kg m$^{-3}$ s$^{-1}$   
+    & Cloud core mass 
+    & Eq. (\ref{eq:continuity}) \\
+   && entrainment/detrainment rate & \\
+
+ $E_{\phi S}$, $D_{\phi S}$     
+    & kg m$^{-3}$ s$^{-1}$ 
+    & Mass entrainment/detrainment rate 
+    & Eqs. (\ref{eq:siebesma_entrainment}), (\ref{eq:siebesma_detrainment}) \\
+   && calculated using Siebesma bulk & \\
+   && tracer budget & \\
+
+ $e$, $d$              
+    & kg m$^{-3}$ s$^{-1}$   
+    & Local mass entrainment/detrainment rate
+    & Eq. (\ref{eq:romps_e_minus_d}) \\
+
+ $E_d$, $D_d$            
+    & kg m$^{-3}$ s$^{-1}$ 
+    & Cloud core mass entrainment/detrainment  
+    & \S 1 \\
+   && rate calculated directly from model & \\
+   && velocity and tracer fields & \\
+
+ $e\phi$,  $d\phi$
+    & [$\phi$] kg m$^{-3}$ s$^{-1}$   
+    & Local cloud core $\phi$  
+    & Eq. (\ref{eq:romps_ephi_minus_dphi}) \\
+   && entrainment/detrainment rate & \\
+
+ $(E \phi)_d$, $(D \phi)_d$
+    & [$\phi$] kg m$^{-3}$ s$^{-1}$ 
+    & Cloud core $\phi$ entrainment/detrainment
+    & \S 2 \\
+   && rate calculated directly from model & \\
+   && velocity and tracer fields & \\
+     
+ $E_{\phi T}$, $D_{\phi T}$
+    & kg m$^{-3}$ s$^{-1}$ 
+    & Cloud core mass entrainment/detrainment  
+    & Eqs. (\ref{eq:corrected_entrainment}), (\ref{eq:corrected_detrainment}) \\
+   && rate calculated by transforming a   & \\
+   && directly calculated value into an  & \\
+   && equivalent tracer budget value & \\
+     
+ $E_{d T}$, $D_{d T}$
+    & kg m$^{-3}$ s$^{-1}$ 
+    & Cloud core mass entrainment/detrainment 
+    & Eqs. (\ref{eq:corrected_entrainment2}), (\ref{eq:corrected_detrainment2}) \\
+   && rate calculated by transforming a tracer & \\
+   && budget value into an equivalent directly  & \\
+   && calculated value & \\
+
+ $E_{\phi R}$, $D_{\phi R}$     
+    & kg m$^{-3}$ s$^{-1}$ 
+    & Cloud core mass entrainment/detrainment
+    & Eqs. (\ref{eq:romps_bulk_entrainment}), (\ref{eq:romps_bulk_detrainment}) \\
+   && rate calculated using Romps & \\
+   && bulk tracer budget & \\
+
+ $\phi$    
+    & [$\phi$]            
+    & Any fluid tracer, such as $q_t$ (kg kg$^{-1}$), 
+    & \S 1 \\
+   && $h$ (J kg$^{-1}$), or $w$ (m s$^{-1}$) & \\
+
+ $\phi_{core}$    
+    & [$\phi$]            
+    & Mean cloud core $\phi$
+    & \S 3a \\
+
+ $\phi_{edge}$    
+    & [$\phi$]            
+    & Mean cloud edge $\phi$
+    & \S 3a \\
+
+ $\phi_{shell}$   
+    & [$\phi$]            
+    & Mean cloud shell $\phi$
+    & \S 3a \\
+
+ $\phi_{env}$     
+    & [$\phi$]            
+    & Mean environment $\phi$
+    & \S 3a \\
+
+ $\phi_{entrain}$ 
+    & [$\phi$]            
+    & Effective value of $\phi$ being entrained
+    & \S 3b \\
+   && calculated from direct entrainment& \\
+
+ $\phi_{detrain}$ 
+    & [$\phi$]            
+    & Effective value of $\phi$ being detrained
+    & \S 3b \\
+   && calculated from direct detrainment & \\
+
+ $\phi_E$         
+    & [$\phi$]            
+    & Placeholder for the value of $\phi$ 
+    & (\ref{eq:corrected_entrainment}) \\
+   && assumed to be entraining & \\
+
+ $\phi_D$         
+    & [$\phi$]            
+    & Placeholder for the value of $\phi$ 
+    & (\ref{eq:corrected_detrainment}) \\
+   && assumed to be detraining & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{appendix}
+
+
 
 % Create a bibliography directory and place your .bib file there.
 \ifthenelse{\boolean{dc}}
