@@ -538,6 +538,7 @@ by $\phi_{core}$:
 If diffusion is neglected, the tracer continuity equation can be 
 used to show that
 \begin{equation}
+    \label{tracer_budget_Ephi_minus_Dphi}
     (E\phi)_d - (D\phi)_d) = 
      \rho \frac{\partial (a \phi_{core})}{\partial t}
    + \frac{\partial (M_{core} \phi_{core})}{\partial z}
@@ -600,8 +601,9 @@ used to calculating vertical advection.  The Romps tracer budget, on the other h
 $((Eq_t)_d - (Dq_t)_d)$, terms which have nearly the same magnitude.  
 Because the magnitude of these terms is so similar, small relative errors in
 these terms can result in large relative errors when their difference is taken.
-Consider, for example, the tiny difference between the unaveraged direct and
-Siebesma $((Eq_t)_d - (Dq_t)_d)$ values (Fig. \ref{fig:numerical_error}b).
+Consider, for example, the tiny difference between the unaveraged direct 
+$((Eq_t)_d - (Dq_t)_d)$ and the Siebesma $((Eq_t)_d - (Dq_t)_d)$ calculated
+via (\ref{tracer_budget_Ephi_minus_Dphi}) (Fig. \ref{fig:numerical_error}b).
 Although the Siebesma tracer budget $((Eq_t)_d - (Dq_t)_d)$ differs only
 slightly from the unaveraged direct flux value, this results in a relatively
 large difference between the unaveraged direct tracer budget and Siebesma 
