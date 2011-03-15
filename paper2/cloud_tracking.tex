@@ -188,20 +188,23 @@ condensed points (if condensed points are present in the cloudlet) or plume
 (if they are not), multiplied by the time between model output saves.
 
 Four kinds of overlap are possible: condensed points in the cloudlet may 
-overlap condensed points in a previous time step cloud (condensed->condensed); 
-condensed points may overlap previous plume points (plume->cloud); plume may 
-overlap condensed points (condensed->plume); and plume may overlap plume 
-(plume->plume).  Several kinds of overlap may occur simultaneously, so we 
-define a heirarchy of connection types and check each in turn.  The strongest 
-connection type is condensed->condensed, followed by plume->condensed, then 
-plume->plume.  Condensed->plume connections are ignored, which prevents 
+overlap condensed points in a previous time step cloud 
+(condensed$\rightarrow$condensed); condensed points may overlap previous plume 
+points (plume$\rightarrow$condensed); plume may overlap condensed points 
+(condensed$\rightarrow$plume); and plume may overlap plume 
+(plume$\rightarrow$plume).  Several kinds of overlap may occur simultaneously, 
+so we define a heirarchy of connection types and check each in turn.  The 
+strongest connection type is condensed$\rightarrow$condensed, followed by 
+plume$\rightarrow$condensed, then plume$\rightarrow$plume.  
+Condensed$\rightarrow$plume connections are ignored, which prevents 
 connections between newly formed cloudlets and leftover plume from a 
-dissipating cloud.  Conversely, allowing plume->condensed connections lets us 
-associate newly condensed clouds with plumes rising through the sub-cloud 
-layer.  Only the strongest connection type present for a given cloudlet is 
-considered: if a cloudlet has condensed->condensed connections, any 
-condensed->plume or plume->plume connections are ignored, and if there are 
-condensed->plume connections, plume->plume connections are ignored.  
+dissipating cloud.  Conversely, allowing plume$\rightarrow$condensed 
+connections lets us associate newly condensed clouds with plumes rising through 
+the sub-cloud layer.  Only the strongest connection type present for a given 
+cloudlet is considered: if a cloudlet has condensed$\rightarrow$condensed 
+connections, any condensed$\rightarrow$plume or plume$\rightarrow$plume 
+connections are ignored, and if there are condensed$\rightarrow$plume 
+connections, plume$\rightarrow$plume connections are ignored.  
 
 A cloudlet may connect to more than one cloud, which is used to identify 
 merges and splits.  Any cloudlet which overlaps more than one previous time 
@@ -242,6 +245,8 @@ have isolated with our tracking algorithm for the BOMEX GCSS case.
 
 \section{Nature versus Nurture}
 TEXT
+
+Bonferroni Correction!!!
 
 \subsection{Cloudbase Properties}
 
@@ -355,14 +360,14 @@ simulation.}
 \includegraphics[width=\textwidth]{./figures/cloud_environment_schematic}
 \end{center}
 \caption{Schematic of encountered cloud environment calculation.}
-\label{fig:cloud_envionment_schematic}
+\label{fig:cloud_environment_schematic}
 \end{figure*}
 
 %f
 \begin{figure*}[t]
 \vspace*{2mm}
 \begin{center}
-\includegraphics[width=\textwidth]{./figures/cloud_environment_histograms}
+\includegraphics[width=\textwidth]{./figures/placeholder}
 \end{center}
 \caption{Histograms of encountered cloud environment.}
 \label{fig:cloud_envionment_histograms}
@@ -372,7 +377,7 @@ simulation.}
 \begin{figure*}[t]
 \vspace*{2mm}
 \begin{center}
-\includegraphics[width=\textwidth]{./figures/cloud_base_schematic}
+\includegraphics[width=\textwidth]{./figures/placeholder}
 \end{center}
 \caption{Schematic of cloud base correlation calculation.}
 \label{fig:cloud_base_schematic}
@@ -382,7 +387,7 @@ simulation.}
 \begin{figure*}[t]
 \vspace*{2mm}
 \begin{center}
-\includegraphics[width=\textwidth]{./figures/cloud_environment_histograms}
+\includegraphics[width=\textwidth]{./figures/placeholder}
 \end{center}
 \caption{Correlation profiles between cloud base and various cloud heights.}
 \label{fig:cloud_envionment_histograms}
@@ -418,37 +423,67 @@ Ends\\
 \end{table}
 
 %t
-\begin{table}[t]
-\caption{t-test Results}
-\vskip4mm
-\centering
-\begin{tabular}{llcr}
-\tophline
-Variable&Significance&Direction\\
-\middlehline
-$\q_t$ environment&n/a&n/a\\
-$\theta_l$ environment&95\%&n/a\\
-$\theta_v$ environment&99\%&n/a\\
-
-\bottomhline
-\end{tabular}
-\end{table}
-
-%% TWO-COLUMN TABLE
-
-%t
-%\begin{table*}[t]
-%\caption{TEXT}
+%\begin{table}[t]
+%\caption{t-test Results}
 %\vskip4mm
 %\centering
-%\begin{tabular}{column = lcr}
+%\begin{tabular}{lcccc}
 %\tophline
-
+%&Variable&t-test value&Significance&Direction\\
 %\middlehline
+%environment&&&\\
+%& $q_t$ & -1.33 & 81\% & n/a\\
+%& $q_n$ & 0.02 & 2\% & n/a\\
+%& tracer & 0.72 & 53\% & n/a\\
+%& $\theta_l$ & 2.53 & 98\% & $\downarrow$\\
+%& $\theta_v$ & 2.77 & 99.4\% & $\downarrow$\\
+%& $w$ & -4.99 & 99.9999\% & $\uparrow$\\
+%core&&&\\
+%& $q_t$ & 1.57 & 88\% & n/a \\
+%& $q_n$ & -0.04 &  3\% & n/a \\
+%& $\theta_l$ & -2.10 & 96\% & $\uparrow$ \\
+%& $\theta_v$ & -3.55 & 99.96\% & $\uparrow$ \\
+% $w$ & -4.21 & 99.997\% & $\uparrow$ \\
+%& $\chi_c$ & -5.14 & 99.99995\% & $\uparrow$ \\
+%& $a$ & -7.10 & 99.999999992\% & $\uparrow$ \\
 
 %\bottomhline
 %\end{tabular}
-%\end{table*}
+%\end{table}
+
+%% TWO-COLUMN TABLE
+
+t
+\begin{table*}[t]
+\caption{t-test results}
+\vskip4mm
+\centering
+\begin{tabular}{lccccccc}
+\tophline
+&&550-650 m&&650-750 m&&750-850 m& \\
+&Variable&t-test value&Significance&t-test value&Significance&t-test value&Significance\\
+
+\middlehline
+
+environment &&       &      &       &      &       & \\
+& $q_t$      & -2.12 & 96\% &  0.96 & 66\% &  2.42 & 98\% \\
+& $q_n$      &  0.57 & 43\% & -0.17 & 13\% &  1.33 & 81\% \\
+& tracer     & -0.81 & 58\% & -0.35 & 27\% &  0.22 & 17\% \\ 
+& $\theta_l$ &  1.49 & 86\% & -1.87 & 93\% & -2.80 & 99.4\% \\
+& $\theta_v$ &  0.45 & 34\% & -2.12 & 96\% & -2.45 & 98\% \\
+& $w$        &  6.45 & 99.999997\% &  3.57 & 99.96\% &  2.03 & 95\% \\
+core        &&       &          &       &      &       & \\
+& $q_t$      & -2.72 & 99.3\%   & -0.50 & 38\% & -1.25 & 78\% \\
+& $q_n$      & -2.76 & 99.4\%   &  0.08 & 6\%  & -0.82 & 58\% \\
+& $\theta_l$ &  2.94 & 99.6\%   &  1.15 & 74\% &  1.68 & 90\% \\
+& $\theta_v$ & -0.25 & 20\%     &  2.16 & 96\% &  1.28 & 79\% \\
+& $w$        &  2.54 & 98\%     &  3.37 & 99.91\% &  1.78 & 92\% \\
+& $\chi_c$   &  0.93 & 64\%     &  4.19 & 99.996\% &  0.69 & 51\% \\
+& $a$        &  4.31 & 99.997\% &  5.94 & 99.9999991\% &  6.00 & 99.9999992\% \\
+
+\bottomhline
+\end{tabular}
+\end{table*}
 
 
 %% The different columns must be seperated with a & command and should
