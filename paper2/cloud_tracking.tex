@@ -23,7 +23,8 @@
 \begin{document}
 
 
-\title{Something about cloud tracking}
+\title{Statistical analysis of a shallow cumulus LES ensemble using a 
+cloud tracking algorithm}
 
 
 \author[1]{Jordan T Dawe}
@@ -69,20 +70,22 @@ shallow cumulus cloud field based upon the Barbados Oceanographic and
 Meteorological Experiment (BOMEX), to calculate statistics of cloud 
 height, lifetime, and other physical properies for individual clouds 
 in the model.  We also examine the question of nature versus nurture 
-in cloud fields: do cloud-base properties determine the properties 
-of the clouds (nature), or are cloud properties determined by the 
-environmental conditions they encounter (nurture).  We find that clouds 
-which ascend through an environment that has been pre-moistened by 
-previous cloud activity are no more likely to reach the inversion than 
-clouds that ascend through a drier environment.  Conversely, we find 
-that cloud base moisture and liquid-water potential temperature are 
-largely uncorrelated with cloud properties, but that the area of the 
-cloud base exerts strong controls over cloud buoyancy, vertical velocity, 
-and maximum cloud height.
+in shallow cumulus cloud fields: do properties at cloud-base determine 
+the upper-level properties of the clouds (nature), or are cloud properties 
+determined by the environmental conditions they encounter (nurture).  
+We find that clouds which ascend through an environment that has been 
+pre-moistened by previous cloud activity are no more likely to reach 
+the inversion than clouds that ascend through a drier environment.  
+Conversely, we find that cloud base moisture and liquid-water potential 
+temperature are largely uncorrelated with upper-level cloud properties, 
+but that the area of the cloud base exerts strong controls over cloud 
+buoyancy, vertical velocity, and maximum cloud height.  We conclude 
+that cloud properties are primarily controlled by cloud-base area, and thus
+nature is more important than nurture for shallow cumulus clouds.
 \end{abstract}
 
 
-%% only used for copernicus2.cls
+%% only used for copernicus2.clsu
 %\abstract{
 % TEXT
 % \keywords{TEXT}}
@@ -344,13 +347,23 @@ simulation.}
 \end{figure*}
 
 %f
-\begin{figure}[t]
+\begin{figure*}[t]
 \vspace*{2mm}
 \begin{center}
-\includegraphics[width=8.3cm]{./figures/cloud_stats}
+\includegraphics[width=\textwidth]{./figures/cloud_stats}
 \end{center}
 \caption{Histograms of cloud lifetimes and heights.}
 \label{fig:cloud_stats}
+\end{figure*}
+
+%f
+\begin{figure}[t]
+\vspace*{2mm}
+\begin{center}
+\includegraphics[width=8.3cm]{./figures/cloud_areas}
+\end{center}
+\caption{Cloud size density}
+\label{fig:cloud_areas}
 \end{figure}
 
 %f
@@ -377,20 +390,40 @@ simulation.}
 \begin{figure*}[t]
 \vspace*{2mm}
 \begin{center}
-\includegraphics[width=\textwidth]{./figures/placeholder}
+\includegraphics[width=\textwidth]{./figures/cloud_base_schematic}
 \end{center}
 \caption{Schematic of cloud base correlation calculation.}
 \label{fig:cloud_base_schematic}
 \end{figure*}
 
 %f
+\begin{figure}[t]
+\vspace*{2mm}
+\begin{center}
+\includegraphics[width=8.3cm]{./figures/sub_cloud_profiles}
+\end{center}
+\caption{Correlation profiles between sub-cloud properties and various cloud heights.}
+\label{fig:sub_cloud_profiles}
+\end{figure}
+
+%f
 \begin{figure*}[t]
 \vspace*{2mm}
 \begin{center}
-\includegraphics[width=\textwidth]{./figures/placeholder}
+\includegraphics[width=\textwidth]{./figures/cloud_base_profiles}
 \end{center}
 \caption{Correlation profiles between cloud base and various cloud heights.}
-\label{fig:cloud_envionment_histograms}
+\label{fig:cloud_base_profiles}
+\end{figure*}
+
+%f
+\begin{figure*}[t]
+\vspace*{2mm}
+\begin{center}
+\includegraphics[width=\textwidth]{./figures/750m_profiles}
+\end{center}
+\caption{Correlation profiles between 750m properties and various cloud heights.}
+\label{fig:750m_profiles}
 \end{figure*}
 
 
@@ -408,15 +441,15 @@ simulation.}
 \tophline
 &&BOMEX\\
 \middlehline
-Total Clouds&&1183\\
+Total Clouds&&1480\\
 Starts\\
-&Broken&59\\
-&Split&339\\
-&New&785\\
+&Broken&64\\
+&Split&539\\
+&New&877\\
 Ends\\
-&Broken&39\\
-&Merge&51\\
-&Decay&1093\\
+&Broken&56\\
+&Merge&91\\
+&Decay&1333\\
 
 \bottomhline
 \end{tabular}
