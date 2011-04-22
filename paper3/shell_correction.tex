@@ -2,8 +2,9 @@
 % PREAMBLE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% The following two commands will generate a PDF that follows all the requirements for submission
-% and peer review.  Uncomment these commands to generate this output (and comment out the two lines below.)
+% The following two commands will generate a PDF that follows all the 
+% requirements for submission and peer review.  Uncomment these commands 
+% to generate this output (and comment out the two lines below.)
 %
 % DOUBLE SPACE VERSION FOR SUBMISSION TO THE AMS
 \documentclass[12pt]{article}
@@ -11,9 +12,10 @@
 \usepackage[pagewise]{lineno}
 \linenumbers
 %
-% The following two commands will generate a single space, double column paper that closely
-% matches an AMS journal page.  Uncomment these commands to generate this output (and comment
-% out the two lines above. FOR AUTHOR USE ONLY. PAPERS SUBMITTED IN THIS FORMAT WILL BE RETURNED
+% The following two commands will generate a single space, double column 
+% paper that closely matches an AMS journal page.  Uncomment these commands 
+% to generate this output (and comment out the two lines above. FOR AUTHOR 
+% USE ONLY. PAPERS SUBMITTED IN THIS FORMAT WILL BE RETURNED
 % TO THE AUTHOR for submission with the correct formatting.
 %
 % TWO COLUMN JOURNAL PAGE LAYOUT FOR AUTHOR USE ONLY
@@ -26,19 +28,21 @@
 % Enter your Abstract here
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\myabstract}{
-Direct measurements of rates of entrainment into and detrainment from cloud 
-cores obtained from LES model cloud fields produce values twice as large as 
-those produced from bulk conserved tracer budget calculations.  This difference 
+Direct measurements of rates of entrainment into and detrainment from cumulus 
+cloud cores obtained from LES model cloud fields produce values twice as large 
+as those produced from total water budget calculations.  This difference 
 can be explained by three effects: the presence of a shell of moist air around 
-the cloud cores and drier air at the edge of the cloud core, correlations 
-between entrainment rates and tracer values, and errors in the calculation of 
-the bulk tracer budget.  Correlations between the vertical momentum and the 
-entrainment rate create strong vertical momentum fluxes into the cloud core,
-making the assumption that clouds entrain fluid with zero vertical momentum
-incorrect.  Variability in the properties of the moist cloud shell has strong
-impacts on entrainment values inferred from bulk tracer calculations.  These
-results indicate the dynamics of the cloud shell should be included in 
-parametrization of cumulus clouds used in general circulation models.
+the cloud cores and drier air at the edge of the cloud core, the tendency for
+the mean tracer values of the entrained fluid to be greater than the mean 
+tracer value of the cloud shell, and numerical errors in the calculation of the 
+tracer budget.  Preferential entrainment of shell air that is moving upward 
+faster than the mean shell creates strong vertical momentum fluxes into the 
+cumulus cloud core, making the assumption that cumulus clouds entrain fluid 
+with zero vertical momentum incorrect.  Variability in the properties of the 
+moist cloud shell has strong impacts on entrainment values inferred from 
+tracer budget calculations.  These results indicate the dynamics of the cloud 
+shell should be included in parametrization of cumulus clouds used in general 
+circulation models.
 }
 %
 \begin{document}
@@ -48,18 +52,18 @@ parametrization of cumulus clouds used in general circulation models.
 %
 % Enter your TITLE here
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{\textbf{\large{The influence of the cloud shell on bulk tracer 
+\title{\textbf{\large{The influence of the cloud shell on tracer budget 
 measurements of LES cloud entrainment}}}
 %
 % Author names, with corresponding author information. 
 % [Update and move the \thanks{...} block as appropriate.]
 %
 \author{\textsc{Jordan T Dawe}
-				\thanks{\textit{Corresponding author address:} 
+		\thanks{\textit{Corresponding author address:} 
 				Jordan T Dawe, Department of Earth and Ocean Sciences, 
-                                University of British Columbia, 6339 Stores Road,
-                                Vancouver, BC, V6T 1Z4, Canada.
-				\newline{E-mail: jdawe@eos.ubc.ca}}\quad\textsc{and Philip H Austin}\\
+                University of British Columbia, 6339 Stores Road,
+                Vancouver, BC, V6T 1Z4, Canada.
+		\newline{E-mail: jdawe@eos.ubc.ca}}\quad\textsc{and Philip H Austin}\\
 \textit{\footnotesize{Department of Earth and Ocean Sciences, University of 
                       British Columbia, Vancouver, BC, Canada.}}
 }
@@ -99,34 +103,58 @@ measurements of LES cloud entrainment}}}
 
 The rate at which air is entrained into and detrained from cumulus clouds 
 affects cloud properties, cloud top height, and vertical transports of heat 
-and moisture.  Proper simulation of these sub-grid scale effects in General 
+and moisture.  Proper simulation of cumulus sub-grid scale fluxes in General 
 Circulation Models (GCM) depends on the accurate parametrization of 
 entrainment of environmental tracer properties into the clouds and detrainment 
 of cloud properties into the environment 
 \citep{Bechtold2008, De_Rooy2010}.  
 
-Entrainment and detrainment rates impact GCM parametrization in several ways.
+Entrainment and Detrainment may be defined mathematically as
+\begin{subequations}
+ \label{eq:ED_theoretical}
+\begin{equation}
+E = -\frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) < 0}
+\rho\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\end{equation}
+\begin{equation}
+D = \frac{1}{A}\oint_{\mathbf{\hat{n}}\cdot(\mathbf{u} - \mathbf{u_i}) > 0}
+\rho\mathbf{\hat{n}}\cdot(\mathbf{u}-\mathbf{u_i})dl
+\end{equation}
+\end{subequations}
+where $E$ and $D$ are the entrainment and detrainment rates in kg m$^{-3}$ 
+s$^{-1}$, $\rho$ is the density of air in kg m$^{-3}$ s$^{-1}$, $\mathbf{u}$ is 
+the velocity of the air in m s$^{-1}$, $\mathbf{u_i}$ is the velocity of the 
+cloud surface in m s$^{-1}$, A is the area of the cloud in m$^2$, 
+$\mathbf{\hat{n}}$ is a unit vector directed out the cloud surface, and the 
+path integral is taken around the cloud surface at a constant vertical level 
+\citep{Siebesma1998}.  Entrainment and detrainment are thus caused by 
+differences between the motion of the cloud surface and the motion of the air.  
+This includes not just mixing processes, but also adiabatic processes such as 
+condensation of fluid at cloud base.  Many parameterizations use cloud core as 
+the region over which to consider entrainment and detrainment, defined as
+regions having condensed liquid water, positive buoyancy, and upward vertical
+velocity.  In this case, the motion of the cloud core surface is simply 
+substituted for the motion of the cloud surface in equations 
+(\ref{eq:ED_theoretical}).
+
+Entrainment and detrainment rates impact GCM parametrizations in several ways.
 First, profiles of cloud vertical mass flux are usually calculated from 
 parametrized entrainment values using the continuity equation for a 
-simple entraining plume:
+simple entraining plume to represent an ensemble of cumulus clouds:
 \begin{equation}
    \label{eq:continuity}
    \rho \frac{\partial a}{\partial t} 
    + \frac{\partial M_{core}}{\partial z} = E - D.
 \end{equation}
-Here $\rho$ is the
-density of the air in kg m$^{-3}$; $a$ is the fractional cloud core area
-(where cloud core is defined as
-regions having condensed liquid water, positive buoyancy, and upward vertical
-velocity); $M_{core}$ is vertical cloud core
-mass flux (kg m$^{-2}$ s$^{-1}$) and $E$ and $D$ are mass entrainment
-and detrainment rates (kg m$^{-3}$ s$^{-1}$). 
+Here $a$ is the fractional cloud core area  and $M_{core}$ is vertical cloud core
+mass flux (kg m$^{-2}$ s$^{-1}$). 
 
-The point where the mass flux profile goes to zero then defines the location 
-of cloud top.  This mass flux profile is combined with the entrainment rate 
-of environmental air into the cloud to generate vertical profiles of cloud
-moisture and temperature, and these profiles are then used to calculate the
-moistening of the environment by detrainment of cloud fluid 
+The level where the mass flux profile goes to zero then defines the location 
+of the cloud ensemble top.  This mass flux profile is combined with the 
+entrainment rate of environmental air into the cloud and the detrainment rate 
+of cloud air into the envrionment to generate vertical profiles of cloud 
+water vapor, condensate, and temperature, and these profiles are then used to 
+calculate the moistening of the environment by detrainment of cloud fluid 
 \citep{Tiedtke1989, Kain1990}.  Precipitation rates are also generated from the
 mass flux and tracer profiles produced from the entrainment and detrainment
 profiles.  The wide range of effects that the entrainment and detrainment have
@@ -134,16 +162,17 @@ make entrainment rate one of the strongest controls on the climate sensitivity
 of GCMs \citep{Stainforth2005, Rougier2009}.
 
 Large Eddy Simulation (LES) is the primary tool used to study cloud entrainment
-and detrainment rates.  LES mass entrainment and detrainment rates are typically
-calculated using budgets of bulk conserved tracer variables to infer the amount
-of fluid exchange between the clouds and the surrounding air.  
+and detrainment rates.  LES mass entrainment and detrainment rates are 
+typically obtained using budgets of conserved tracer variables to infer the 
+amount of fluid exchange between the cloud ensemble and the surrounding air.  
 \cite{Siebesma1995} derive the following equations for entrainment and
-detrainment of mass from a cloud core plume:
+detrainment of mass from the ensemble of cloud core plumes:
 \begin{subequations}
   \label{eq:siebesmaED}
 \begin{equation}
   \label{eq:siebesma_entrainment}
-    E_{\phi S}(\phi_{core} - \phi_{env}) = - M_{core} \frac{\partial \phi_{core}}{\partial z}
+    E_{\phi S}(\phi_{core} - \phi_{env}) = 
+        - M_{core} \frac{\partial \phi_{core}}{\partial z}
         - \frac{\partial \rho a \overline{w' \phi'}^{core}}{\partial z}
         - \rho a \frac{\partial \phi_{core}}{\partial t}
         + a \rho \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}
@@ -151,26 +180,26 @@ detrainment of mass from a cloud core plume:
 and
 \begin{equation}
   \label{eq:siebesma_detrainment}
-    D_{\phi S}(\phi_{core} - \phi_{env}) = - M_{core} \frac{\partial \phi_{env}}{\partial z}
+    D_{\phi S}(\phi_{core} - \phi_{env}) = 
+        - M_{core} \frac{\partial \phi_{env}}{\partial z}
         + \frac{\partial \rho (1 - a) \overline{w' \phi'}^{env}}{\partial z}
         + \rho (1-a) \frac{\partial \phi_{env}}{\partial t}
      - \rho (1-a) \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}
 \end{equation}
 \end{subequations}
-Where $\phi$ (with units denoted by $[\phi]$) represents any conserved
-bulk tracer, such as the total specific humidity $q_t$ (kg water
-kg$^{-1}$ moist air) or the liquid-water moist static energy $h$ (J
-kg$^{-1}$); $w$ is vertical velocity (m
-s$^{-1}$); $env$ and $core$ sub-and super-scripts denote horizontally
+Where $\phi$ (with units denoted by $[\phi]$) represents any conserved tracer, 
+such as the total specific humidity $q_t$ (kg water kg$^{-1}$ moist air) or the 
+liquid-water moist static energy $h$ (J kg$^{-1}$); $w$ is vertical velocity 
+(m s$^{-1}$); $env$ and $core$ sub-and super-scripts denote horizontally
 averaged values conditionally sampled in the cloud environment and
 core; $forcing$ refers to tracer sources and sinks, such as radiation
 or subsidence, not included in the other terms; primed values
 represent anomalies relative to the horizontal mean; overbars
-represent horizontal averaging; and $E_{\phi S}(z)$ and $D_{\phi
-  S}(z)$ are the total mass entrainment into and detrainment from the
-cloud core inferred from the bulk tracer budget, in kg s$^{-1}$
+represent horizontal averaging; and $E_{\phi S}(z)$ and 
+$D_{\phi S}(z)$ are the total mass entrainment into and detrainment from the
+cloud core inferred from the tracer budget, in kg s$^{-1}$
 m$^{-3}$.  We use the $S$ subscript to differentiate $E$ and $D$
-calculated via the Siebesma bulk tracer budget method from other
+calculated via the Siebesma tracer budget method from other
 measures of mass exchanges, and we shall refer to values calculated by
 this method as ``Siebesma tracer budget" entrainment and detrainment.
 For convenience, the various tracer and entrainment/detrainment rate subscripts 
@@ -190,8 +219,7 @@ fields.  His equation (2) is:
         + \nabla \cdot (\rho \mathbf{u} \mathcal{A}) 
 \end{equation}
 Here $\mathcal{A}$ is the ``activity'' of the fluid, where
-$\mathcal{A}$ is one at cloud core points and zero otherwise, and
-$\mathbf{u}$ is the velocity of the air in m s$^{-1}$.  The values of
+$\mathcal{A}$ is one at cloud core points and zero otherwise.  The values of
 $e - d$ are averaged over the time that a grid cell experiences mass
 fluxes between an active and an inactive point, then positive $e-d$
 values are considered to be purely $e$, and negative values, $d$.  As
@@ -199,35 +227,35 @@ noted above, we shall refer to entrainment and detrainment values
 calculated by this method as ``direct" $E$ and $D$ and denote them
 with the subscript $d$.
 
-Romps found that direct calculation of the entrainment and
+Romps found that such direct calculation of the entrainment and
 detrainment mass fluxes produced values roughly twice as large as
 the Siebesma tracer budget calculations.  Romps attributed this difference
-to the Siebesma tracer budget calculation assumption that fluid
-exchanged between clouds and environment has the mean properties of
-the cloud or environment, respectively.  Recent studies of the dense,
-descending shell of moist air that forms around trade-wind cumulus
-clouds \citep{Heus2008, Wang2010} suggest that the cloud shell
-properties are quite different than the core or environment
-properties, bolstering Romps' hypothesis.  Since fluid exchanges
+to the Siebesma tracer budget calculation assumption that fluid exchanged 
+between clouds and environment has the mean properties of the cloud or 
+environment at that level, respectively.  Studies of the dense, descending 
+shell of moist air that forms around trade-wind cumulus clouds 
+\citep{Jonas1990, Rodts2003, Heus2008, Jonker2008, Heus2009, Wang2010} suggest 
+that the cloud shell properties are quite different than the core or 
+environment properties, bolstering Romps' hypothesis.  Since fluid exchanges
 between clouds and environment must pass through this shell, it is
 likely that it plays an important role in entrainment and detrainment
 dynamics.
 
 Below we examine the sources of the discrepancy in entrainment and
-detrainment values calculated via bulk tracer budgets and directly
-from model fluxes.  We show that the discrepancy is explained by three
-effects: the presence of the shell of moist air around the cloud cores
-and drier air at the edge of the cloud core, correlations between
-local entrainment rates and tracer values which enhance tracer fluxes
-between the clouds and the environment, and errors in the calculation
-of the bulk tracer budget.  We derive a relation to transform the
-``direct" entrainment flux values into ``Siebesma tracer budget"
-values suitable for use in one-dimensional simple entraining plume
+detrainment values calculated via tracer budgets and directly
+using (\ref{eq:romps_e_minus_d}).  We show that the discrepancy is explained by 
+three effects: the presence of the shell of moist air around the cloud cores
+and drier air at the edge of the cloud core, preferential entrainment of shell 
+air with higher average humidity and upward velocity than the mean shell 
+proterties which enhances tracer fluxes between the clouds and the environment, 
+and errors in the calculation of the tracer budget.  We derive a relation 
+to transform the ``direct" entrainment flux values into ``Siebesma tracer 
+budget" values suitable for use in one-dimensional simple entraining plume
 cloud parametrizations, and then use these transformed fluxes to
-evaluate the impact of the shell on bulk tracer entrainment and
+evaluate the impact of the shell on tracer budget entrainment and
 detrainment rates of specific humidity and vertical velocity.  Finally, we
-examine the dynamics that drives the strong correlations we find
-between entrainment rate, specific humidity, and vertical velocity.
+examine the dynamics that drives the preferential entrainment of air with 
+higher than average specific humidity and vertical velocity.
 
 %===================================================
 
@@ -249,7 +277,7 @@ We have implemented the entrainment calculation scheme of \cite{Romps2010} in
 SAM, allowing us to calculate the mass of air entrained into and detrained from
 cloud core directly from model $\rho$, $\mathbf{u}$, and $\mathcal{A}$.  
 \citet[eq. 4]{Romps2010} also presents a method for calculating local 
-entrainment and detrainment rates for any model bulk variable in the same
+entrainment and detrainment rates for any model variable in the same
 framework as (\ref{eq:romps_e_minus_d}), but neglects forcing and diffusion
 terms.  These terms are significant for quantities like vertical momentum, so 
 we modify Romps' equation to include their effects:
@@ -257,50 +285,66 @@ we modify Romps' equation to include their effects:
   \label{eq:romps_ephi_minus_dphi}
   e\phi - d\phi = \frac{\partial}{\partial t}(\phi \mathcal{A} \rho) 
                 + \nabla \cdot (\phi \rho \mathbf{u} \mathcal{A})
-                - \rho \mathcal{A}S_\phi
+                - \rho \mathcal{A}S_\phi.
 \end{equation}
 where $S_\phi$ is any non-advective source or sink term for $\phi$, such as 
-precipitation for $q_t$ or radiation for $h$, in units of $[\phi]$ s$^{-1}$.  
+precipitation for $q_t$ or pressure gradient for $w$, in units of $[\phi]$ 
+s$^{-1}$.  The inclusion of these source/sink terms allows us to expand the 
+definition of $\phi$ to include non-conserved fluid properties.
 
 As with equation (\ref{eq:romps_e_minus_d}), the local $(e\phi)(x,y,z)$
-and $(d\phi)(x,y,z)$ must be horizontally summed to give the total
-tracer entrained into or detrained out of the cloud ensemble, but
-since $\phi$ can be negative, it is possible for entrainment to reduce
-and for detrainment to increase the quantity of tracer in the cloud
-core.  To accommodate this effect, if the average value of $\phi$ is
-positive over the time that a grid cell experiences mass fluxes
-between an active and an inactive point, then positive $e\phi-d\phi$
-values are considered to be purely $e\phi$, and negative
-values, $d\phi$.  However, if the average of $\phi$ is
-negative, then positive $e\phi-d\phi$ values are considered to be
-purely $(d\phi)(x,y,z)$, and negative values, $(e\phi)(x,y,z)$.
-Horizontal summation of $(e\phi)$ and $(d\phi)$ then gives
-$(E\phi)_d(z)$ and $(D\phi)_d(z)$, the total entrainment and
-detrainment of tracer for the cloud ensemble in units of $[\phi]$ kg s$^{-1}$
-m$^{-3}$ calculated directly from the model velocity and tracer fields.
+and $(d\phi)(x,y,z)$ must be horizontally summed to give the total entrainment 
+into or detrainment out of the cloud ensemble for any fluid property, but
+since $\phi$ can be negative for properties like vertical velocity, it is 
+possible for entrainment to reduce and for detrainment to increase the 
+various properties of the cloud core.  To accommodate this effect, if the 
+average value of $\phi$ is positive over the time that a grid cell experiences 
+mass fluxes between an active and an inactive grid cell, then positive 
+$e\phi-d\phi$ values are considered to be purely $e\phi$, and negative values, 
+$d\phi$.  However, if the average of $\phi$ is negative, then positive 
+$e\phi-d\phi$ values are considered to be purely $(d\phi)(x,y,z)$, and negative 
+values, $(e\phi)(x,y,z)$.
+
+The obvious way to calculate the average value of $\phi$ is to perform a 
+flux-weighted calculation, so that $\phi = (e\phi - d\phi)/(e - d)$.  However,
+doing so for positive definite quantities, such as $q_t$, sometimes results in 
+negative $\phi$.  The see the reason for this, consider a situation 
+where $(e - d)$ integrated over the period of activity is found to be slightly 
+bigger than zero for a grid cell.  The Romps algorithm would assign $E$ to a 
+small value and $D$ to be zero, but in reality the problem is unconstrained; as 
+long as $E \approx D$, the net flux measured by the algorithm would be 
+satisfied.  At the same time, $E q_t - D q_t$ is found to be negative, due to 
+$E$ and $D$ having similar magnitues but the detraining $q_t$ being larger 
+than the entraining $q_t$.  In this case, $(E q_t - D q_t)/(E-D)$ will be 
+negative, even though $q_t$ is always positive.  To avoid this problem, we 
+calculate $\phi$ as a simple time average for the purpose of determining if 
+$e\phi-d\phi$ is assigned to $e\phi$ or to $d\phi$.  Horizontal summation of 
+$(e\phi)$ and $(d\phi)$ then gives $(E\phi)_d(z)$ and $(D\phi)_d(z)$, the total 
+entrainment and detrainment of a property for the cloud ensemble in units of 
+$[\phi]$ kg s$^{-1}$ m$^{-3}$ calculated directly from the model velocity and 
+property fields.
 
 %===================================================
 
-\section{Relationship Between Direct and Bulk Tracer Budget Entrainment}
+\section{Relationship Between Direct and Tracer Budget Entrainment}
 
-\cite{Romps2010} established that the direct estimate of mass
-entrainment and detrainment yields values roughly twice the size of
-those calculated via bulk tracer budgets.  Furthermore, examination of
-the ratios of the Siebesma tracer budget mass entrainment and detrainment
-calculated via a total specific water budget ($E_{qS}$, $D_{qS}$) to the
-directly calculated values ($E_d$, $D_d$) over the diurnal cycle of an
-ARM LES reveals significant changes over the course of the day
-(Fig.~\ref{fig:entrainment_ratio_variability}).  Thus the bulk tracer
-and direct measurements of $E$ and $D$ are not only significantly
+\cite{Romps2010} established that the direct estimate of mass entrainment and 
+detrainment yields values roughly twice the size of those calculated via 
+conserved tracer budgets.  Furthermore, examination of the ratios of the 
+Siebesma mass entrainment and detrainment calculated via a total specific water 
+budget ($E_{qS}$, $D_{qS}$) to the directly calculated values ($E_d$, $D_d$) 
+over the diurnal cycle of an ARM LES reveals significant changes over the 
+course of the day (Fig.~\ref{fig:entrainment_ratio_variability}).  Thus, the 
+tracer and direct measurements of $E$ and $D$ are not only significantly
 different, but have differing dynamics, which may need to be be accounted for
 in large-scale parametrizations that account for entrainment and
 detrainment.  In this section we examine the sources of disagreement
 between direct and Siebesma tracer budget estimates of mass
 entrainment into and detrainment from the cloud core. We first
 consider the different assumptions about tracer values in the cloud
-core and environment, then look at correlations between
+core and environment, then look at relationships between
 entrainment/detrainment and tracer values and the different numerical
-approximations made in the two budget calculations.
+approximations made in the Siebesma tracer budget and direct calculations.
 
 %---------------------------------------------------
 
@@ -312,8 +356,8 @@ fluid entrained or detrained has the properties of the mean
 environment or cloud core, respectively.  The fact that the mean core
 and environment properties are not representative of entraining and
 detraining fluid is shown in Fig. \ref{fig:Shell_correction}a. If we
-examine the specific humidity of the fluid at the ``cloud core edge"
-(cloud core model grid cells that are nearest-neighbor adjacent to
+examine the horizontal mean specific humidity of the fluid at the ``cloud core 
+edge" (cloud core model grid cells that are nearest-neighbor adjacent to
 non-core cells), which presumably is the fluid being detrained, we see
 it is drier than the mean core.  Similarly, the fluid just outside the
 cloud core in the ``cloud core shell" (non-core model grid cells that
@@ -323,98 +367,86 @@ entrainment is moister than the mean environment.
 Budget equations that explicitly distinguish between the the moist
 cloud shell and dry cloud edge allow us to transform ($E_d, D_d$)
 values into equivalent Siebesma tracer budget values ($E_{\phi S},
-D_{\phi S}$) and back again.  We start our derivation by modifying
-equations (5.1) from \cite{Siebesma1995}:
-\begin{eqnarray}
-  \label{eq:entrainment_derivation_1}
-    \rho \frac{\partial a \phi_{core}}{\partial t} 
-    = - \frac{\partial M_{core} \phi_{core}}{\partial z} 
-    + E_d \phi_E - D_d \phi_D
-    - \frac{\partial \rho a \overline{w' \phi'}^{core}}{\partial z} 
-    + a \rho \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}
-\end{eqnarray}
-\begin{eqnarray}
-  \label{eq:detrainment_derivation_1}
-    \rho \frac{\partial (1 - a) \phi_{env}}{\partial t}
-    = \frac{\partial M_{core} \phi_{env}}{\partial z} 
-    - E_d \phi_E + D_d \phi_D
-    - \frac{\partial \rho (1 - a) \overline{w' \phi'}^{env}}{\partial z} 
-    + \rho (1 - a) \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}.
-\end{eqnarray}
-Here we have replaced $\phi_{env}$ in the original entrainment term with $\phi_E$ and 
-$\phi_{core}$ in the detrainment term with $\phi_D$, where $\phi_E$ and $\phi_D$
-are the tracer values of the air being entrained and detrained, respectively.
-
-Next we substitute equation (\ref{eq:continuity}), the continuity equation 
-for a cloud plume, into (\ref{eq:entrainment_derivation_1}) 
-and (\ref{eq:detrainment_derivation_1}) and using the chain rule write
-\begin{eqnarray}
-  \label{eq:entrainment_derivation_2}
-    E_d (\phi_{core} - \phi_E) - D_d (\phi_{core} - \phi_D)
-    = M_{core} \frac{\partial \phi_{core}}{\partial z}
-    + \frac{\partial \rho a \overline{w' \phi'}^{core}}{\partial z} 
-    + \rho a \frac{\partial \phi_{core}}{\partial t}
-    - a \rho \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}
-\end{eqnarray}
-\begin{eqnarray}
-  \label{eq:detrainment_derivation_2}
-    D_d (\phi_D - \phi_{env}) - E_d (\phi_E - \phi_{env})
-    = - M_c \frac{\partial \phi_{env}}{\partial z}
-    + \frac{\partial \rho (1 - a) \overline{w' \phi'}^{env}}{\partial z} 
-    + \rho (1 - a) \frac{\partial \phi_{env}}{\partial t}
-    - \rho (1 - a) \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}.
-\end{eqnarray}
-
-We then substitute in (\ref{eq:siebesmaED})
-for the bulk tracer tendency terms and 
-rearrange to get:
+D_{\phi S}$) and back again.  We start our derivation with the observation 
+that both the tracer budget and direct value of $E$ and $D$ are consistent 
+with the continuity equation (equations \ref{eq:continuity} and 
+\ref{eq:romps_e_minus_d}).  This implies that 
+\begin{equation}
+  E_{\phi} - D_{\phi} = E_d - D_d.
+\end{equation}
+Similarily, the entrainment and detrainment rates of water must be consistent 
+with the total water budget, giving us
+\begin{equation}
+  E_{\phi} \phi_{env} - D_{\phi} \phi_{core} = E_d \phi_E - D_d \phi_D.
+\end{equation}
+Combining these equations and solving for $E_{\phi}$ and $D_{\phi}$ in turn 
+results in:
 \begin{subequations}
   \label{eq:correctedED}
 \begin{equation}
   \label{eq:corrected_entrainment}
     E_{\phi T} = E_d 
-             - \left[E_d\frac{(\phi_E - \phi_{env})}{(\phi_{core} - \phi_{env})}
-                   + D_d\frac{(\phi_{core} - \phi_D)}{(\phi_{core} - \phi_{env})}\right]
+             - \left[E_d\frac{(\phi_E - \phi_{env})}
+                             {(\phi_{core} - \phi_{env})}
+                   + D_d\frac{(\phi_{core} - \phi_D)}
+                             {(\phi_{core} - \phi_{env})}\right]
 \end{equation}
 \begin{equation}
   \label{eq:corrected_detrainment}
     D_{\phi T} = D_d
-             - \left[E_d\frac{(\phi_E - \phi_{env})}{(\phi_{core} - \phi_{env})}
-                   + D_d\frac{(\phi_{core} - \phi_D)}{(\phi_{core} - \phi_{env})}\right].
+             - \left[E_d\frac{(\phi_E - \phi_{env})}
+                             {(\phi_{core} - \phi_{env})}
+                   + D_d\frac{(\phi_{core} - \phi_D)}
+                             {(\phi_{core} - \phi_{env})}\right].
 \end{equation}
 \end{subequations}
-The bracketed terms represent the bias introduced by assuming that
-entrained/detrained air has the properties of the mean environment and
+Here we have added the $T$ subscript to the $E_{\phi T}$ and $D_{\phi T}$ terms 
+to denote that these values are equivalent to Siebesma tracer budget values,
+but have been calculated by transforming the direct entrainment and detrainment 
+values.  We shall refer to these values as ``transformed" entrainment and 
+detrainment.  The bracketed terms represent the bias introduced by assuming 
+that entrained/detrained air has the properties of the mean environment and
 core.  Thus, to convert from ($E_d$,$D_d$) to ($E_{\phi T}$, $D_{\phi  T}$), 
 both $E_d$ and $D_d$ must be reduced by $E_d A + D_d B$, where
-$A = (\phi_E - \phi_{env})/(\phi_{core} - \phi_{env})$ and $B =
-(\phi_{core} - \phi_D)/(\phi_{core} - \phi_{env})$.  Here we have
-added the $T$ subscript to the $E_{\phi T}$ and $D_{\phi T}$ terms to
-denote that these values are equivalent to Siebesma tracer budget values,
-but have been calculated by transforming the direct entrainment and
-detrainment values.  We shall refer to these values as ``transformed"
-entrainment and detrainment.
+$A = (\phi_E - \phi_{env})/(\phi_{core} - \phi_{env})$ and 
+$B = (\phi_{core} - \phi_D)/(\phi_{core} - \phi_{env})$.  
+
+Note that rearrangement of $A$ gives $\phi_E = A \phi_{core} + (1-A)\phi_{env}$
+so $A$ can be thought of as the fraction of mean core air in a mixture of mean 
+core and mean environment air needed to produce the properties of the entrained 
+fluid.  Similarily, $\phi_D = B \phi_{env} + (1-B)\phi_{core}$ and 
+$B$ can be thought of as the fraction of mean environment air in a mixture of 
+mean core and mean environment air needed to produce the properties of the 
+detrained fluid.  Since the fluid being entrained or detrained does not 
+neccessarily originate at the level it is entrained or detrained at, we cannot 
+assume that a fraction $A$ of the entrained air is modified core air.  
+Nevertheless, $A$ and $B$ are likely proxies for the recirculation of entrained 
+and detrained air.
 
 Alternatively, we can solve for $E_d$ and $D_d$, arriving at
 \begin{subequations}
 \begin{equation}
   \label{eq:corrected_entrainment2}
     E_{d T} = E_{\phi S} 
-        + \left[E_{\phi S}\frac{(\phi_E - \phi_{env})}{(\phi_D - \phi_E)} 
-              + D_{\phi S}\frac{(\phi_{core} - \phi_D)}{(\phi_D - \phi_E)}\right].
+        + \left[E_{\phi S}\frac{(\phi_E - \phi_{env})}
+                               {(\phi_D - \phi_E)} 
+              + D_{\phi S}\frac{(\phi_{core} - \phi_D)}
+                               {(\phi_D - \phi_E)}\right].
 \end{equation}
 \begin{equation}
   \label{eq:corrected_detrainment2}
     D_{d T} = D_{\phi S} 
-        + \left[E_{\phi S}\frac{(\phi_E - \phi_{env})}{(\phi_D - \phi_E)}
-              + D_{\phi S}\frac{(\phi_{core} - \phi_D)}{(\phi_D - \phi_E)}\right].
+        + \left[E_{\phi S}\frac{(\phi_E - \phi_{env})}
+                               {(\phi_D - \phi_E)}
+              + D_{\phi S}\frac{(\phi_{core} - \phi_D)}
+                               {(\phi_D - \phi_E)}\right].
 \end{equation}
 \end{subequations}
 In this case, to convert from ($E_{\phi S}$, $D_{\phi S}$) to
 ($E_{dT}$, $D_{dT}$), both $E_{\phi S}$ and $D_{\phi S}$ must be
-increased by $E_{\phi S} a + D_{\phi S} b$, where $a = (\phi_E -
-\phi_{env})/(\phi_{core} - \phi_{env})$ and $b = (\phi_{core} -
-\phi_D)/(\phi_{core} - \phi_{env})$.  Note that under both these
+increased by $E_{\phi S} a + D_{\phi S} b$, where 
+$a = (\phi_E - \phi_{env})/(\phi_D - \phi_E)$ and 
+$b = (\phi_{core} -\phi_D)/(\phi_D - \phi_E)$.  Note that under both these
 transformations $E_d-D_d = E_{\phi}-D_{\phi}$, preserving mass
 continuity, and furthermore, $E_d A + D_d B = E_{\phi} a + D_{\phi}
 b$.
@@ -424,42 +456,41 @@ $E_{d}$ and $D_{d}$ values into biased Siebesma tracer budget
 $E_{\phi S}$ and $D_{\phi S}$ values, which are better suited for
 simple entraining plume parametrization of cloud fields.
 Comparison of $E_{q S}$ and $D_{q S}$ ($E_{\phi S}$ and $D_{\phi S}$ inferred
-using total specific moisture $q_t$ as the bulk tracer) with $E_d$ and $D_d$
+using total specific moisture $q_t$ as the tracer) with $E_d$ and $D_d$
 shows the direct entrainment and detrainment magnitudes are significantly larger 
 than the Siebesma tracer budget values (Figure \ref{fig:Shell_correction}b 
 and \ref{fig:Shell_correction}c, grey and dotted lines).  
-Using  (\ref{eq:correctedED}) to calculate $E_{q T}$ and $D_{q T}$ with
-$q_E = q_{edge}$ and $q_D = q_{shell}$ results in values quite close to 
-the Siebesma tracer budget values above the middle of the cloud layer.   
-The transformation also duplicates the negative 
-detrainment values near cloud base that are typically produced by bulk tracer
-calculations.
+Using (\ref{eq:correctedED}) to calculate $E_{q T}$ and $D_{q T}$ with
+$q_E = q_{edge}$, the horizontal mean humidity in the cloud edge, and 
+$q_D = q_{shell}$, the horizontal mean humidity in the cloud shell, results in 
+values quite close to the Siebesma tracer budget values above the middle of the 
+cloud layer. The transformation also duplicates the negative detrainment values 
+near cloud base that are typically produced by tracer calculations.
 
 %-------------------------------------------------------------------------
 
-\subsection{Entrainment/Tracer Correlations}
+\subsection{Preferential Entrainment of Moist, Ascending Air}
 
-Relative to the Siebesma tracer budget
-values, the transformed $E_{q T}$ and $D_{q T}$ values are still too large 
-near cloud base. 
-We can partially explain the difference between the transformed mass 
-entrainment/detrainment values and the Siebesma tracer budget values as 
-being the result of correlations between the local entrainment/detrainment 
-rates and the local tracer properties in the shell and edge.  Using the 
-mean shell and edge values of tracers to transform the direct entrainment 
-and detrainment assumes that any fluid parcel in the shell or edge is 
-equally likely to be entrained or detrained.  In reality, mixing relatively 
-dry air into the cloud core is more likely to cause evaporation, which will 
-drive detrainment, while mixing relatively moist air into the cloud core is 
-more likely to produce a saturated fluid mixture, resulting in entrainment.
+Relative to the Siebesma tracer budget values, the transformed $E_{q T}$ and 
+$D_{q T}$ values calculated using $q_E = q_{edge}$ and $q_D = q_{shell}$ are 
+still too large near cloud base. We can partially explain the difference 
+between the transformed mass entrainment/detrainment values and the Siebesma 
+tracer budget values as being the result of the mean tracer values 
+of the entrained and detrained air being different than the mean value of the 
+shell and edge air, respectively.  Using the mean shell and edge values of 
+tracers to transform the direct entrainment and detrainment assumes that any 
+fluid parcel in the shell or edge is equally likely to be entrained or 
+detrained.  In reality, mixing relatively dry air into the cloud core is more 
+likely to cause evaporation, which will drive detrainment, while mixing 
+relatively moist air into the cloud core is more likely to produce a saturated 
+fluid mixture, resulting in entrainment.  This suggests that the moistest 
+shell parcels are more likely to undergo entrainment than the average shell 
+parcel, and the driest edge parcels are more likely to detrain than the 
+average edge parcel.
 
-If there are correlations between entrainment/detrainment and the local 
-fluid properties, this will result in the effective tracer value 
-entrained into or detrained from the cloud core being different than the 
-mean tracer value in the shell or edge.  We can directly calculate the 
-effective tracer value at which entrainment occurs by taking the total 
-tracer entrainment $(E\phi)_d$ calculated via equation 
-(\ref{eq:romps_ephi_minus_dphi}) and dividing it by the total mass
+We can directly calculate the effective tracer value at which entrainment 
+occurs by taking the total tracer entrainment $(E\phi)_d$ calculated via 
+equation (\ref{eq:romps_ephi_minus_dphi}) and dividing it by the total mass
 entrainment $E_d$ so that $\phi_{entrain} = (E\phi)_d / E_d$.  Similarly, 
 the effective tracer value at which detrainment occurs can be found from  
 $\phi_{detrain} = (D\phi)_d / D_d$.  Examination of these values from the 
@@ -467,8 +498,8 @@ BOMEX simulation using $q_t$ for $\phi$ shows $q_{entrain}$ is moister than
 $q_{shell}$ (Figure \ref{fig:Reynolds_correction}a), indicating entrainment
 occurs preferentially at the moistest parts of the shell.  Conversely, 
 there is little difference between between $q_{detrain}$ and $q_{edge}$,
-indicating no significant correlation between detrainment and the moisture
-present in the cloud core edge.
+indicating the detrained parcels tend to have the mean moisture of the cloud 
+core edge.
 
 Using $q_{entrain}$ and $q_{detrain}$ to transform $E_d$ and $D_d$
 results in smaller $E_{q T}$ and $D_{q T}$ values than utilizing the
@@ -491,7 +522,7 @@ shell and edge correction of Figure~\ref{fig:Reynolds_correction}.
 The results above highlight the role of the definition of mean cloud
 and environmental quantities in determining entrainment and detrainment
 using tracer budgets.  An additional source for the discrepancy
-between the bulk tracer budgets and their direct counterparts
+between the tracer budgets and their direct counterparts
 is the  calculation of source and sink terms.
 The Siebesma tracer budget calculated
 using (\ref{eq:siebesmaED}) accounts for the
@@ -506,7 +537,7 @@ These effects are likely small, but the exact amount of error they
 induce is difficult to evaluate.
 
 \cite{Romps2010} presents an alternative to the Siebesma method of calculating 
-bulk tracer budget entrainment and detrainment values (Romps' equations (11) 
+tracer budget entrainment and detrainment values (Romps' equations (11) 
 and (12)) which uses the direct mass and $\phi$ entrainment/detrainment rates 
 and mean profiles of $\phi_{core}$ and $\phi_{env}$ to calculate the vertical
 advection and time tendency budgets (referred to as VATT below) 
@@ -515,20 +546,22 @@ that are on the right hand side of (\ref{eq:siebesmaED}):
  \label{eq:romps_bulkED}
 \begin{equation}
   \label{eq:romps_bulk_entrainment}
-    E_{\phi R}(\phi_{core} - \phi_{env}) = \phi_{core}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
+    E_{\phi R}(\phi_{core} - \phi_{env}) = 
+    \phi_{core}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
 \end{equation}
 \begin{equation}
   \label{eq:romps_bulk_detrainment}
-    D_{\phi R}(\phi_{core} - \phi_{env}) = \phi_{env}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
+    D_{\phi R}(\phi_{core} - \phi_{env}) = 
+    \phi_{env}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
 \end{equation}
 \end{subequations}
 Here the $R$ subscript indicates that $E$ and $D$ have been calculated via 
-the Romps bulk tracer budget method, and we shall refer to values calculated 
+the Romps tracer budget method, and we shall refer to values calculated 
 by this method as the  ``Romps tracer budget'' $E$ and $D$.
 
-To see that the Romps tracer budget equations (\ref{eq:romps_bulkED}) account for exactly the same
-source and sink terms as  the Siebesma 
-tracer budget equations (\ref{eq:siebesmaED}),  first multiply  (\ref{eq:continuity})
+To see that the Romps tracer budget equations (\ref{eq:romps_bulkED}) account 
+for exactly the same source and sink terms as the Siebesma tracer budget 
+equations (\ref{eq:siebesmaED}), first multiply (\ref{eq:continuity})
 by $\phi_{core}$:
 \begin{equation}
     \phi_{core}(E_d - D_d) =
@@ -549,26 +582,26 @@ Subtracting $(E\phi)_d - (D\phi)_d$ from $\phi_{core}(E_d - D_d)$ then
 results in the VATT budget terms on the rhs of (\ref{eq:siebesma_entrainment}).  
 
 Note that by substituting $(E \phi)_d = E_d \phi_E$ and 
-$(D\phi)_d = D_d \phi_D$ into (\ref{eq:romps_bulkED}), we can quickly recover the 
-equations to transform direct entrainment/detrainment values into 
+$(D\phi)_d = D_d \phi_D$ into (\ref{eq:romps_bulkED}), we can quickly recover 
+the equations to transform direct entrainment/detrainment values into 
 equivalent tracer budget values (equations (\ref{eq:corrected_entrainment}) 
 and (\ref{eq:corrected_detrainment})).  This equivalence between 
 (\ref{eq:correctedED}) and (\ref{eq:romps_bulkED})
 means the Romps tracer budget formulation agrees exactly with the result of 
 using $q_{entrain}$ and $q_{detrain}$ values to transform the direct 
-entrainment and detrainment into equivalent bulk tracer values.  
+entrainment and detrainment into equivalent tracer budget values.  
 
 Comparing the Romps and Siebesma $q_{core}(E_d - D_d)$ values
 (Fig. \ref{fig:numerical_error}a) shows that the Romps value for this
 first VATT term has a significantly smaller magnitude than the
 Siebesma value given by (\ref{eq:siebesmaED}).  
 The Romps $(Eq_t)_d - (Dq_t)_d$ values
-(Fig. \ref{fig:numerical_error}b) also have a smaller magnitude when
-compared to the Siebesma value.  The reason for this can be seen by
+(Fig. \ref{fig:numerical_error}b) also have smaller magnitudes when
+compared to the Siebesma values.  The reason for this can be seen by
 comparing these calculations with a version of the direct entrainment
 calculation done without any time averaging of the fluxes.  The effect
 of time averaging is to significantly reduce the size of the direct
-entrainment and detrainment rates $E$ and $D$.  The difference $E-D$,
+entrainment and detrainment rates $E_d$ and $D_d$.  The difference $E_d-D_d$,
 however, is the same with or without time averaging in order to
 satisfy mass continuity as expressed by (\ref{eq:continuity}).
 Indeed, the unaveraged $\phi_{core}(E_d - D_d)$ value (gray line in
@@ -585,7 +618,8 @@ However, despite the large differences between the time averaged
 $q_{core}(E_d - D_d)$ and $((Eq_t)_d - (Dq_t)_d)$ values and the unaveraged
 values, the net tracer budget that results from the difference
 between these terms (Fig. \ref{fig:numerical_error}c) agrees remarkably 
-well.  Conversely, the Siebesma tracer budget that results is much larger 
+well between the time-averaged and instantaneous calculations.  Conversely, the 
+Siebesma tracer budget that results is much larger 
 than the Romps tracer budget, despite the close agreement between the 
 Siebesma and Romps tracer budget $q_{core}(E_d - D_d)$ and 
 $((Eq_t)_d - (Dq_t)_d)$ values.  This difference between the tracer budgets
@@ -597,7 +631,8 @@ Evaluating whether the VATT budget calculation done using (\ref{eq:siebesmaED})
 or (\ref{eq:romps_bulkED}) is more accurate is difficult.
 We have mentioned the possible problems in the Siebesma tracer budget
 calculation related to neglect of tracer diffusion and the simplified method 
-used to calculating vertical advection.  The Romps tracer budget, on the other hand, requires taking the difference of $q_{core}(E_d - D_d)$ and 
+used for calculating vertical advection.  The Romps tracer budget, on the other 
+hand, requires taking the difference of $q_{core}(E_d - D_d)$ and 
 $((Eq_t)_d - (Dq_t)_d)$, terms which have nearly the same magnitude.  
 Because the magnitude of these terms is so similar, small relative errors in
 these terms can result in large relative errors when their difference is taken.
@@ -618,8 +653,8 @@ Equations (\ref{eq:corrected_entrainment}) or (\ref{eq:corrected_detrainment})
 imply that the Siebesma tracer budget method will measure different entrainment
 and detrainment values for fluid properties with differing values of 
 $A = (\phi_E - \phi_{env})/(\phi_{core} - \phi_{env})$ and
-$B = (\phi_{core} - \phi_D)/(\phi_{core} - \phi_{env})$.  With this in mind 
-we compare transformed $E_{\phi T}$ and $D_{\phi T}$ values produced by liquid
+$B = (\phi_{core} - \phi_D)/(\phi_{core} - \phi_{env})$.  With this in mind we 
+compare transformed $E_{\phi T}$ and $D_{\phi T}$ values produced by liquid 
 water moist static energy $h$ and vertical velocity $w$ with those produced 
 using total specific moisture $q_t$.
 
@@ -631,8 +666,8 @@ transformed $E_{hT}$ and $D_{hT}$ values are nearly identical to the $E_{qT}$
 and $D_{qT}$ (not shown).
 
 Vertical velocity shows very different relative profiles compared to
-$q_t$ or $h$ (c.f.~Fig.~\ref{fig:Reynolds_correction_w}a and Fig.~\ref{fig:Reynolds_correction}a).  
-There is a
+$q_t$ or $h$ (c.f.~Fig.~\ref{fig:Reynolds_correction_w}a and 
+Fig.~\ref{fig:Reynolds_correction}a).  There is a
 much wider spread in the $w$ values, with the shell having nearly zero
 vertical velocity and the edge being halfway between the core and the
 environment.  $w_{detrain}$ is slightly larger than the value of $w$
@@ -642,11 +677,11 @@ $w_{entrain}$ and $w_{detrain}$ are both larger than $w_{shell}$ and
 $w_{edge}$ this implies that rapidly rising air is both preferentially
 entrained and detrained over slowly rising air.  These effective
 entrainment and detrainment $w$ values produce $E_{wT}$ and $D_{wT}$
-(solid black line, Fig.~\ref{fig:Reynolds_correction_w}c and Fig.~\ref{fig:Reynolds_correction_w}c)
-that are quite different than the transformed entrainment and
-detrainment produced by $q_t$ and $h$
-(dotted line, Fig.~\ref{fig:Reynolds_correction_w}b and \ref{fig:Reynolds_correction_w}c); 
-$E_{wT}$ is negative
+(solid black line, Fig.~\ref{fig:Reynolds_correction_w}c and 
+Fig.~\ref{fig:Reynolds_correction_w}c) that are quite different than the 
+transformed entrainment and detrainment produced by $q_t$ and $h$
+(dotted line, Fig.~\ref{fig:Reynolds_correction_w}b and 
+\ref{fig:Reynolds_correction_w}c); $E_{wT}$ is negative
 over the whole of the cloud field, and $D_{wT}$ is half the magnitude
 of $D_{qT}$ over much of the cloud layer.
 
@@ -654,31 +689,81 @@ Finally, we examine the temporal variability of
 $A = (\phi_E - \phi_{env})/(\phi_{core} - \phi_{env})$ and
 $B = (\phi_{core} - \phi_D)/(\phi_{core} - \phi_{env})$ from the transformation
 equations (\ref{eq:corrected_entrainment}) and (\ref{eq:corrected_detrainment})
-in the ARM model run.  These quantities show strong changes over the ARM diurnal
-cycle (Figure \ref{fig:shell_variability}).  Near cloud base and within the
-inversion, $A$ is nearly one while $B$ is nearly zero.  As the clouds mix 
-into the inversion over the course of the day, the values calculated using 
-$q_t$ evolve until at mid-cloud layer, $A$ has values near 0.6 and $B$ near 
-0.2.  When calculated for $w$ on the other hand, $A$ reaches a value around 
-0.5 and $B$ goes to 0.6.  Performing this calculation with fixed values of 
+in the ARM model run.  Since $A$ represents the fraction of core air in a 
+mixture of core and environmental air which has the properties of $\phi_E$, and
+$B$ represents the fraction of environmental air in a mixture of core and 
+environmental air which has the properties of $\phi_D$, $A$ and $B$ provide 
+information about the amount of recirculation of entrained and detrained fluid 
+occuring at different model heights.  However, $A$ and $B$ cannot be considered 
+exact mixing fractions, as the source heights of air mixtures may be different 
+than the height at which they entrain or detrain, and not all mixtures of 
+core and environment properties are equally likely to undergo entrainment.
+
+$A$ and $B$ calculated for $q_t$ both show strong changes over the ARM diurnal 
+cycle (Figure \ref{fig:shell_variability}, a and b).  Near cloud base, $A$ is 
+nearly one while $B$ is nearly zero, implying that both the entrained and 
+detrained air have the properties of the cloud core air.  This is due to the 
+main entrainment process at cloud base being condensation of rising thermals
+instead of mixing; buoyant updrafts simply condense without modification of 
+their properties.  Similarily, the air that detrains from the clouds at cloud 
+base is almost undiluted because most entrainment at this level comes from the 
+well-mixed sub-cloud layer below and so has properties nearly identical to the 
+cloud core.  At cloud top, $A$ is also nearly one while $B$ is nearly zero, 
+implying that both the entrained and detrained air have the properties of the 
+cloud core air.  Here, this is due to the main detrainment process from the 
+core being clouds becoming negatively buoyant as $\theta_v$ in the inversion 
+increases faster than heating due to condensation can add buoyancy to the cloud 
+core \citep{Wu2009}.  Since this process does not depend on mixing, the air 
+detraining from the core is relatively undiluted by the environment.  
+Conversely, much of the air surrounding the remaining cloud core which is 
+available for entrainment was previously detrained from the core without 
+mixing, and so has the properties of the core air.
+
+As the clouds mix into the inversion over the course of the day, they cause the 
+inversion to rise.  This means that points in the mid-cloud layer are less 
+influenced by the adiabatic entrainment and detrainment processes occuring at 
+cloud base and cloud top, and so the effects of mixing become more prominent.  
+By the end of the day, $A$ within the cloud layer has values near 0.6, 
+suggesting that a significant amount of re-entrainment of air previously 
+detrained from the core still occurs.  $B$ has values near 0.2, indicating that 
+air detraining from the core is relatively undiluted by environmental air; this 
+is sensible, since relatively little dilution by environmental air is required 
+to cause the core air to become neutrally buoyant and detrain.
+
+When calculated for $w$ on the other hand, $A$ reaches a value around 
+0.4 and $B$ goes to 0.6. The difference between these values and the values of 
+$A$ and $B$ calculated for $q_t$ is the result of buoyancy and pressure 
+gradient forces on the mixtures, and the stronger tendency for upward-moving 
+shell parcels to be entrained relative to the tendency to entrain moister shell 
+parcels.  In other words, a relatively dry, rapidly ascending shell parcel is 
+more likely to be entrained than a relatively moist, slowly ascending shell 
+parcel. This is especially apparent near cloud base where the values of $A$ 
+are larger than 1, due to the mean entrained parcels having a larger upward 
+velocity than the mean core parcels.
+
+Performing these calculations with fixed values of 
 $(\phi_{core} - \phi_{env})$, to remove changes due to movement of the mean
 environment and core profiles, shows similar results.  Changes in the 
-properties of the entraining and detraining fluid clearly are active in
-determining the magnitude of the rates at which properties entrain and detrain.
+properties of the entraining and detraining fluid due to the dynamics of mixing 
+and entrainment in the shell clearly are active in determining the rates at 
+which properties entrain and detrain.
 
 %-------------------------------------------------------------------------
 
-\section{Causes of $e$, $q$, and $w$ Correlations}
+\section{Causes of Preferential Entrainment of Moist, Ascending Air}
 
-The source of the correlations between entrainment, $q_t$, $h$, and $w$ can 
-be seen by comparing instantaneous snapshots of the model values of local mass entrainment $e$, moisture entrainment $e{q_t}$, and vertical velocity 
-entrainment $e{w}$.  Since the \cite{Romps2010} method of calculating 
-$e$ and $d$ requires taking time averages, it is unsuitable for calculating instantaneous entrainment fields.  Instead, we use an alternative method that 
-we have devised that substitutes spatial interpolation for time averaging 
-\citep{Dawe2011}.  This alternative method results in slightly smaller values 
-of $e$ and $d$ than those produced by Romps' method, but the two calculations
-show good agreement in variability. The $eq_t$ and $ew$ fields are calculated simply by
-multiplying the value of $e$ by the values of $q_t$ and $w$, respectively.
+The reason that shell air which is moister and ascending faster than the mean 
+shell is more likely to be entrained can be seen by comparing instantaneous 
+snapshots of the model values of local mass entrainment $e$, moisture 
+entrainment $e{q_t}$, and vertical velocity entrainment $e{w}$.  Since 
+the \cite{Romps2010} method of calculating $e$ and $d$ requires taking time 
+averages, it is unsuitable for calculating instantaneous entrainment fields.  
+Instead, we use an alternative method we have devised that substitutes 
+spatial interpolation for time averaging \citep{Dawe2011}.  This alternative 
+method results in slightly smaller values of $e$ and $d$ than those produced 
+by Romps' method, but the two calculations show good agreement in variability. 
+The $eq_t$ and $ew$ fields are calculated simply by multiplying the value of 
+$e$ by the values of $q_t$ and $w$, respectively.
 
 Comparing the $e$, $eq_t$, and $ew$ fields shows that $e$ and $eq_t$ have a 
 very similar spatial pattern, but $ew$ is concentrated in regions where strong
@@ -686,7 +771,8 @@ updrafts enter the cloud core (Figure \ref{fig:w_entrainment_example}).  The
 reason for this can been seen by examining the buoyancy, condensed liquid water,
 and vertical velocity fields that define the cloud core.  Of these three fields,
 buoyancy is the strongest constraint determining if air is part of the core.
-However, regions exist far above cloud base where air has become negatively buoyant but maintains upward velocity and condensed liquid water.  As this air
+However, regions exist far above cloud base where air has become negatively 
+buoyant but maintains upward velocity and condensed liquid water.  As this air
 continues to rise more condensation occurs, which heats the updraft, makes it
 positively buoyant, and thus entrains it into the core.  In this way, 
 entrainment is positively correlated with both $q_t$ and $w$.  This process
@@ -702,7 +788,8 @@ Considering all these results, we now turn to the most important question of
 all: which entrainment value is the right one?  The unsatisfying answer is that
 it depends on the purpose for which the entrainment is to be used.
 
-Consider a cumulus cloud parametrization based upon a simplified form of the continuity equation which assumes the cloud fraction is constant,
+Consider a cumulus cloud parametrization based upon a simplified form of the 
+continuity equation which assumes the cloud fraction is constant,
 \begin{equation}
     \label{eq:simple_continuity}
     \frac{\partial M_{core}}{\partial z} = E - D
@@ -711,7 +798,8 @@ a cloud budget equation that assumes mean vertical advection is balanced by
 entrainment of mean environmental properties,
 \begin{equation}
     \label{eq:simple_cloud_budget}
-    M_{core} \frac{\partial \phi_{core}}{\partial z} = E(\phi_{env} - \phi_{core})
+    M_{core} \frac{\partial \phi_{core}}{\partial z} = 
+    E(\phi_{env} - \phi_{core})
 \end{equation}
 and a simple detrainment forcing equation,
 \begin{equation}
@@ -719,15 +807,16 @@ and a simple detrainment forcing equation,
     \rho \frac{\partial \phi_{env}}{\partial t} = D(\phi_{core} - \phi_{env}).
 \end{equation}
 $\phi_{env}$ is input to the parametrization from the GCM.  If we assume 
-we have a perfect parametrization of $M_{core}$ and $\phi_{core}$ at cloud base with
-which to construct mean core mass flux and tracer profiles, we wish the $E$ 
-and $D$ values to produce a profile of $\partial \phi_{core} / \partial t$ 
-to force the GCM which agrees with LES results for a similar mean environmental
-profile.  The $E$ and $D$ we desire then is closer to $E_{\phi S}$ and $D_{\phi S}$
-than $E_d$ and $D_d$, but nevertheless must be modified to account for the 
-time tendency and Reynolds flux budget terms we have neglected.  This also 
-implies that we should have different $E_{\phi S}$ and $D_{\phi S}$ values for 
-properties with different distribution patterns around the clouds.
+we have a perfect parametrization of $M_{core}$ and $\phi_{core}$ at cloud 
+base with which to construct mean core mass flux and tracer profiles, we wish 
+the $E$ and $D$ values to produce a profile of 
+$\partial \phi_{core} / \partial t$ to force the GCM which agrees with LES 
+results for a similar mean environmental profile.  The $E$ and $D$ we desire 
+then is closer to $E_{\phi S}$ and $D_{\phi S}$ than $E_d$ and $D_d$, but 
+nevertheless must be modified to account for the time tendency and Reynolds 
+flux budget terms we have neglected.  This also implies that we should have 
+different $E_{\phi S}$ and $D_{\phi S}$ values for properties with different 
+distribution patterns around the clouds.
 
 Using values near $E_d$ and $D_d$ instead would require modifying equation 
 (\ref{eq:simple_cloud_budget}) to
@@ -774,35 +863,31 @@ quantities that satisfy both the continuity equation (\ref{eq:continuity}) and
 the tracer budget of the cloud core under the assumption that the core entrains
 mean environment fluid and detrains mean cloud core fluid.
 
-While the correlations between vertical velocity and entrainment we
-found were done for cloud core entrainment, we would like to emphasize
-that this process is not an artifact of the cloud core sampling;
-similar correlations between entrainment, humidity and vertical
-velocity appear when we perform entrainment calculations for simple
-cloudy regions (areas of condensed liquid water).  In this case,
-vertical advection of air can drive condensation, converting
-environment air into cloud air, and thus driving entrainment of air
-into the cloud.
+While the tendency for rapidly ascending shell air to be entrained more often 
+than the slower parts of the shell was found for cloud core entrainment, we 
+would like to emphasize that this process is not an artifact of the cloud core 
+sampling; similar results appear when we perform entrainment calculations for 
+simple cloudy regions (areas of condensed liquid water).  In this case,
+vertical advection of air can drive condensation, converting environment air 
+into cloud air, and thus driving entrainment of air into the cloud.
 
 As both BOMEX and ARM model runs involved non-precipitating shallow cumulus, 
 we have ignored the effects of precipitation.  Precipitation is generally not
 considered part of the turbulent mixing processes associated with entrainment 
 and detrainment in parametrization, instead being represented by a sink 
-term in the liquid water budget \citep{Tiedtke1989, Kain1990}.  LES bulk microphysics and bin schemes 
-are more complicated, explicitly modeling 
-advection of precipitation by the wind and precipitation fall rate.  
+term in the liquid water budget \citep{Tiedtke1989, Kain1990}.  
 Nevertheless, incorporating precipitation into the Siebesma tracer budget 
 and direct entrainment calculations would be relatively simple.  The
-precipitation fall rate would be a new sink/source forcing term in Siebesma's
-equation (\ref{eq:siebesmaED}),
+precipitation flux divergence rate would be a new sink/source forcing term in 
+Siebesma's equation (\ref{eq:siebesmaED}),
 and would be part of the forcing term $\rho \mathcal{A}S_\phi$ in Romps'
- equation (\ref{eq:romps_ephi_minus_dphi}), resulting in precipitation fall 
-not being counted as part of the detrainment.  Specifying the advection terms would
-be somewhat trickier since, depending on the complexity of the microphysics 
-scheme, moisture might be advected as a single $q_t$ field or advected as 
-separate hydrometeor classes.  However, this would simply mean adding extra 
-advection terms for each hydrometeor class.  Once these effects were properly
-incorporated into the calculations, the transformations between 
+ equation (\ref{eq:romps_ephi_minus_dphi}), resulting in precipitation flux 
+divergence not being counted as part of the detrainment.  Specifying the 
+advection terms would be somewhat trickier since, depending on the complexity 
+of the microphysics scheme, moisture might be advected as a single $q_t$ field 
+or advected as separate hydrometeor classes.  However, this would simply mean 
+adding extra advection terms for each hydrometeor class.  Once these effects 
+were properly incorporated into the calculations, the transformations between 
 ($E_d$, $D_d$) and ($E_{qT}$, $D_{qT}$) would be unchanged.
 
 %==============================================================================
@@ -810,16 +895,17 @@ incorporated into the calculations, the transformations between
 \section{Conclusion}
 
 We have explained the differences between values of entrainment and detrainment 
-of mass calculated via bulk tracer budgets and direct flux calculations by 
-taking into account the properties of the cloud shell, the effect of 
-correlations between local entrainment rates and local air properties, 
-and differences in the numerical methods used by the two calculations.  
-Furthermore, significant correlations are apparent between local tracer 
-values and local entrainment rates.  These correlations are the result of 
-upward advection of negatively buoyant, saturated air so that
-condensation causes latent heating, making the air buoyant and entraining it 
-into the core.  These effects suggest that the moist cloud shell has a
-significant role in mediating fluxes between the clouds and the environment. 
+of mass calculated via tracer budgets and direct flux calculations by 
+taking into account the properties of the cloud shell, the tendency for
+the mean tracer values of the entrained fluid to be greater than the mean 
+tracer value of the cloud shell, and differences in the numerical methods used 
+by the two calculations.  Furthermore, the tendency for the moistest, fastest-
+rising regions of the shell to be entrained more often than the drier, slower
+parts appears to be the result of upward advection of negatively buoyant, 
+saturated air so that condensation causes latent heating, making the air 
+buoyant and entraining it into the core.  These effects suggest that the 
+dynamics of the moist cloud shell have a significant role in mediating fluxes 
+between the clouds and the environment. 
 
 Direct entrainment and detrainment calculations should be used to help 
 improve our understanding of the dynamics of cloud mass exchanges and 
@@ -841,7 +927,8 @@ All figures were generated using the matplotlib library in the Python
 programming language.
 \end{acknowledgment}
 
-% Use appendix}[A], {appendix}[B], etc. etc. in place of appendix if you have multiple appendixes.
+% Use appendix}[A], {appendix}[B], etc. etc. in place of appendix 
+% if you have multiple appendixes.
 \ifthenelse{\boolean{dc}}
 {}
 {\clearpage}
@@ -870,7 +957,7 @@ Symbol & Units & Definition & First Occurrence\\
     & kg m$^{-3}$ s$^{-1}$ 
     & Mass entrainment/detrainment rate 
     &  (\ref{eq:siebesma_entrainment}), (\ref{eq:siebesma_detrainment}) \\
-   && calculated using Siebesma bulk & \\
+   && calculated using Siebesma & \\
    && tracer budget & \\
 
  $e$, $d$              
@@ -919,7 +1006,7 @@ Symbol & Units & Definition & First Occurrence\\
     & Cloud core mass entrainment/detrainment
     &  (\ref{eq:romps_bulk_entrainment}), (\ref{eq:romps_bulk_detrainment}) \\
    && rate calculated using Romps & \\
-   && bulk tracer budget & \\
+   && tracer budget & \\
 
  $\phi$    
     & [$\phi$]            
@@ -991,15 +1078,17 @@ Symbol & Units & Definition & First Occurrence\\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=19pc]{./figures/entrainment_ratio_variability}\\
-  \caption{Variability of the ratio of the Siebesma specific humidity tracer budget a) entrainment
+  \noindent
+  \includegraphics[width=19pc]{./figures/entrainment_ratio_variability}\\
+  \caption{Ratio of the Siebesma specific humidity tracer budget a) entrainment
   and b) detrainment values to the directly calculated values over the duration
   of the ARM model run.}
   \label{fig:entrainment_ratio_variability}
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=39pc,angle=0]{./figures/shell_correction}\\
+  \noindent
+  \includegraphics[width=39pc,angle=0]{./figures/shell_correction}\\
   \caption{Result of transforming direct entrainment values into equivalent 
   tracer budget values using mean cloud core shell and edge properties.  
   a) Mean profiles of the total specific humidity in the cloud core (thick 
@@ -1013,7 +1102,8 @@ Symbol & Units & Definition & First Occurrence\\
 \end{figure}
 
 \begin{figure}[t]
-  \noindent\includegraphics[width=39pc,angle=0]{./figures/reynolds_correction}\\
+  \noindent
+  \includegraphics[width=39pc,angle=0]{./figures/reynolds_correction}\\
   \caption{Result of transforming direct entrainment values into equivalent 
   tracer budget values using effective entrainment and detrainment properties.
   a) Mean profiles of the effective total specific humidity values being
@@ -1052,11 +1142,15 @@ Symbol & Units & Definition & First Occurrence\\
 
 \begin{figure}[t]
   \noindent\includegraphics[width=39pc]{./figures/shell_variability}
-  \caption{Variation in a) $(q_{entrain} - q_{env})/(q_{core} - q_{env})$,  
-  b) $(q_{core} - q_{detrain})/(q_{core} - q_{env})$,  
-  c) $(w_{entrain} - w_{env})/(w_{core} - w_{env})$, and 
-  d) $(w_{core} - q_{detrain})/(w_{core} - w_{env})$ over the duration of the 
-  ARM model run.
+  \caption{Variation in a) the fraction of core air in a mixure of core and 
+environmenal air needed to produce the mean humidity entrained by the clouds,  
+  b) the fraction of environmental air in a mixure of core and environmenal air 
+needed to produce the mean humidity detrained by the clouds,  
+  c) the fraction of core air in a mixure of core and environmenal air needed 
+to produce the mean vertical velocity entrained by the clouds, and 
+  d) the fraction of environmental air in a mixure of core and environmenal air 
+needed to produce the mean vertical velocity detrained by the clouds, over the 
+duration of the ARM model run.
   }
   \label{fig:shell_variability}
 \end{figure}
@@ -1066,9 +1160,9 @@ Symbol & Units & Definition & First Occurrence\\
   \caption{Instantaneous vertical cross-section of directly calculated cloud 
   core mass entrainment (a), humidity entrainment (b), vertical velocity
   entrainment (c), buoyancy (d), condensed liquid water (e), and vertical
-  velocity (f) of a single model cloud, illustrating the strong correlation
-  between vertical velocity and entrainment.  Black lines indicate the edge of
-  the cloud core in each figure.}
+  velocity (f) of a single model cloud, illustrating the tendency to entrain 
+  shell air that is rising faster than the mean shell.  Black lines indicate 
+  the edge of the cloud core in each figure.}
   \label{fig:w_entrainment_example}
 \end{figure}
 
