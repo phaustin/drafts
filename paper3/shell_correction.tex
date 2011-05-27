@@ -411,8 +411,9 @@ both $E_d$ and $D_d$ must be reduced by $E_d A + D_d B$, where
 $A = (\phi_E - \phi_{env})/(\phi_{core} - \phi_{env})$ and 
 $B = (\phi_{core} - \phi_D)/(\phi_{core} - \phi_{env})$.  
 
-Note that rearrangement of $A$ gives $\phi_E = A \phi_{core} + (1-A)\phi_{env}$
-so $A$ can be thought of as the fraction of mean core air in a mixture of mean 
+Note that rearrangement of $A$ gives 
+$\phi_E = A \phi_{core} + (1-A)\phi_{env}$, meaning that $A$ can be 
+thought of as the fraction of mean core air in a mixture of mean 
 core and mean environment air needed to produce the properties of the entrained 
 fluid.  Similarily, $\phi_D = B \phi_{env} + (1-B)\phi_{core}$ and 
 $B$ can be thought of as the fraction of mean environment air in a mixture of 
@@ -420,7 +421,7 @@ mean core and mean environment air needed to produce the properties of the
 detrained fluid.  Since the fluid being entrained or detrained does not 
 neccessarily originate at the level it is entrained or detrained at, we cannot 
 assume that a fraction $A$ of the entrained air is modified core air.  
-Nevertheless, $A$ and $B$ are likely proxies for the recirculation of entrained 
+Nevertheless, $A$ and $B$ are likely related to the recirculation of entrained 
 and detrained air.
 
 Alternatively, we can solve for $E_d$ and $D_d$, arriving at
@@ -517,133 +518,99 @@ shell and edge correction of Figure~\ref{fig:Reynolds_correction}.
 
 %------------------------------------------------------------------------------
 
-\subsection{Tracer Budget Errors}
+\subsection{Numerical Errors}
 
-The results above highlight the role of the definition of mean cloud
-and environmental quantities in determining entrainment and detrainment
-using tracer budgets.  An additional source for the discrepancy
-between the tracer budgets and their direct counterparts
-is the  calculation of source and sink terms.
-The Siebesma tracer budget calculated
-using (\ref{eq:siebesmaED}) accounts for the
-vertical advection of tracer properties by taking derivatives of mean 
-vertical tracer profiles, along with averaged vertical Reynolds fluxes.  
-There is no guarantee this estimate of vertical advection will exactly 
-agree with the fully three dimensional MPDATA advection algorithm used by 
-SAM.  In fact, the differences in the numerics of these calculations 
-likely insures the results, while similar, will not be exactly the 
-same.  Furthermore, the Siebesma calculation neglects tracer diffusion.  
-These effects are likely small, but the exact amount of error they 
-induce is difficult to evaluate.
+An additional source of discrepancy between the Siebesma tracer budget 
+and the Romps direct calculation is numerical truncation errors due to 
+the differing advection schemes used by each calculation.  Changing the 
+advection scheme in the Romps direct calculation from a first-order 
+upwind scheme to a second-order MPDATA scheme results in changes in 
+$E_d$ and $D_d$ of up to 40\% \citep{Dawe2011}.  The Siebesma tracer 
+budget calculated using (\ref{eq:siebesmaED}) accounts for the 
+vertical advection of tracer properties by taking derivatives of 
+mean vertical tracer profiles, along with averaged vertical Reynolds 
+fluxes.  The differences in the numerics between these calculations and 
+the fully three dimensional MPDATA advection algorithm used by SAM 
+means the results will not be exactly the same.
 
-\cite{Romps2010} presents an alternative to the Siebesma method of calculating 
-tracer budget entrainment and detrainment values (Romps' equations (11) 
-and (12)) which uses the direct mass and $\phi$ entrainment/detrainment rates 
-and mean profiles of $\phi_{core}$ and $\phi_{env}$ to calculate the vertical
-advection and time tendency budgets (referred to as VATT below) 
-that are on the right hand side of (\ref{eq:siebesmaED}):
+Normally these types of errors are not overwhleming, but the form of 
+the equations (\ref{eq:correctedED}), which transform a direct 
+entrainment estimate into an equivalent tracer budget entrainment, serve 
+to amplify numerical truncation errors in the Romps direct calculation. 
+This can be better seen by using an alternate form of the transformation 
+from direct to equivalent tracer budget values presented by 
+\citet[equations (11) and (12)]{Romps2010}:
 \begin{subequations}
  \label{eq:romps_bulkED}
 \begin{equation}
   \label{eq:romps_bulk_entrainment}
-    E_{\phi R}(\phi_{core} - \phi_{env}) = 
+    E_{\phi T}(\phi_{core} - \phi_{env}) = 
     \phi_{core}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
 \end{equation}
 \begin{equation}
   \label{eq:romps_bulk_detrainment}
-    D_{\phi R}(\phi_{core} - \phi_{env}) = 
+    D_{\phi T}(\phi_{core} - \phi_{env}) = 
     \phi_{env}(E_d-D_d) - ((E\phi)_d - (D\phi)_d)
 \end{equation}
 \end{subequations}
-Here the $R$ subscript indicates that $E$ and $D$ have been calculated via 
-the Romps tracer budget method, and we shall refer to values calculated 
-by this method as the  ``Romps tracer budget'' $E$ and $D$.
 
-To see that the Romps tracer budget equations (\ref{eq:romps_bulkED}) account 
-for exactly the same source and sink terms as the Siebesma tracer budget 
-equations (\ref{eq:siebesmaED}), first multiply (\ref{eq:continuity})
-by $\phi_{core}$:
+Both (\ref{eq:siebesmaED}) and (\ref{eq:romps_bulkED}) estimate 
+$E_{\phi}(\phi_{core} - \phi_{env})$ and 
+$D_{\phi}(\phi_{core} - \phi_{env})$, but the Romps estimate relies 
+on taking the differences $(E_d-D_d)$ and $((E\phi)_d - (D\phi)_d)$,
+both of which are between large quantities that have nearly 
+identical magnitudes, which tends to magnify numerical errors present in 
+each individual term.  Furthermore, these two difference 
+terms are then differenced again, amplifying the numerical errors a 
+second time.
+
+This effect can be seen by comparing the values of 
+$\phi_{core}(E-D)$ and $((E\phi) - (D\phi))$ that are estimated 
+via (\ref{eq:siebesma_entrainment}) and (\ref{eq:romps_bulk_entrainment}).  
+First, we must identify which terms in (\ref{eq:siebesma_entrainment}) 
+correspond to $\phi_{core}(E-D)$ and which to 
+$((E\phi) - (D\phi))$.  The first correspondence can be found by 
+multipling equation (\ref{eq:continuity}) by $\phi_{core}$:
 \begin{equation}
-    \phi_{core}(E_d - D_d) =
+    \label{eq:tracer_budget_E_minus_D}
+    \phi_{core}(E - D) =
     \phi_{core} \left(\rho \frac{\partial a}{\partial t}
                     + \frac{\partial M_{core}}{\partial z}\right).
 \end{equation}
-If diffusion is neglected, the tracer continuity equation can be 
-used to show that
+Combining this with equations (\ref{eq:siebesma_entrainment}) and 
+(\ref{eq:romps_bulk_entrainment}), we find
 \begin{equation}
     \label{tracer_budget_Ephi_minus_Dphi}
-    (E\phi)_d - (D\phi)_d = 
+    (E\phi) - (D\phi) = 
      \rho \frac{\partial (a \phi_{core})}{\partial t}
    + \frac{\partial (M_{core} \phi_{core})}{\partial z}
    + \frac{\partial \rho a \overline{w' \phi'}^{core}}{\partial z}
    - a \rho \left(\frac{\partial \bar{\phi}}{\partial t}\right)_{forcing}.
 \end{equation}
-Subtracting $(E\phi)_d - (D\phi)_d$ from $\phi_{core}(E_d - D_d)$ then 
-results in the VATT budget terms on the rhs of (\ref{eq:siebesma_entrainment}).  
 
-Note that by substituting $(E \phi)_d = E_d \phi_E$ and 
-$(D\phi)_d = D_d \phi_D$ into (\ref{eq:romps_bulkED}), we can quickly recover 
-the equations to transform direct entrainment/detrainment values into 
-equivalent tracer budget values (equations (\ref{eq:corrected_entrainment}) 
-and (\ref{eq:corrected_detrainment})).  This equivalence between 
-(\ref{eq:correctedED}) and (\ref{eq:romps_bulkED})
-means the Romps tracer budget formulation agrees exactly with the result of 
-using $q_{entrain}$ and $q_{detrain}$ values to transform the direct 
-entrainment and detrainment into equivalent tracer budget values.  
+Comparing the Romps and Siebesma $\phi_{core}(E - D)$ values
+(Fig. \ref{fig:numerical_error}a) calculated using total specific water
+$q_t$ as the budget tracer, shows that the Romps value (calculated via 
+$q_{core}(E_d - D_d)$) agrees well with the Siebesma value calculated 
+using (\ref{eq:tracer_budget_E_minus_D}).  Similarily, the Romps 
+$(E\phi) - (D\phi)$ values (Fig. \ref{fig:numerical_error}b) calculated 
+using $(Eq)_d - (Dq)_d$ are quite similar to the the Siebesma values 
+calulated using (\ref{tracer_budget_Ephi_minus_Dphi}).  However, when 
+the difference of these terms is taken 
+(Fig. \ref{fig:numerical_error}c), the similar magnitudes of 
+$\phi_{core}(E - D)$ and $(E\phi) - (D\phi)$ causes the result to 
+be dominated by numerical errors.  The order 5\% differences in the 
+estimates of $\phi_{core}(E - D)$ and  $(E\phi) - (D\phi)$ combine to 
+result in a factor of two difference between Siebesma tracer budget and 
+the Romps tracer budget.
 
-Comparing the Romps and Siebesma $q_{core}(E_d - D_d)$ values
-(Fig. \ref{fig:numerical_error}a) shows that the Romps value for this
-first VATT term has a significantly smaller magnitude than the
-Siebesma value given by (\ref{eq:siebesmaED}).  
-The Romps $(Eq_t)_d - (Dq_t)_d$ values
-(Fig. \ref{fig:numerical_error}b) also have smaller magnitudes when
-compared to the Siebesma values.  The reason for this can be seen by
-comparing these calculations with a version of the direct entrainment
-calculation done without any time averaging of the fluxes.  The effect
-of time averaging is to significantly reduce the size of the direct
-entrainment and detrainment rates $E_d$ and $D_d$.  The difference $E_d-D_d$,
-however, is the same with or without time averaging in order to
-satisfy mass continuity as expressed by (\ref{eq:continuity}).
-Indeed, the unaveraged $\phi_{core}(E_d - D_d)$ value (gray line in
-Figure~\ref{fig:numerical_error}a) agrees almost exactly with the
-Siebesma tracer budget value $\phi_{core}(E_{qS} - D_{qS})$ (dotted
-line).  Due to the time averaging of the direct entrainment and
-detrainment, the direct calculation always has a pool of ``activity
-flux" which has not yet been assigned to either $E_d$ or $D_d$.  This
-reduces both $E_d$ and $D_d$ by roughly the same proportion, causing
-$E_d-D_d$ to be smaller than both the unaveraged direct values and the
-Siebesma $E_{qS}-D_{qS}$ values.
-
-However, despite the large differences between the time averaged 
-$q_{core}(E_d - D_d)$ and $((Eq_t)_d - (Dq_t)_d)$ values and the unaveraged
-values, the net tracer budget that results from the difference
-between these terms (Fig. \ref{fig:numerical_error}c) agrees remarkably 
-well between the time-averaged and instantaneous calculations.  Conversely, the 
-Siebesma tracer budget that results is much larger 
-than the Romps tracer budget, despite the close agreement between the 
-Siebesma and Romps tracer budget $q_{core}(E_d - D_d)$ and 
-$((Eq_t)_d - (Dq_t)_d)$ values.  This difference between the tracer budgets
-calculated by the Siebesma and Romps methods is the source of the remaining
-differences between the direct and Siebesma entrainment and detrainment
-calculations.
-
-Evaluating whether the VATT budget calculation done using (\ref{eq:siebesmaED})
-or (\ref{eq:romps_bulkED}) is more accurate is difficult.
-We have mentioned the possible problems in the Siebesma tracer budget
-calculation related to neglect of tracer diffusion and the simplified method 
-used for calculating vertical advection.  The Romps tracer budget, on the other 
-hand, requires taking the difference of $q_{core}(E_d - D_d)$ and 
-$((Eq_t)_d - (Dq_t)_d)$, terms which have nearly the same magnitude.  
-Because the magnitude of these terms is so similar, small relative errors in
-these terms can result in large relative errors when their difference is taken.
-Consider, for example, the tiny difference between the unaveraged direct 
-$((Eq_t)_d - (Dq_t)_d)$ and the Siebesma $((Eq_t)_d - (Dq_t)_d)$ calculated
-via (\ref{tracer_budget_Ephi_minus_Dphi}) (Fig. \ref{fig:numerical_error}b).
-Although the Siebesma tracer budget $((Eq_t)_d - (Dq_t)_d)$ differs only
-slightly from the unaveraged direct flux value, this results in a relatively
-large difference between the unaveraged direct tracer budget and Siebesma 
-tracer budgets (Fig. \ref{fig:numerical_error}c).  Both of the calculation 
-methods thus have possible sources of error.
+The neglect of turbulent diffusion in the Siebesma bulk tracer 
+calculation is one last possible source of discrepency between $E_{q T}$ 
+and $E_{q S}$ .  This is easily checked by neglecting turbulent diffusion
+in the $\rho \mathcal{A}S_\phi$ term of equation 
+(\ref{eq:romps_ephi_minus_dphi}); doing so results in a change of 
+only TK\% in the value of $E_{q T}$ (not shown), not nearly enough 
+to explain the discrepancy.
 
 %==============================================================================
 
@@ -1001,13 +968,6 @@ Symbol & Units & Definition & First Occurrence\\
    && budget value into an equivalent directly  & \\
    && calculated value & \\
 
- $E_{\phi R}$, $D_{\phi R}$     
-    & kg m$^{-3}$ s$^{-1}$ 
-    & Cloud core mass entrainment/detrainment
-    &  (\ref{eq:romps_bulk_entrainment}), (\ref{eq:romps_bulk_detrainment}) \\
-   && rate calculated using Romps & \\
-   && tracer budget & \\
-
  $\phi$    
     & [$\phi$]            
     & Any fluid tracer, such as $q_t$ (kg kg$^{-1}$), 
@@ -1118,12 +1078,23 @@ Symbol & Units & Definition & First Occurrence\\
 
 \begin{figure}[t]
   \noindent\includegraphics[width=39pc]{./figures/numerical_error}\\
-  \caption{Size of a) $q_{core}(E-D)$, b) $Eq_t-Dq_t$ and c) the resulting 
-  cloud core vertical advection and time tendency specific humidity budget 
-  VATT$=q_{core}(E-D) - (Eq_t-Dq_t)$ for the direct entrainment/detrainment 
-  (black lines), the direct entrainment/detrainment without time averaging 
-  (grey lines), and the Siebesma tracer budget entrainment/detrainment 
-  (dotted lines).}
+  \caption{Sizes of: a) $\phi_{core}(E-D)$ calculated with total 
+  specific humidity $q_t$ using Romps direct entrainment/detrainment 
+  ($q_{core}[E_d - D_d]$, black line) and Siebesma tracer budget 
+  entrainment/detrainment ($q_{core} (\rho {\partial a}/{\partial t} 
+  + {\partial M_{core}}/{\partial z}$)); b) $(E\phi)-(D\phi)$ 
+  calculated using Romps direct entrainment/detrainment 
+  ($(Eq)_d - (Dq)_d$, black line) and Siebesma tracer budget (
+  $\rho {\partial (a q_{core})}/{\partial t}
+  + {\partial (M_{core} q_{core})}/{\partial z}
+  + {\partial (\rho a \overline{w' q'}^{core})}/{\partial z}
+  - a \rho ({\partial \bar{q}}/{\partial t})_{forcing}$, 
+  grey line); and c) the difference of a) and b), 
+  $\phi_{core}(E-D) - ((E\phi)-(D\phi))$, for the direct 
+  entrainment/detrainment (black lines) and the Siebesma tracer budget 
+  entrainment/detrainment (grey lines).  Note how small relative 
+  differences in the values of a) and b) result in large relative 
+  differences in c).}
   \label{fig:numerical_error}
 \end{figure}
 
