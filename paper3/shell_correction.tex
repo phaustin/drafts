@@ -150,7 +150,7 @@ Here $a$ is the fractional cloud core area  and $M_{core}$ is vertical cloud
 core mass flux (kg m$^{-2}$ s$^{-1}$). The level where the mass flux profile 
 goes to zero then defines the location of the cloud ensemble top.  This mass 
 flux profile is combined with the entrainment rate of environmental air into 
-the cloud and the detrainment rate of cloud air into the envrionment to 
+the cloud and the detrainment rate of cloud air into the environment to 
 generate vertical profiles of cloud water vapor, condensate, and 
 temperature, and these profiles are then used to calculate the moistening 
 of the environment by detrainment of cloud fluid 
@@ -245,7 +245,7 @@ using (\ref{eq:romps_e_minus_d}).  We show that the discrepancy is explained by
 two effects: the presence of the shell of moist air around the cloud cores
 and drier air at the edge of the cloud core, and preferential entrainment of 
 shell air with higher average humidity and upward velocity than the mean shell 
-proterties which enhances tracer fluxes between the clouds and the environment.
+properties which enhances tracer fluxes between the clouds and the environment.
 We derive a relation to transform the direct mass entrainment and detrainment 
 fluxes into tracer budget values suitable for use in one-dimensional simple 
 entraining plume cloud parametrizations, and then use these transformed fluxes 
@@ -308,7 +308,7 @@ values, $(e\phi)(x,y,z)$.
 
 The obvious way to calculate the average value of $\phi$ is to perform a 
 flux-weighted calculation, so that $\phi = (e\phi - d\phi)/(e - d)$.  
-However, doing so for positive definite quantities, such as total specifc 
+However, doing so for positive definite quantities, such as total specific 
 water $q_t$, sometimes results in negative $\phi$.  To see the reason 
 for this, consider a situation where $(e - d)$ integrated over the period 
 that a grid cell is active is found to be slightly bigger than zero for 
@@ -373,7 +373,7 @@ $E$ and $D$ are consistent with the continuity equation (equations
 \begin{equation}
   E_{\phi} - D_{\phi} = E_d - D_d.
 \end{equation}
-Similarily, the entrainment and detrainment rates of fluid properties 
+Similarly, the entrainment and detrainment rates of fluid properties 
 must be consistent with the total property budget, giving us
 \begin{equation}
   E_{\phi} \phi_{env} - D_{\phi} \phi_{core} = E_d \phi_E - D_d \phi_D,
@@ -414,11 +414,11 @@ Note that rearrangement of $A$ gives
 $\phi_E = A \phi_{core} + (1-A)\phi_{env}$, meaning that $A$ can be 
 thought of as the fraction of mean core air in a mixture of mean 
 core and mean environment air needed to produce the properties of the 
-entrained fluid.  Similarily, $\phi_D = B \phi_{env} + (1-B)\phi_{core}$ 
+entrained fluid.  Similarly, $\phi_D = B \phi_{env} + (1-B)\phi_{core}$ 
 and $B$ can be thought of as the fraction of mean environment air in a 
 mixture of mean core and mean environment air needed to produce the 
 properties of the detrained fluid.  Since the fluid being entrained or 
-detrained does not neccessarily originate at the level it is entrained 
+detrained does not necessarily originate at the level it is entrained 
 or detrained at, we cannot assume that a fraction $A$ of the entrained 
 air is modified core air.  Nevertheless, $A$ and $B$ are likely related 
 to the recirculation of entrained and detrained air.
@@ -556,7 +556,7 @@ represents the fraction of core air in a mixture of core and environmental
 air which has the properties of $\phi_E$, and $B$ represents the fraction 
 of environmental air in a mixture of core and environmental air which has 
 the properties of $\phi_D$, $A$ and $B$ provide information about the 
-amount of recirculation of entrained and detrained fluid occuring at 
+amount of recirculation of entrained and detrained fluid occurring at 
 different model heights.  However, $A$ and $B$ cannot be considered exact 
 mixing fractions, as the source heights of air mixtures may be different 
 than the height at which they entrain or detrain, and not all mixtures 
@@ -569,7 +569,7 @@ base, $A$ is nearly one while $B$ is nearly zero, implying that both the
 entrained and detrained air have the properties of the cloud core air.  
 This is due to the main entrainment process at cloud base being 
 condensation of rising thermals instead of mixing; buoyant updrafts 
-simply condense without modification of their properties.  Similarily, 
+simply condense without modification of their properties.  Similarly, 
 the air that detrains from the clouds at cloud base is almost undiluted 
 because most entrainment at this level comes from the well-mixed 
 sub-cloud layer below and so has properties nearly identical to the 
@@ -588,7 +588,7 @@ so has the properties of the core air.
 As the clouds mix into the inversion over the course of the day, they 
 cause the inversion to rise.  This means that points in the mid-cloud 
 layer are less influenced by the adiabatic entrainment and detrainment 
-processes occuring at cloud base and cloud top, and so the effects of 
+processes occurring at cloud base and cloud top, and so the effects of 
 mixing become more prominent.  By the end of the day, $A$ within the 
 cloud layer has values near 0.6, suggesting that a significant amount 
 of re-entrainment of air previously detrained from the core still occurs.  
@@ -711,7 +711,7 @@ the effects of $\phi_E$ and $\phi_D$ into the $E$ and $D$ values and
 keep the equations in their less complex form.
 
 On the other hand, the true values of the mass entrainment and 
-detraiment are important for comparison of LES results with field 
+detrainment are important for comparison of LES results with field 
 studies, or possibly for calculations of aerosol reactions whose chemical 
 properties are dependent on the concentration of liquid water in the air 
 \citep{Hoppel1994}.  They are also vital for diagnosing mass exchanges 
@@ -723,7 +723,7 @@ the often-made assumption that fluid entrained into the cloud core has
 negligible vertical momentum \citep{Simpson1969,Gregory2001,Siebesma2003}.  
 This is reflected in the smaller values of the transformed $E_{wT}$ and 
 $D_{wT}$ shown in Fig.~\ref{fig:Reynolds_correction_w}.  The negative 
-valus of $w$ entrainment and $q_t$ and $w$ detrainment produced near 
+values of $w$ entrainment and $q_t$ and $w$ detrainment produced near 
 cloud base emphasize the artificial nature of the tracer budget 
 entrainment and detrainment.  $E_{\phi}$ and $D_{\phi}$ should be 
 interpreted simply as mathematical quantities that satisfy both the 
@@ -1014,14 +1014,14 @@ Symbol & Units & Definition & First Occurrence\\
 
 \begin{figure}[t]
   \noindent\includegraphics[width=39pc]{./figures/shell_variability}
-  \caption{Variation in a) the fraction of core air in a mixure of core 
-  and environmenal air needed to produce the mean humidity entrained by 
-  the clouds, b) the fraction of environmental air in a mixure of core 
-  and environmenal air needed to produce the mean humidity detrained by 
-  the clouds, c) the fraction of core air in a mixure of core and 
-  environmenal air needed to produce the mean vertical velocity 
+  \caption{Variation in a) the fraction of core air in a mixture of core 
+  and environmental air needed to produce the mean humidity entrained by 
+  the clouds, b) the fraction of environmental air in a mixture of core 
+  and environmental air needed to produce the mean humidity detrained by 
+  the clouds, c) the fraction of core air in a mixture of core and 
+  environmental air needed to produce the mean vertical velocity 
   entrained by the clouds, and d) the fraction of environmental air in 
-  a mixure of core and environmenal air needed to produce the mean 
+  a mixture of core and environmental air needed to produce the mean 
   vertical velocity detrained by the clouds, over the duration of the 
   ARM model run.
   }
