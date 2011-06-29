@@ -68,7 +68,7 @@ A technique for the tracking of individual clouds in an large eddy simulation
 model is presented.  We use this technique on a Large Eddy Simulation (LES) of 
 a shallow cumulus cloud field based upon the Barbados Oceanographic and 
 Meteorological Experiment (BOMEX), to calculate statistics of cloud height, 
-lifetime, and other physical properies for individual clouds in the model.  We 
+lifetime, and other physical properties for individual clouds in the model.  We 
 also examine the question of nature versus nurture in shallow cumulus clouds: 
 do properties at cloud base determine the upper-level properties of the clouds 
 (nature), or are cloud properties determined by the environmental conditions 
@@ -92,7 +92,7 @@ for shallow cumulus clouds.
 %% \introduction[modified heading if necessary]
 
 - Clouds are vital for climate
-- hard to parameterize
+- hard to parametrize
 - Studied via LES
 - LES studies traditionally look at bulk cloud properties
 
@@ -158,7 +158,7 @@ numerical tracer that is emitted at the surface and subsequently decays
 exponentially with a one minute time constant.  A point is considered to be in 
 the plume if the tracer value of that point is larger than one standard 
 deviation above the mean tracer value at the current height.  Additionally, 
-the tracer must exceed five precent of the integral of the tracer standard 
+the tracer must exceed five percent of the integral of the tracer standard 
 deviation from the surface to the current height.  However, unlike 
 \citeauthor{Couvreaux2010}, we do not require upper-level plume points to have 
 condensed liquid water.  Finally, we force the condensed region to be a subset 
@@ -170,7 +170,7 @@ cloudlets are then expanded into nearest-neighbour connected condensed points
 until all condensed points that are connected to a core are assigned to a 
 cloudlet.  Condensed points cannot belong to two cloudlets, so if a cloud 
 contains more than one contiguous volume of nearest-neighbour connected core 
-points it will be split into seperate cloudlets.  Leftover condensed points are 
+points it will be split into separate cloudlets.  Leftover condensed points are 
 then divided into new cloudlets which have no cores.  Once all the condensed 
 points have been assigned to cloudlets, this expansion process is repeated for 
 the plume points.  This results in three types of cloudlets: ones consisting of 
@@ -181,7 +181,7 @@ points.  This process is then repeated for every saved model time step.
 These cloudlets are then assigned to individual clouds.  For the first time 
 step, we assign cloudlets which have touching condensed surfaces to the same 
 cloud.  At subsequent time steps, cloudlets that spatially overlap with a cloud 
-at the previous timestep are assumed to be the same cloud.  The cloudlet's 
+at the previous time step are assumed to be the same cloud.  The cloudlet's 
 position is corrected for advection using the mean velocity of the cloudlet's 
 condensed points (if condensed points are present in the cloudlet) or plume 
 (if they are not), multiplied by the time between model output saves.
@@ -192,7 +192,7 @@ overlap condensed points in a previous time step cloud
 plume points (plume$\rightarrow$condensed); plume may overlap condensed 
 points (condensed$\rightarrow$plume); and plume may overlap plume 
 (plume$\rightarrow$plume).  Several kinds of overlap may occur 
-simultaneously, so we define a heirarchy of connection types and check each in 
+simultaneously, so we define a hierarchy of connection types and check each in 
 turn.  The strongest connection type is condensed$\rightarrow$condensed, 
 followed by plume$\rightarrow$condensed, then plume$\rightarrow$plume.  
 Condensed$\rightarrow$plume connections are ignored, which prevents 
@@ -223,7 +223,7 @@ repeated for each time step until all cloudlets are assigned to a cloud.
   
 Once the cloudlets are all assigned to a cloud, any cloud that has condensed 
 points for less than five minutes is flagged.  If any merge or split events 
-occured over these clouds' short lifetimes, the cloud is rejoined to the cloud 
+occurred over these clouds' short lifetimes, the cloud is rejoined to the cloud 
 it split from or merged into.  This prevents decaying detritus shed from a 
 cloud top and clouds which split then immediately re-merge with their parent 
 from being counted as discrete cloud objects.  Finally, clouds that have 
@@ -236,14 +236,14 @@ forced clouds at cloud base.
 
 Applying the cloud tracking algorithm to three hours of BOMEX LES output 
 resulted in 3171 tracked clouds.  Of these, 609 (19\%) were created by 
-splitting an existing cloud, 2381 (75\%) were unassosciated with previous 
+splitting an existing cloud, 2381 (75\%) were unassociated with previous 
 clouds, and 181 (6\%) were present at the start of the output period and thus 
 their initiation was not observed.  Conversely, 261 (8\%) of the clouds ended 
 their life cycle by merging with another cloud, 2820 (89\%) ended their 
-lifecycle by decaying away, and 90 (3\%) were present at the end of the output 
+life cycle by decaying away, and 90 (3\%) were present at the end of the output 
 period.  Only 20 clouds both begin by splitting from and end by merging with 
 another cloud, indicating that 850 clouds (27\%) are involved in such 
-interactions--a sizeable proportion of the field.  The larger number of clouds 
+interactions--a sizable proportion of the field.  The larger number of clouds 
 present at the start of the output period (181) than at the end (90) is the 
 result of the algorithm maintaining connections between physically separated 
 clouds.
@@ -255,13 +255,13 @@ and split events.  However, the majority of the merge and split events that
 occur to this cloud do not significantly alter the cloud area, and none of the 
 other horizontally averaged properties display significant discontinuities.  
 Most of the cloud maintains upward velocities over 1 m s$^{-1}$ (Fig. 
-\ref{fig:example_cloud}b), though short-lived downdrafts are apprent in the 
+\ref{fig:example_cloud}b), though short-lived downdrafts are apparent in the 
 inversion (above $\approx$ 1.5 km) and at the end of the cloud's life.  Near 
 cloud base, the total specific water ($q_t$, units of g kg$^{-1}$, Fig. 
 \ref{fig:example_cloud}c), liquid-water potential temperature ($\theta_l$, 
 units of K, Fig. \ref{fig:example_cloud}d), and condensed liquid water 
 ($q_l$, units of g kg$^{-1}$, Fig. \ref{fig:example_cloud}e) are similar to 
-the environmental properties near cloudbase but the $q_t$ excess, $\theta_l$ 
+the environmental properties near cloud base but the $q_t$ excess, $\theta_l$ 
 deficit, and $q_l$ of the cloud increases with height and indications of 
 upward propagating pulses can be seen in these fields.  The cloud buoyancy is 
 generally positive below the inversion, with strong pulses of positive buoyancy 
@@ -276,7 +276,7 @@ display buoyant mass pulses more clearly than the cloud properties.  Cloud core
 occupies roughly 60\% the horizontal cloud area near cloud base, but 
 essentially vanishes in the inversion.  Since the cloud properties show 
 positive vertical velocity and negative buoyancy in the inversion, the 
-dissapearance of the core is due to the rapid increase of environmental 
+disappearance of the core is due to the rapid increase of environmental 
 buoyancy which makes the cloud negatively buoyant.  Cloud core vertical 
 velocity increases steadily with height and $q_t$ excess, $\theta_l$ deficit, 
 and $q_l$ are all greatest at cloud top.  Core buoyancy is positive by 
@@ -292,7 +292,7 @@ period since we do not have access to their complete life cycles. This removed
 some of the longest-lived clouds from our sample, biasing the population 
 slightly.  However, our results show the cloud population to be overwhelmingly 
 composed of short-lived clouds, implying that robust estimates of the frequency 
-occurrance of the longest-lived clouds will not be possible in any case.
+occurrence of the longest-lived clouds will not be possible in any case.
 
 Both cloud lifetime (Fig \ref{fig:cloud_stats}a) and mean cloud area over the 
 cloud's lifetime (Fig \ref{fig:cloud_stats}b) are heavily skewed toward small, 
@@ -318,7 +318,7 @@ cloud base, interspersed with occasional large, long-lived towers that have
 managed to overcome convective inhibition and reach the inversion.
 
 As cloud size distributions are known to follow a power law scaling 
-\cite{Zhao2007}, these results are physically plausable. However, few of these 
+\cite{Zhao2007}, these results are physically plausible. However, few of these 
 statistics have been accurately measured in real cloud fields. One cloud 
 property that has been widely measured, however, is instantaneous cloud area 
 taken from satellite images.  Fitting a line to a log-log plot of cloud size 
@@ -334,7 +334,7 @@ hours of model output, then fit a line to this distribution in log-log space
 (fig \ref{fig:cloud_areas}).  Note that the output of this calculation is not 
 identical to what a satellite would observe, as the tracking algorithm may 
 associate disconnected patches of condensed liquid water with a single tracked 
-cloud, or may split one conguous area of condensed liquid water into multiple 
+cloud, or may split one contiguous area of condensed liquid water into multiple 
 tracked clouds.  As a result, the tracked cloud statistics show a deficit in 
 the cloud population in the smallest size classes compared to expected values 
 for a power law distribution.  To compensate for this, we exclude clouds with a 
@@ -344,7 +344,7 @@ from our line fit.
 With this caveat in mind, the tracking algorithm generates a cloud size 
 distribution that follows a power law with a -1.95 slope, in good agreement 
 with the observed value of -2 \citep{Zhao2007}.  We conclude that our cloud 
-tracking algorithm is doing a reasonable job of seperating individual clouds 
+tracking algorithm is doing a reasonable job of separating individual clouds 
 from the cloud field and tracking them in time.
 
 %==============================================================================
@@ -353,10 +353,10 @@ from the cloud field and tracking them in time.
 
 The output of the tracking algorithm provides us with a complete decomposition 
 of the model cloud field into individual clouds.  This allows us the 
-opportunity to generate statistics of cloud behavior and use these statistics 
+opportunity to generate statistics of cloud behaviour and use these statistics 
 to answer questions about cloud field dynamics.  In this section, we perform 
 two analyses on the tracking algorithm output to address the question of nature 
-versus nurture in shallow cumumulus cloud dynamics: do the properties of the 
+versus nurture in shallow cumulus cloud dynamics: do the properties of the 
 air entering the cloud plume at cloud base, or the properties of the 
 environmental air the plume encounters as it rises, exert stronger influence on 
 the evolution of the cloud?
@@ -396,7 +396,7 @@ Since many of the cloud's properties, such as cross-sectional area, are not
 normally distributed, we use a non-parametric statistical test to determine if 
 the properties of the tall clouds and their environment are significantly 
 different than the properties of the short clouds.  The Mann-Whitney U test 
-evalutes the null hypothesis that the property distribution of two samples are 
+evaluates the null hypothesis that the property distribution of two samples are 
 identical \citep{Mann1947}.  It does this by summing the number of values 
 in one sample which are greater than each value in the other sample; this sum 
 is called $U$.  If large samples are taken from populations with identical 
@@ -411,7 +411,7 @@ $U_1 + U_2 = mn$, and by convention only the smaller U-value is quoted.
 
 We calculate U values for total specific water $q_t$, liquid-water potential 
 temperature $\theta_l$, density potential temperature $\theta_\rho$, and 
-vertical velocity $w$ for both cloud top and envrionment.  Two additional 
+vertical velocity $w$ for both cloud top and environment.  Two additional 
 quantities are calculated for cloud top alone: specific liquid water $q_l$ and 
 cross sectional area $a$.  All of these values are calculated for both averages 
 over 550-750 m and 750-1000 m, resulting in a total of 20 property comparisons.
@@ -419,21 +419,21 @@ For the 550-750 m samples, the mean value of $U$ if both the tall and short
 clouds have identical distributions should be 8908, and for the 750-1000 m 
 samples, 7175.  
 
-Since we are calculating 20 seperate tests, there is a high chance that one of 
+Since we are calculating 20 separate tests, there is a high chance that one of 
 these tests will show a spurious significant relationship if we test for a 95\% 
 significance level (for example see http://xkcd.com/882/).  Several methods, 
 such as the Bonferonni correction \citep{Shaffer1995}, can be used to reduce 
 the possibility of finding a spurious result.  However, these methods often 
 risk erroneously excluding significant results, and much debate over their use 
 can be found in the scientific literature \citep{Perneger1998, Nakagawa2004}.  
-The simplest correction to signficance for multiple statistical tests is simply 
+The simplest correction to significance for multiple statistical tests is simply 
 to divide the p-value sought by the number of tests performed.  Thus, to 
 achieve an overall p-value of 0.05 with 20 tests, we must achieve a p-value of 
 .05/20 = 0.0025 on an individual test. This represents a worst case scenario 
 where only 1 of the 20 tests is significant, and we must exclude the 
 possibility this significance results from random chance; if more than one test 
 is significant, the p-value needed to exclude false positives is reduced.  
-Instead of calculating these probabilities explicity, we will simply consider 
+Instead of calculating these probabilities explicitly, we will simply consider 
 any result with p < 0.05 as possibly significant and any with a 
 p-value < 0.0025 as definitely significant.  
 
@@ -455,14 +455,14 @@ likely to become tall clouds.
 However, simply because the differences in these values are statistically 
 significant does not mean that they are important.  Examining histograms of 
 environmental $q_t$ and $w$ and cloud top $w$ and $a$ (Figure 
-\ref{fig:cloud_envionment_histograms}) shows that, while the differences 
+\ref{fig:cloud_environment_histograms}) shows that, while the differences 
 between the tall and short clouds are unlikely to have occurred by chance, 
 clouds tops with small areas in environments moving upward slowly still have 
 a reasonable chance of becoming tall clouds.  These properties certainly have 
 an influence on the cloud height, but it is clearly not a definitive one.
 
 As the clouds rise above cloud base, the properties associated with short and 
-tall clouds change.  The average envrionmental values of $q_t$, $\theta_l$, 
+tall clouds change.  The average environmental values of $q_t$, $\theta_l$, 
 and $\theta_\rho$ encountered by the clouds between 750-1000 m are not 
 significantly different for short clouds than for tall clouds.  The vertical 
 velocity of the environment in this height range still has an effect, but it 
@@ -514,10 +514,10 @@ for the 550 m and 750 m releases, we use the cloud core properties.  A total of
 particles at 750 m.
 
 The properties tracked by the particles released in the sub-cloud layer tend to 
-be significantly autocorrelated until the particle reaches cloud base (Figure 
+be significantly auto-correlated until the particle reaches cloud base (Figure 
 \ref{fig:sub_cloud_profiles}).  The state variables $q_t$ and $\theta_l$ of 
-the released parcels have nearly constant autocorrelation and are 
-anticorrelated with each other up to cloud base, at which point the correlation 
+the released parcels have nearly constant auto-correlation and are 
+anti-correlated with each other up to cloud base, at which point the correlation 
 begins to decay with height, disappearing by the time the particles reach 
 700 m.  The buoyancy tracked by the particles appears quite tightly coupled 
 with the liquid-water potential temperature, but not the specific total water, 
@@ -532,7 +532,7 @@ first 200 m above cloud base.
 Like the correlation profiles of the particles released in the sub-cloud 
 layer, the profiles of correlation between $q_t$ and $\theta_l$ at cloud base 
 and at higher levels are significant until about 750 m height (Figure 
-\ref{fig:cloud_base_profiles}).  However, this is where the simliarity ends.   
+\ref{fig:cloud_base_profiles}).  However, this is where the similarity ends.   
 Unlike the sub-cloud layer case, $\theta_\rho$ anomalies show significant 
 correlations up to 800 m with $\theta_\rho$ at cloud base.  Furthermore, 
 instead of being tightly correlated with $\theta_l$, $\theta_\rho$ now 
@@ -554,13 +554,13 @@ correlations are still apparent 750 m above cloud base.
 
 Finally, we look at correlations profiles for particles released at 750 m 
 (Figure \ref{fig:750m_profiles}).  Again we see significantly different 
-behavior compared to particles released at cloud base.  Overall, correlations 
+behaviour compared to particles released at cloud base.  Overall, correlations 
 are much stronger and persist far higher above the particle release level, 
 likely due to the particles having greater vertical velocity which allows 
 anomalies to propagate farther before turbulence mixes them away.  Cloud core 
-$q_t$ and $\theta_l$ are tightly anticorrelated at 750 m, and significant 
+$q_t$ and $\theta_l$ are tightly anti-correlated at 750 m, and significant 
 correlations between these variables persist up to 1100 m.  Density potential 
-temperature shows similar behavior, though it displays slighly greater 
+temperature shows similar behaviour, though it displays slightly greater 
 correlation with $q_t$ than with $\theta_l$.  Vertical velocity at 750 m shows 
 smaller but still significant correlations with $q_t$, $\theta_l$, and 
 $\theta_\rho$ up to 1100 m.  Finally, while $a$ shows much smaller 
@@ -575,7 +575,7 @@ but buoyancy controls the eventual velocity the cloud core reaches.  Unlike
 the thermodynamic variables, $a$ at 750 m does not correlate with $w$ 
 better than any other property.  As was the case with the cloud base particles, 
 cloud liquid water anomalies behaves essentially identically to $q_t$. Finally, 
-cloud core area again shows the highest autocorrelations, with $a$ at 750 m 
+cloud core area again shows the highest auto-correlations, with $a$ at 750 m 
 showing significant correlations with area up until the cloud core reaches the 
 inversion at 1.5 km.
 
@@ -585,7 +585,7 @@ Our results suggest that cloud base area exerts strong controls over the
 future height, area, and thermodynamic properties of the cloud.  Because of 
 this, we conclude that nature, in the form of cloud base area, has a more 
 important role in the dynamics of BOMEX shallow cumulus clouds than the 
-environmental conditions they encounted (nurture).  A simple illustration of 
+environmental conditions they encountered (nurture).  A simple illustration of 
 the reasons for this can be seen in profiles of the standard deviation of 
 various cloud properties with height (Figure \ref{fig:st_dev}).  Most of the 
 properties of the clouds at cloud base are fairly uniform, with small standard 
@@ -596,7 +596,7 @@ of the clouds as they rise, because it is the only cloud base property that
 varies enough to have an effect.
 
 Using numerical tracers in a BOMEX LES, \cite{Romps2010a} found that 
-stochastic entrainment controlled the evolution of convecting parcles, not 
+stochastic entrainment controlled the evolution of convecting parcels, not 
 the properties of those parcels at cloud base.  From this, they concluded that 
 nurture (the entrainment history of the rising parcel) was more important than 
 nature (the properties at cloud base) in controlling the dynamics of convecting 
@@ -622,10 +622,10 @@ buoyancy, and so anomalies quickly dissipate.
 Once the broad regions of rising air reach cloud base, a different set of 
 physics takes over.  As rising parcels reach the top of the well-mixed 
 sub-cloud layer, they become negatively buoyant.  Since the parcels are now 
-negatively buoyant, they must rely on inertia and pressure pertubations to 
+negatively buoyant, they must rely on inertia and pressure perturbations to 
 allow them to continue rising.  Thus, the strong buoyancy change at cloud base 
 acts as a filter which admits only the fastest moving parcels, or the parcels 
-in a region of organized motion with a pressure pertubation sufficient to 
+in a region of organized motion with a pressure perturbation sufficient to 
 overcome the negative buoyancy (i.e., a cloud with a large horizontal area).  
 Hence, larger area clouds in an upward moving environment are better able to
 penetrate through cloud base.
@@ -639,7 +639,7 @@ more buoyant clouds move faster.  At the same time, entrainment and mixing
 tend to wipe out this excess buoyancy.  Clouds with higher moisture content and 
 buoyancy are more likely to remain buoyant, so thermodynamic quantities become 
 important in determining eventual cloud height.  However, cloud area dominates 
-these effects, as larger clouds are better able to sheild their cores from 
+these effects, as larger clouds are better able to shield their cores from 
 mixing with the environment.  The larger clouds preserve their cloud base 
 properties better than smaller clouds, and so their upper-level thermodynamic 
 properties are strongly influenced by cloud area.  This set of physics persists 
@@ -659,7 +659,7 @@ splitting of buoyant cloud plumes, and a numerical tracer which we use to
 evaluate if a cloud plume remains dynamically connected to the planetary 
 surface.  The output of this algorithm is suitable for conducting statistical 
 analyses of shallow cumulus cloud populations.  We believe this algorithm could 
-be easily extended to study deep convection.  We include in the supplimentary 
+be easily extended to study deep convection.  We include in the supplementary 
 material of this paper our implementation of this algorithm, written in Python, 
 for general use by the cloud modeling community.
 
@@ -676,7 +676,7 @@ layer.  If these plumes make it through the cloud base layer, dilution by the
 environment competes with buoyancy production from latent heating to control 
 the ascent of the clouds to the inversion.  These results suggest that, in 
 contrast to the fate of individual cloud parcels, the fate of whole clouds is 
-goverened by their cloud base areas, and thus their nature is more important 
+governed by their cloud base areas, and thus their nature is more important 
 than the environment they are nurtured in.
 
 %\appendix
