@@ -75,12 +75,14 @@ do properties at cloud base determine the upper-level properties of the clouds
 they encounter (nurture).  We find that clouds which ascend through an 
 environment that has been pre-moistened by previous cloud activity are no more 
 likely to reach the inversion than clouds that ascend through a drier 
-environment.  Conversely, we find that cloud base moisture and liquid-water 
-potential temperature are largely uncorrelated with upper-level cloud 
-properties, but that the area of the cloud base influences cloud buoyancy and 
-maximum cloud height.  We conclude that cloud properties are primarily 
-influenced by cloud base area, and thus nature is more important than nurture 
-for shallow cumulus clouds.
+environment.  Cloud base thermodynamic properties are uncorrelated with 
+upper-level cloud properties, while integrated entrainment and detrainment
+displays moderate correlations up to the inversion.  conversely, cloud base area 
+influences upper-level cloud area and maximum cloud height.  We conclude that 
+cloud thermodynamic properties are primarily influenced by entrainment and 
+detrainment processes, cloud area and height are primarily influenced by cloud 
+base area, and thus nature and nurture both play roles in the dynamics of 
+BOMEX shallow cumulus clouds.
 \end{abstract}
 
 %% only used for copernicus2.clsu
@@ -98,7 +100,7 @@ transport heat and moisture away from the surface, erode the inversion, and
 precondition the free troposphere for deep convection \citep{Tiedtke1988, 
 Neggers2007}.  Additionally, since short-wave radiation reflection from marine 
 boundary-layer clouds is a primary component of cloud radiative effects, 
-accurate parameterization of shallow cumulus is neccessary to accurately model 
+accurate parametrization of shallow cumulus is necessary to accurately model 
 global radiation balance in General Circulation Models 
 \citep[GCMs;][]{Bony2005, Medeiros2008, Wyant2009, Medeiros2011}.
   
@@ -127,7 +129,7 @@ similar approach was taken by \cite{Heus2009}, who used a virtual-reality
 environment to help select 79 clouds from a set of LES experiments.
 
 While the methods of \citeauthor{Zhao2005} and \citeauthor{Heus2009} were 
-able to provide many insights into the dyanamics of individual clouds in a 
+able to provide many insights into the dynamics of individual clouds in a 
 LES cloud field, they still suffer from two issues.  First, they are time 
 consuming, requiring human intervention to select individual clouds out of 
 the model simulations, and second, they do not allow for a complete 
@@ -157,7 +159,7 @@ of whether initial cloud properties or the environment encountered by the cloud
 is more important in determining the course of the cloud's life cycle.  
 In section 5 we present our conclusions.  In addition, we include the full 
 source code for our algorithm for use by the LES modeling community, written in 
-the Python programming language, as supplimental material to this paper.
+the Python programming language, as supplemental material to this paper.
 
 %==============================================================================
 
@@ -238,7 +240,7 @@ step, we assign cloudlets which have nearest-neighbour connected condensed
 regions to the same cloud.  At subsequent time steps, cloudlets that spatially 
 overlap with a cloud at the previous time step are assumed to be the same 
 cloud.  For the purpose of determining cloudlet overlaps, the cloudlet's 
-position is corrected for advection that has occured between snapshots using 
+position is corrected for advection that has occurred between snapshots using 
 the mean velocity of the cloudlet's condensed points (if condensed points are 
 present in the cloudlet) or plume (if they are not).
 
@@ -414,7 +416,7 @@ snapshot; and second, the tracking algorithm treats short-lived clouds which
 have recently separated from a parent as part of the parent cloud.  Large
 clouds are underrepresented by the algorithm for two reasons: first, clouds 
 which have connected condensed regions may still have separate cores, and so 
-are considered seperate clouds by the algorithm; and second, the projection of 
+are considered separate clouds by the algorithm; and second, the projection of 
 the three dimensional cloud area onto the 2D plane done for the instantaneous 
 snapshots results in clouds which overlap in the vertical, but which are 
 disconnected in 3D space, inflating the numbers of large clouds seen in the 
@@ -422,8 +424,8 @@ snapshots.  Many of the small and large clouds thus end up classified as mid-
 sized clouds by the tracking algorithm, inflating their numbers.
 
 Clear scale breaks appear around 1000 m in the snapshot distribution and 900 m 
-in the tracking algorithm distribution, and so we excluse length scales greater 
-than 1000m and 900 m from the line fits used to find $\lambda$.  Additionaly, 
+in the tracking algorithm distribution, and so we exclude length scales greater 
+than 1000m and 900 m from the line fits used to find $\lambda$.  Additionally, 
 a small-length scale scale break is apparent in the tracking algorithm 
 distribution for clouds with $l$ less than 100 m, so we exclude this length 
 scale from the tracking algorithm line fit as well.  Lines fit to the 
@@ -465,7 +467,7 @@ reveal strong instantaneous relationships between cloud properties (Figure
 \ref{fig:cloud_autocorrelation}).  Above 800 m, $q_t$, $-\theta_l$, and 
 $\theta_\rho$ are strongly correlated, to the point that they can essentially 
 be considered a single variable; more buoyant clouds have higher $q_t$ and 
-lower $\theta_l$.  Similarily, $a$ and $M$ have near-unity correlations above 
+lower $\theta_l$.  Similarly, $a$ and $M$ have near-unity correlations above 
 600 m, indicating that variations in cross-sectional area completely control 
 the cloud's vertical mass flux.  From this we conclude that BOMEX cloud 
 variability between 800 m and the inversion base can be completely 
@@ -581,7 +583,7 @@ definition insures the particles will always move upward.  A total of
 between thermodynamic variables and cloud area and mass flux, we restrict our 
 analysis to $\theta_\rho$, $w$, and $a$.  However, since $\theta_l$ is 
 uncorrelated with $q_t$ and $\theta_\rho$ at cloudbase, we do calculate the 
-correlation between $\theta_l$ at 600 m and upper-level properties seperately 
+correlation between $\theta_l$ at 600 m and upper-level properties separately 
 from cloud base $\theta_\rho$.
 
 Cloud base $\theta_l$ turns out to be uncorrelated with any upper-level 
@@ -600,7 +602,7 @@ vertical velocity appear to be uncorrelated with cloud-base properties, but
 upper-level cloud core area is correlated with cloud base $a$ and, to a lesser
 extent, $w$.
 
-\cite{Romps2010} explained the variation in cloud parcel propeties at height 
+\cite{Romps2010} explained the variation in cloud parcel properties at height 
 as the result of the entrainment the parcel experienced as it rose from 
 cloud base.  We can examine the influence of entrainment and detrainment 
 processes on the cloud core properties by integrating the total fractional 
@@ -616,7 +618,7 @@ each cloud at each particle sampling time.  Additionally, we calculate the
 integral of the critical mixing fraction $\chi_c$, the fraction of 
 environmental air in a mixture of core and environmental air needed to produce 
 a neutrally buoyant mixture.  $\chi_c$ is used in buoyancy-sorting 
-parameterization schemes to determine cloud core entrainment and detrainment 
+parametrization schemes to determine cloud core entrainment and detrainment 
 rates \citep{Kain1990, Rooy2008}.  We calculate $\chi_c$ using the mean cloud
 core properties and environmental properties taken as the average of all 
 non-cloud core points at the current height within 100 m of the cloud core.
@@ -629,7 +631,7 @@ release, and indicate that low entrainment and detrainment rates are correlated
 with anomalously buoyant clouds.  Vertical velocity also shows stronger 
 correlations with $-\epsilon$, $-\delta$, and $\chi_c$ than with cloud base 
 $w$ between 800-1,300 m, although in this case integrated $-\delta$ has a 
-noticably higher correlation with $w$ than $-\epsilon$ does.  Conversely, 
+noticeably higher correlation with $w$ than $-\epsilon$ does.  Conversely, 
 cloud core area is more correlated with cloud base core area than integrated 
 $-\epsilon$, $-\delta$ or $\chi_c$ all the way to the inversion base, at 
 which point the integrated $-\delta$ and $\chi_c$ values show roughly the 
@@ -798,7 +800,7 @@ detrainment, have roles in the dynamics of BOMEX shallow cumulus clouds.
 
 Finally, the strong effect we find that cloud area has on the eventual cloud 
 top height cloud suggests a simple physical interpretation for the stochastic 
-entrainment event parameterisation proposed by \cite{Romps2010a}: entrainment 
+entrainment event parametrization proposed by \cite{Romps2010a}: entrainment 
 events occur when a parcel reaches the edge of the cloud. This idea is 
 supported by examining the changes in the probability distribution of $q_t$ 
 values at various distances from the cloud surface (Figure 
