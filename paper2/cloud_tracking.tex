@@ -64,21 +64,21 @@ cloud tracking algorithm}
 
 
 \begin{abstract}
-A technique for the tracking of individual clouds in an large eddy simulation 
-model is presented.  We use this technique on a Large Eddy Simulation (LES) of 
-a shallow cumulus cloud field based upon the Barbados Oceanographic and 
-Meteorological Experiment (BOMEX) to calculate statistics of cloud height, 
-lifetime, and other physical properties for individual clouds in the model.  We 
-also examine the question of nature versus nurture in shallow cumulus clouds: 
-do properties at cloud base determine the upper-level properties of the clouds 
-(nature), or are cloud properties determined by the environmental conditions 
-they encounter (nurture).  We find that clouds which ascend through an 
-environment that has been pre-moistened by previous cloud activity are no more 
-likely to reach the inversion than clouds that ascend through a drier 
-environment.  Cloud base thermodynamic properties are uncorrelated with 
-upper-level cloud properties, while integrated entrainment and detrainment
-displays moderate correlations up to the inversion.  Conversely, cloud base area 
-correlates well with upper-level cloud area and maximum cloud height.  We 
+A technique for the tracking of individual clouds in a Large Eddy Simulation 
+(LES) is presented.  We use this technique on a LES of a shallow cumulus cloud 
+field based upon the Barbados Oceanographic and Meteorological Experiment 
+(BOMEX) to calculate statistics of cloud height, lifetime, and other physical 
+properties for individual clouds in the model.  We also examine the question of 
+nature versus nurture in shallow cumulus clouds: do properties at cloud base 
+determine the upper-level properties of the clouds (nature), or are cloud 
+properties determined by the environmental conditions they encounter (nurture). 
+We find that clouds which ascend through an environment that has been 
+pre-moistened by previous cloud activity are no more likely to reach the 
+inversion than clouds that ascend through a drier environment.  Cloud base 
+thermodynamic properties are uncorrelated with upper-level cloud properties, 
+while mean fractional entrainment and detrainment rate displays moderate 
+correlations with cloud properties up to the inversion.  Conversely, cloud base 
+area correlates well with upper-level cloud area and maximum cloud height.  We 
 conclude that cloud thermodynamic properties are primarily influenced by 
 entrainment and detrainment processes, cloud area and height are primarily 
 influenced by cloud base area, and thus nature and nurture both play roles in 
@@ -99,11 +99,11 @@ They form an important part of the tropical Hadley circulation, acting to
 transport heat and moisture away from the surface, erode the inversion, and 
 precondition the free troposphere for deep convection \citep{Tiedtke1988, 
 Neggers2007}.  Additionally, since short-wave radiation reflection from marine 
-boundary-layer clouds is a primary component of cloud radiative effects, 
-accurate parametrization of shallow cumulus is necessary to accurately model 
+boundary-layer clouds is a primary component of cloud radiative effects, a
+proper parametrization of shallow cumulus is necessary to accurately model 
 the global radiation balance in General Circulation Models 
 \citep[GCMs;][]{Bony2005, Medeiros2008, Wyant2009, Medeiros2011}.
-  
+
 Much effort has been devoted to understanding the dynamics of shallow cumulus, 
 notably the work of the Global Energy and Water Cycle Experiment (GEWEX) Cloud 
 System Studies \citep[GCSS;][]{Randall2003} boundary layer cloud group.  The 
@@ -307,13 +307,13 @@ clouds at the end of the output period.
 
 Figure \ref{fig:example_cloud} displays horizontally averaged condensed region 
 (cloud points containing condensed liquid water) properties for the 
-longest-lived cloud in the ensemble.  The cloud's cross-sectional condensed 
-area shows large, vertically coherent discontinuities in time due to merge 
-events and split events.  However, the majority of the merge and split events 
-that occur to this cloud do not significantly alter the cloud condensed area, 
-and none of the other horizontally averaged properties display significant 
-discontinuities.  Most of the cloud condensed region maintains upward 
-velocities over 1 m s$^{-1}$ (Fig. \ref{fig:example_cloud}b), though 
+longest-lived cloud in the ensemble.  The cloud's horizontal cross-sectional 
+condensed area shows large, vertically coherent discontinuities in time due to 
+merge events and split events.  However, the majority of the merge and split 
+events that occur to this cloud do not significantly alter the cloud condensed 
+area, and none of the other horizontally averaged properties display 
+significant discontinuities.  Most of the cloud condensed region maintains 
+upward velocities over 1 m s$^{-1}$ (Fig. \ref{fig:example_cloud}b), though 
 short-lived downdrafts are apparent in the inversion (above $\approx$ 1.5 km) 
 and at the end of the cloud's life.  Near cloud base, the total specific water 
 ($q_t$, units of g kg$^{-1}$, Fig. \ref{fig:example_cloud}c), liquid-water 
@@ -457,10 +457,10 @@ Before we turn to our examples, we briefly examine the variability of the
 clouds in the tracked ensemble.  We examine six basic properties of the 
 clouds' condensed liquid water regions: total specific water $q_t$, 
 liquid-water potential temperature $\theta_l$, density potential temperature 
-$\theta_\rho$, vertical velocity $w$, cross-sectional area $a$, and vertical 
-mass flux $M$.  We take horizontal averages of the first four properties and 
-horizontal sums for $a$ and $M$ over condensed points to generate property 
-profiles for each cloud at each sampled time.
+$\theta_\rho$, vertical velocity $w$, horizontal cross-sectional area $a$, 
+and vertical mass flux $M$.  We take horizontal averages of the first four 
+properties and horizontal sums for $a$ and $M$ over condensed points to 
+generate property profiles for each cloud at each sampled time.
 
 Cross-correlations between properties of each cloud sample at a given height 
 reveal strong instantaneous relationships between the properties of the cloud 
@@ -470,22 +470,22 @@ are applicable both to condensed and core regions.  Above 800 m, $q_t$,
 $-\theta_l$, and $\theta_\rho$ are strongly correlated, to the point that 
 they can essentially be considered a single variable; more buoyant clouds have 
 higher $q_t$ and lower $\theta_l$.  Similarly, $a$ and $M$ have near-unity 
-correlations from 600-1400 m, indicating that variations in cross-sectional 
-area completely control the vertical mass flux.  From this we conclude that 
-BOMEX cloud variability between 800 m and the inversion base can be completely 
-characterized by three variables: $\theta_\rho$, $w$, and $a$.  
+correlations from 600-1400 m, indicating that variations in horizontal 
+cross-sectional area completely control the vertical mass flux.  From this we 
+conclude that BOMEX cloud variability between 800 m and the inversion base can 
+be completely characterized by three variables: $\theta_\rho$, $w$, and $a$.  
 
 Near cloud base the system becomes slightly more complicated, as $a$ and $M$ 
-become uncorrelated at cloud base, and $-\theta_l$ diverges from $q_t$ and 
-$\theta_\rho$.  At cloud base, buoyancy is completely controlled by 
-variations in $q_t$, and $-\theta_l$ becomes anti-correlated with $q_t$ and 
-$\theta_\rho$.  Within the 700-1400 m layer cross-correlations are 
-significant at the 99\% confidence level between $\theta_\rho$, $w$, and $a$, 
-but the magnitude of these relationships is much weaker, with a correlation of 
-$\approx$ .75 between $w$ and $\theta_\rho$, $\approx$ .4 between $a$ 
-and $\theta_\rho$, and $\approx$ .4 between $w$ and $a$.  Once the clouds 
-reach the inversion layer, these cross-correlations between $w$, 
-$\theta_\rho$ and $a$ are no longer statistically significant.
+become uncorrelated and $-\theta_l$ diverges from $q_t$ and $\theta_\rho$.  
+Below 600 m, buoyancy is completely controlled by variations in $q_t$, and 
+$-\theta_l$ becomes anti-correlated with $q_t$ and $\theta_\rho$.  Within 
+the 700-1400 m layer cross-correlations are significant at the 99\% confidence 
+level between $\theta_\rho$, $w$, and $a$, but the magnitude of these 
+relationships is much weaker, with a correlation of $\approx$ .75 between $w$ 
+and $\theta_\rho$, $\approx$ .4 between $a$ and $\theta_\rho$, and 
+$\approx$ .4 between $w$ and $a$.  Once the clouds reach the inversion layer, 
+these cross-correlations between $w$, $\theta_\rho$ and $a$ are no longer 
+statistically significant.
 
 Some of the causes of these cloud property cross-correlation patterns can be 
 inferred from the vertical structure of the mean cloud condensed region 
@@ -500,7 +500,7 @@ and as they rise this variation only grows a little.  Finally, the clouds start
 with some variability in their vertical velocity at cloud base, which increases 
 as they rise due to variability in the buoyancy forcing.  Adopting the language 
 of \cite{Romps2010}, this suggests that cloud area and mass flux results from 
-the cloud's nature (inital conditions), and thermodynamic variables are 
+the cloud's nature (initial conditions), and thermodynamic variables are 
 governed by nurture (the environmental conditions they experience).  We examine 
 this question further in the next section.
 
@@ -513,7 +513,7 @@ properties of the environment the cloud encounters as it rises, exert stronger
 influence on the evolution of the cloud?  \cite{Romps2010} addressed this 
 question for individual parcels of convecting air and found the net entrainment 
 experienced by a parcel influences the parcel's state far more than the 
-parcel's inital properties at cloud base.  Our tracking algorithm allows us to 
+parcel's initial properties at cloud base.  Our tracking algorithm allows us to 
 examine this question from the prospective of whole clouds, instead of 
 sub-cloud parcels.
 
@@ -552,7 +552,7 @@ region to advect the particles and calculate property values.  A total of 8012
 particles are released at 300 m and tracked.  For this calculation we ignore 
 plume area and vertical mass flux, because the method we use to divide the 
 sub-cloud plume up between individual clouds makes the area of the sub-cloud 
-plume dependant on that of the cloud core above.
+plume dependent on that of the cloud core above.
 
 The $q_t$ of the rising particles is strongly correlated with $q_t$ at release 
 up until the particles reach cloud base at 500 m (Figure 
@@ -583,7 +583,7 @@ definition insures the particles will always move upward.  A total of
 9984 particles are released and tracked.  Due to the strong cross-correlations 
 between thermodynamic variables and cloud area and mass flux, we restrict our 
 analysis to $\theta_\rho$, $w$, and $a$.  However, since $\theta_l$ is 
-uncorrelated with $q_t$ and $\theta_\rho$ at cloudbase, we do calculate the 
+uncorrelated with $q_t$ and $\theta_\rho$ at cloud base, we do calculate the 
 correlation between $\theta_l$ at 600 m and upper-level properties separately 
 from cloud base $\theta_\rho$.
 
@@ -605,41 +605,43 @@ cloud core area is correlated with cloud base $a$ and, to a lesser extent, $w$.
 \cite{Romps2010} explained the variation in cloud parcel properties at height 
 as the result of the entrainment the parcel experienced as it rose from 
 cloud base.  We can examine the influence of entrainment and detrainment 
-processes on the cloud core properties by integrating the total fractional 
-cloud core entrainment $\epsilon$ (in units of m$^{-1}$) and fractional cloud 
-core detrainment $\delta$ (also in m$^{-1}$) experienced by the particle 
-between 600 m and the current height, and correlating these integrated 
-$\epsilon$ and $\delta$ values with the properties of the cloud core at the 
-current height.  To do this we calculate cloud core mass entrainment and 
-detrainment rate profiles for each individual cloud using the direct 
-entrainment method detailed in \cite{Dawe2011}, and divide these profiles by 
-the cloud core vertical mass flux of each cloud to generate individual 
-$\epsilon$ and $\delta$ values for each cloud at each particle sampling time.
-Additionally, we calculate the integral of the critical mixing fraction 
-$\chi_c$, the fraction of environmental air in a mixture of core and 
-environmental air needed to produce a neutrally buoyant mixture.  $\chi_c$ is 
-used in buoyancy-sorting parametrization schemes to determine cloud core 
-entrainment and detrainment rates \citep{Kain1990, Rooy2008}.  We calculate 
-$\chi_c$ using the mean cloud core properties and environmental properties 
-taken as the average of all non-cloud core points at the current height within 
-100 m of the cloud core.
+processes on the cloud core properties by taking the mean of the total 
+fractional cloud core entrainment $\epsilon$ (in units of m$^{-1}$) and 
+fractional cloud core detrainment $\delta$ (also in m$^{-1}$) experienced by 
+the particle between 600 m and the current height, and correlating these
+$\bar{\epsilon}$ and $\bar{\delta}$ values (where the over-bar denotes the 
+mean of the property between cloud base to the current height) with the 
+properties of the cloud core at the current height.  To do this we calculate 
+cloud core mass entrainment and detrainment rate profiles for each individual 
+cloud using the direct entrainment method detailed in \cite{Dawe2011}, and 
+divide these profiles by the cloud core vertical mass flux of each cloud to 
+generate individual $\epsilon$ and $\delta$ values for each cloud at each 
+particle sampling time.  Additionally, we calculate the mean of the critical 
+mixing fraction $\chi_c$, the fraction of environmental air in a mixture of 
+core and environmental air needed to produce a neutrally buoyant mixture.  
+$\chi_c$ is used in buoyancy-sorting parametrization schemes to determine 
+cloud core entrainment and detrainment rates \citep{Kain1990, Rooy2008}.  We 
+calculate $\chi_c$ using the mean cloud core properties and environmental 
+properties taken as the average of all non-cloud core points at the current 
+height within 100 m of the cloud core.
 
-Cloud core $\theta_\rho$ is anti-correlated with integrated $\epsilon$ and 
-$\delta$, and correlated with integrated $\chi_c$, with a constant magnitude 
-of roughly 0.5 up to 1,400 m (Figure \ref{fig:cloud_base_integrals_env}). 
-These correlations become stronger than the correlation with cloud base 
-$\theta\rho$ roughly 200 m above particle release, and indicate that low 
-entrainment and detrainment rates are correlated with anomalously buoyant 
-clouds.  Vertical velocity also shows stronger correlations with -$\epsilon$, 
--$\delta$, and $\chi_c$ than with cloud base $w$ between 800-1,300 m, 
-although in this case integrated -$\delta$ has a noticeably higher correlation 
-with $w$ than -$\epsilon$ does.  Conversely, cloud core area is more 
-correlated with cloud base core area than integrated -$\epsilon$, -$\delta$ 
-or $\chi_c$ all the way to the inversion base, at which point the integrated 
--$\delta$ and $\chi_c$ values show roughly the same correlation with $a$ as 
-cloud base area.  Integrated -$\epsilon$ is far less correlated with $a$, 
-however, showing that cloud area variations are more influenced by detrainment 
-than entrainment.
+Cloud core $\theta_\rho$ is anti-correlated with $\bar{\epsilon}$ and 
+$\bar{\delta}$, and correlated with $\bar{\chi_c}$, with a constant 
+magnitude of roughly 0.5 up to 1,400 m (Figure 
+\ref{fig:cloud_base_integrals_env}). These correlations become stronger than 
+the correlation with cloud base $\theta\rho$ roughly 200 m above particle 
+release, and indicate that low entrainment and detrainment rates are correlated 
+with anomalously buoyant clouds.  Vertical velocity also shows stronger 
+correlations with -$\bar{\epsilon}$, -$\bar{\delta}$, and $\bar{\chi_c}$ 
+than with cloud base $w$ between 800-1,300 m, although in this case 
+-$\bar{\delta}$ has a noticeably higher correlation with $w$ than 
+-$\bar{\epsilon}$ does.  Conversely, cloud core area is more correlated with 
+cloud base core area than -$\bar{\epsilon}$, -$\bar{\delta}$ or 
+$\bar{\chi_c}$ all the way to the inversion base, at which point the 
+-$\bar{\delta}$ and $\bar{\chi_c}$ values show roughly the same correlation 
+with $a$ as cloud base area.  -$\bar{\epsilon}$ is far less 
+correlated with $a$, however, showing that cloud area variations are more 
+influenced by detrainment than entrainment.
 
 \subsection{Ascending cloud top properties versus maximum cloud height}
 
@@ -672,32 +674,34 @@ dividing height to 1300 m.  This results in 131 tall clouds and 136 short
 clouds in the 550-750 m case, and 127 tall and 113 short clouds in the 
 750-1000 m case.
 
-Since many of the cloud's properties, such as cross-sectional area, are not 
-normally distributed, we use a non-parametric statistical test to determine if 
-the properties of the tall clouds and their environment are significantly 
-different than the properties of the short clouds.  The Mann-Whitney U test 
-evaluates the null hypothesis that two data samples come from the same 
-distribution \citep{Mann1947}.  It does this by summing the number of values 
-in one sample which are greater than each value in the other sample; this sum 
-is called $U$.  If large samples are taken from populations with identical 
-distributions, on average one would expect a given value from the first sample 
-to be larger than half the values in the other sample, and $U$ will be normally 
-distributed with a mean value of $mn/2$.  Thus, the further $U$ is from $mn/2$, 
-the more likely it is that the two samples come from distributions with 
-differing magnitudes.  Note that there are actually two U values defined by 
-this test, depending on whether the first sample is ranked against the second, 
-or the second is ranked against the first.  However, it is easy to show that 
-$U_1 + U_2 = mn$, and by convention only the smaller U-value is quoted.
+Since some of the cloud's properties, such as horizontal cross-sectional area, 
+are not normally distributed, we use a non-parametric statistical test to 
+determine if the properties of the tall clouds and their environment are 
+significantly different than the properties of the short clouds.  The 
+Mann-Whitney U test evaluates the null hypothesis that two data samples come 
+from the same distribution \citep{Mann1947}.  It does this by summing the 
+number of values in one sample which are greater than each value in the other 
+sample; this sum is called $U$.  If large samples are taken from populations 
+with identical distributions, on average one would expect a given value from 
+the first sample to be larger than half the values in the other sample, and $U$ 
+will be normally distributed with a mean value of $mn/2$.  Thus, the further 
+$U$ is from $mn/2$, the more likely it is that the two samples come from 
+distributions with differing magnitudes.  Note that there are actually two U 
+values defined by this test, depending on whether the first sample is ranked 
+against the second, or the second is ranked against the first.  However, it is 
+easy to show that $U_1 + U_2 = mn$, and by convention only the smaller U-value 
+is quoted.
 
 We calculate U values for total specific water $q_t$, liquid-water potential 
 temperature $\theta_l$, density potential temperature $\theta_\rho$, and 
 vertical velocity $w$ for both cloud top and environment.  Three additional 
 quantities are calculated for cloud top alone: specific liquid water $q_l$, 
-cross sectional area $a$, and vertical mass flux $M$ (in units of kg s$^{-1}$).  
-All of these values are calculated for both averages over 550-750 m and 
-750-1000 m, resulting in a total of 22 property comparisons.  For the 550-750 m 
-samples, if both the tall and short clouds have identical distributions the 
-mean value of $U$ should be 8908, and for the 750-1000 m samples, 7175.  
+horizontal cross sectional area $a$, and vertical mass flux $M$ (in units of 
+kg s$^{-1}$).  All of these values are calculated for both averages over 
+550-750 m and 750-1000 m, resulting in a total of 22 property comparisons.  
+For the 550-750 m samples, if both the tall and short clouds have identical 
+distributions the mean value of $U$ should be 8908, and for the 750-1000 m 
+samples, 7175.  
 
 Since we are calculating 22 separate tests, there is a high chance that one of 
 these tests will show a spurious significant relationship if we test for a 95\% 
@@ -727,20 +731,20 @@ cloud environment, which is on average 0.05 m s$^{-1}$ larger between 550-750 m
 for the tall clouds than the short clouds.  Thermodynamic cloud top properties 
 are likewise not significantly different between tall and short clouds.  Cloud 
 top vertical velocity is possibly significant, with faster-rising clouds 
-slightly more likely to become tall, but much more important is the cloud 
-cross-sectional area $a$ and mass flux $M$, with extremely small p-values of 
-2.6x10$^{-11}$ and 5.8x10$^{-11}$, respectively; clouds with larger 
-cross-sectional areas and greater vertical mass flux are more likely to become 
-tall clouds.
+slightly more likely to become tall, but much more important is the horizontal 
+cloud cross-sectional area $a$ and mass flux $M$, with extremely small p-values 
+of 2.6x10$^{-11}$ and 5.8x10$^{-11}$, respectively; clouds with larger 
+horizontal cross-sectional areas and greater vertical mass flux are more likely 
+to become tall clouds.
 
 However, simply because the differences in these values are statistically 
 significant does not mean that they are important.  Examining histograms of 
 environmental $q_t$ and $w$ and cloud top $w$ and $a$ (Figure 
 \ref{fig:cloud_environment_histograms}) shows that, while the differences 
 between the tall and short clouds are unlikely to have occurred by chance, 
-clouds tops with small areas, in environments moving upward slowly, still have 
-a reasonable chance of becoming tall clouds.  These properties certainly have 
-an influence on the cloud height, but it is clearly not a definitive one.
+clouds tops with small areas, in relatively slowly rising environments, still 
+have a reasonable chance of becoming tall clouds.  These properties certainly 
+have an influence on the cloud height, but it is clearly not a definitive one.
 
 As the clouds rise above cloud base, the properties associated with short and 
 tall clouds change (Table 1).  The average environmental 
@@ -766,9 +770,9 @@ upward velocity of air parcels in this region are controlled by turbulent
 inertia and pressure effects (but not buoyancy), and anomalies quickly 
 dissipate.
 
-Once the broad regions of rising air reach cloud base, they enter a physical 
-regime.  As rising parcels reach the top of the sub-cloud layer they lose 
-buoyancy, and must rely on inertia and pressure perturbations to 
+Once the broad regions of rising air reach cloud base, they enter a different 
+physical regime.  As rising parcels reach the top of the sub-cloud layer they 
+lose buoyancy, and must rely on inertia and pressure perturbations to 
 allow them to continue rising.  Thus, the environmental stability at cloud base 
 acts as a filter which admits only the fastest moving parcels, or the parcels 
 in a region of organized motion with a pressure perturbation sufficient to 
@@ -829,18 +833,18 @@ be easily extended to study deep convection.  We include in the supplementary
 material of this paper our implementation of this algorithm, written in Python, 
 for general use by the cloud modeling community.
 
-BOMEX cloud properties above cloud base divide into three groups of variables 
-that are highly correlated: the thermodynamic properties $q_t$, $\theta_l$, 
-and $\theta_\rho$; the vertical velocity $w$; and the area $a$ and vertical 
-mass flux $M$.  The thermodynamic properties show little variation at cloud 
-base, but their variability increases steadily with height; cloud area is 
-quite variable at cloud base and maintains its variance with height; and 
-vertical velocity falls between these two extremes.
+BOMEX cloud properties above cloud base divide into three categories of 
+variables that are highly correlated within each category: the thermodynamic 
+properties $q_t$, $\theta_l$, and $\theta_\rho$; the vertical velocity $w$; 
+and the area $a$ and vertical mass flux $M$.  The thermodynamic properties show 
+little variation at cloud base, but their variability increases steadily with 
+height; cloud area is quite variable at cloud base and maintains its variance 
+with height; and vertical velocity falls between these two extremes.
 
 Analyzing the upward propagation of property anomalies shows three sets of 
-physics operating on the clouds at different heights.  Below cloud base, cloud 
-plumes are large and homogenous and upward motion is primarily governed by 
-turbulence.  The buoyancy of plumes rapidly decreases at cloud base, which 
+processes operating on the clouds at different heights.  Below cloud base, 
+cloud plumes are large and homogenous and upward motion is primarily governed 
+by turbulence.  The buoyancy of plumes rapidly decreases at cloud base, which 
 prevents all but the fastest rising plumes from penetrating into the cloud 
 layer.  If these plumes make it through the cloud base layer, dilution by the 
 environment competes with buoyancy production from latent heating to control 
@@ -929,8 +933,8 @@ sections shows two clouds merging; in the first time step, the clouds'
 condensed regions have come into contact, but not until their cores contact 
 does cloud 3 merge into cloud 2. The right side of the sections shows a cloud 
 splitting in two; cloud 5 splits from cloud 4 since their condensed regions 
-have seperated, while the disconnected core region on the left side of cloud 4 
-has not seperated since it is not connected to ground level by the cloud 
+have separated, while the disconnected core region on the left side of cloud 4 
+has not separated since it is not connected to ground level by the cloud 
 plume.}
 \label{fig:cloudfinder_instructions}
 \end{figure}
@@ -941,14 +945,14 @@ plume.}
 \begin{center}
 \includegraphics[width=\textwidth]{./figures/example_cloud}
 \end{center}
-\caption{Height-time profiles of a) cross-sectional area, b) vertical 
-velocity, c) total specific water surplus, d) liquid-water potential 
-temperature deficit, e) specific liquid water and f) buoyancy of the condensed 
-liquid water region of the longest-lived tracked cloud.  Surplus and deficit 
-values in c) and d) are relative to the horizontal mean properties of the 
-model.  The black lines in b) and f) denote the zero contours.  The longer line
-markers at the top and bottom of the plots denote the times at which clouds 
-split from and merge into this cloud, respectively.}
+\caption{Height-time profiles of a) horizontal cross-sectional area, 
+b) vertical velocity, c) total specific water surplus, d) liquid-water 
+potential temperature deficit, e) specific liquid water and f) buoyancy of the 
+condensed liquid water region of the longest-lived tracked cloud.  Surplus and 
+deficit values in c) and d) are relative to the horizontal mean properties of 
+the model.  The black lines in b) and f) denote the zero contours.  The longer 
+line markers at the top and bottom of the plots denote the times at which 
+clouds split from and merge into this cloud, respectively.}
 \label{fig:example_cloud}
 \end{figure*}
 
@@ -958,7 +962,7 @@ split from and merge into this cloud, respectively.}
 \begin{center}
 \includegraphics[width=\textwidth]{./figures/example_core}
 \end{center}
-\caption{Same as Figure \ref{fig:example_cloud}, but for the cloud core region.}
+\caption{As in as Figure \ref{fig:example_cloud}, but for the cloud core region.}
 \label{fig:example_core}
 \end{figure*}
 
@@ -968,10 +972,10 @@ split from and merge into this cloud, respectively.}
 \begin{center}
 \includegraphics[width=8.3cm]{./figures/cloud_stats}
 \end{center}
-\caption{Histograms of a) cloud lifetime in minutes, b) mean mass of the 
-cloud condensed region over the cloud lifetime, c) maximum height reached by 
-the cloud top, and d) minumum height of the cloud base for tracked clouds with 
-complete life histories.}
+\caption{Bin-width normalized number densities ($n(x)dx$) of a) cloud lifetime 
+in minutes, b) mean mass of the cloud condensed region over the cloud lifetime, 
+c) maximum height reached by the cloud top, and d) minimum height of the cloud 
+base for tracked clouds with complete life histories.}
 \label{fig:cloud_stats}
 \end{figure}
 
@@ -998,13 +1002,13 @@ instantaneous and tracked cloud histograms, respectively.}
 \caption{Vertical profiles of cross-correlations between condensed region 
 a) mean total specific water $q_t$, b) mean liquid-water potential 
 temperature $\theta_l$, c) mean density potential temperature $\theta_\rho$, 
-d) mean vertical velocity $w$, e) cross-sectional area $a$ and d) vertical mass 
-flux $M$.  Green squares denote correlations with $q_t$, yellow triangles 
-correlations with -$\theta_l$, red circles correlations with $\theta_\rho$, 
-blue x markers correlations with $w$, unmarked black lines correlations with 
-$a$, and unmarked grey lines correlations with $M$. The dashed line denotes the 
-99/% confidence level for the correlation to be significantly different than 
-zero.}
+d) mean vertical velocity $w$, e) horizontal cross-sectional area $a$ and 
+d) vertical mass flux $M$.  Green squares denote correlations with $q_t$, 
+yellow triangles correlations with -$\theta_l$, red circles correlations with 
+$\theta_\rho$, blue x markers correlations with $w$, unmarked black lines 
+correlations with $a$, and unmarked grey lines correlations with $M$. The 
+dashed line denotes the 99\% confidence level for the correlation to be 
+significantly different than zero.}
 \label{fig:cloud_autocorrelation}
 \end{figure*}
 
@@ -1017,11 +1021,11 @@ zero.}
 \caption{Variation with height of the bin-width normalized probability 
 density functions ($P(x) \Delta x$) of a) mean total specific water excess, 
 b) mean liquid-water potential temperature deficit, c) mean buoyancy, d) mean 
-vertical velocity, e) cross-sectional area, and f) vertical mass flux of the 
-condensed liquid-water regions of the tracked clouds.  Black lines show 
-contours of the cumulative distribution functions of each variables at the .01, 
-.05, .16, .5, .84, .95, and .99 levels, from left to right.  White line denotes 
-the mean values for each variable. }
+vertical velocity, e) horizontal cross-sectional area, and f) vertical mass 
+flux of the condensed liquid-water regions of the tracked clouds.  Black lines 
+show contours of the cumulative distribution functions of each variable at the 
+.01, .05, .16, .5, .84, .95, and .99 levels, from left to right.  White line 
+denotes the mean values for each variable. }
 \label{fig:mean_profiles}
 \end{figure*}
 
@@ -1032,13 +1036,17 @@ the mean values for each variable. }
 \includegraphics[width=\textwidth]{./figures/cloud_base_schematic}
 \end{center}
 \caption{Method used to determine correlations between lower- and upper-level 
-cloud properties. a) A numerical particle is released each minute from an 
-initial level in the cloud and advected with the mean vertical velocity of the 
-cloud. b) The time each particle reaches each model height is recorded and used 
-to determine c) the properties of the cloud at each height at the time when the 
-particle reaches that height.  d) These properties are then used to determine 
-correlation profiles between the properties of the cloud at the release height 
-and each height reached by the rising particles.}
+cloud properties. a) Dotted lines show the location of numerical particles 
+released each minute from an initial level in the cloud and advected with the 
+mean vertical velocity of the cloud.  Colors represent cloud vertical 
+velocities.  b) The time each particle reaches each model height is recorded 
+(dotted lines) and the mean profiles of cloud properties are used to determine 
+c) the properties of the cloud at each height at the time when the particle 
+reaches that height.  d) These property profiles are then used to determine 
+correlation profiles (solid line) between the properties of the cloud at the 
+release height and each height reached by the rising particles.  The dotted 
+lines show the 99\% confidence level for a correlation to be significantly 
+different than zero.}
 \label{fig:cloud_base_schematic}
 \end{figure*}
 
@@ -1048,14 +1056,15 @@ and each height reached by the rising particles.}
 \begin{center}
 \includegraphics[width=8.3cm]{./figures/sub_cloud_profiles}
 \end{center}
-\caption{Correlation profiles between cloud plume properties at 300 m height 
-and at higher levels for a) total specific water $q_t$, b) liquid-water 
-potential temperature $\theta_l$, c) density potential temperature 
-$\theta_\rho$, and d) vertical velocity $w$.  Green squares show correlations 
-with 300 m level $q_t$, yellow triangles correlations with 300 m $\theta_l$, 
-red circles correlations with 300 m $\theta_\rho$, and blue x markers 
-correlations with 300 m $w$.  Dotted lines show the 99\% confidence level for 
-a correlation to be significantly different than zero.}
+\caption{Correlation profiles between cloud plume properties near the middle 
+of the sub-cloud layer at 300 m height and at higher levels for a) total 
+specific water $q_t$, b) liquid-water potential temperature $\theta_l$, 
+c) density potential temperature $\theta_\rho$, and d) vertical velocity $w$. 
+Green squares show correlations with 300 m level $q_t$, yellow triangles 
+correlations with 300 m $\theta_l$, red circles correlations with 300 m 
+$\theta_\rho$, and blue x markers correlations with 300 m $w$.  Dotted lines 
+show the 99\% confidence level for a correlation to be significantly different 
+than zero.}
 \label{fig:sub_cloud_profiles}
 \end{figure}
 
@@ -1067,12 +1076,12 @@ a correlation to be significantly different than zero.}
 \end{center}
 \caption{Correlation profiles between cloud base properties at 600 m and 
 at higher levels for a) density potential temperature $\theta_\rho$, b) 
-vertical velocity $w$, and c) cross-sectional area $a$.  Yellow triangles show 
-correlations with cloud base $\theta_l$, red circles show correlations with 
-cloud base $\theta_\rho$, blue x markers correlations with cloud base $w$, 
-and the black line show correlations with cloud base $a$. Dotted lines show the 
-99\% confidence level for a correlation to be significantly different than 
-zero.}
+vertical velocity $w$, and c) horizontal cross-sectional area $a$.  Yellow 
+triangles show correlations with cloud base $\theta_l$, red circles show 
+correlations with cloud base $\theta_\rho$, blue x markers correlations with 
+cloud base $w$, and the black line show correlations with cloud base $a$. 
+Dotted lines show the 99\% confidence level for a correlation to be 
+significantly different than zero.}
 \label{fig:cloud_base_profiles}
 \end{figure*}
 
@@ -1083,15 +1092,15 @@ zero.}
 \includegraphics[width=\textwidth]{./figures/cloud_base_integrals_env}
 \end{center}
 \caption{Correlation profiles between cloud properties at each level and the 
-integrated entrainment/detrainment variables from cloud base at 600 m to the 
+mean of the entrainment/detrainment variables from cloud base at 600 m to the 
 current level for a) density potential temperature $\theta_\rho$, b) 
-vertical velocity $w$, and c) cross-sectional area $a$.  Yellow triangles show 
-correlations with integrated critical mixing fraction $\chi_c$, orange 
-diamonds show correlations with the negative of the integrated fractional 
-entrainment rate $\epsilon$, and cyan triangles show correlations with the 
-negative of the integrated fractional detrainment rate $\delta$.  Dotted lines 
-show the 99\% confidence level for a correlation to be significantly different 
-than zero.}
+vertical velocity $w$, and c) horizontal cross-sectional area $a$.  Yellow 
+triangles show correlations with mean critical mixing fraction $\bar{\chi_c}$, 
+orange diamonds show correlations with the negative of the mean fractional 
+entrainment rate $\bar{\epsilon}$, and cyan triangles show correlations with 
+the negative of the mean fractional detrainment rate $\bar{\delta}$.  Dotted 
+lines show the 99\% confidence level for a correlation to be significantly 
+different than zero.}
 \label{fig:cloud_base_integrals_env}
 \end{figure*}
 
@@ -1116,11 +1125,13 @@ encountered by the cloud top.}
 \begin{center}
 \includegraphics[width=\textwidth]{./figures/cloud_environment_histograms}
 \end{center}
-\caption{Histograms of mean properties between 550-750 m of a) environmental 
-total specific water, b) envrionmental vertical velocity, c) cloud vertical 
-velocity, and d) cloud cross-sectional area.  Blue histograms show clouds with 
-maximum height less than 1,150 m, red histograms show clouds with maximum 
-height greater than 1,150 m.  Black lines show mean value of each histogram.}
+\caption{Bin-width normalized probability density functions ($P(x)dx$) of 
+mean properties between 550-750 m of a) environmental total specific water, 
+b) environmental vertical velocity, c) cloud vertical velocity, and 
+d) horizontal cloud cross-sectional area.  Top row, blue histograms show clouds 
+with maximum height less than 1,150 m; bottom row, red histograms show clouds 
+with maximum height greater than 1,150 m.  Black lines show mean value of each 
+histogram.}
 \label{fig:cloud_environment_histograms}
 \end{figure*}
 
@@ -1130,12 +1141,13 @@ height greater than 1,150 m.  Black lines show mean value of each histogram.}
 \begin{center}
 \includegraphics[width=8.3cm]{./figures/qt_vs_dist}
 \end{center}
-\caption{Probability density functions of total specific water $q_t$ at 
-1,250 m height at various distances from the nearest cloud surface.  Negative
-distances represent points inside the cloud.  Black lines show 
-contours of the cumulative distribution functions of each variables at the .01, 
-.05, .16, .84, .95, and .99 levels, from bottom to top; white line shows the
-.5 level of the cumulative distribution function.}
+\caption{Variation in the probability density function of total specific 
+water $q_t$ at 1,250 m height with distance from the nearest cloud surface.  
+Probability density functions are taken at 25 m distance intervals, to match 
+the model grid spacing.  Negative distances represent points inside the cloud.  
+Black lines show contours of the cumulative distribution functions of each 
+variables at the .01, .05, .16, .84, .95, and .99 levels, from bottom to top; 
+white line shows the .5 level of the cumulative distribution function.}
 \label{fig:qt_vs_dist}
 \end{figure}
 
@@ -1154,9 +1166,9 @@ encountered environment and rising cloud top properties for tall vs short
 clouds.  For average properties between 550-750 m, tall clouds are defined as 
 clouds that reach heights over 1,050 m; for average properties between 
 750-1,000 m, tall clouds are those that reach heights over 1,300 m.  Shown are 
-differences in the means, the means normalized by the standard deviation, the 
-U-value, and the p-value that this U-value would arise for two samples taken 
-from the same distribution.}
+differences in the means (tall minus short), the differences in the means 
+normalized by the standard deviation, the U-value, and the p-value that this 
+U-value would arise for two samples taken from the same distribution.}
 \vskip4mm
 \centering
 \begin{tabular}{lccccclr}
@@ -1194,7 +1206,7 @@ cloud 750-1000 m & & & & & &          \\
 \end{tabular}
 \end{table*}
 
-%% The different columns must be seperated with a & command and should
+%% The different columns must be separated with a & command and should
 %% end with \\ to identify the column brake.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
