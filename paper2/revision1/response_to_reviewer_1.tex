@@ -1,0 +1,220 @@
+\documentclass[12pt]{article}
+\begin{document}
+\textbf{Section 3.1. This description of the cloud-tracking algorithm is 
+difficult to follow. What distinguishes the different yellow areas that are 
+otherwise adjacent in Figure 1? How is cloud that is connected to more than one 
+core associated with only one core?}
+
+\vspace{5mm}
+
+We have re-written Section 3.1 extensively to try to make it clearer.
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{p. 23243, lines 5-7. Are these inter-cloud or intra-cloud 
+correlations? Does this include clouds of all heights?}
+
+\vspace{5mm}
+
+These are inter-cloud correlations, done upon all clouds that reach a given 
+height.  Clouds that are not present at a given height are not included in the 
+cross-correlations, which is why the significant correlation level changes with
+height. We have modified lines 5-7 to read ``Cross-correlations between the 
+horizontal mean properties of all clouds present at a given height reveal 
+strong relationships between the mean cloud properties.''
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{p. 23243, line 14. If $a$ and $M$ have near-unity correlations, this 
+implies that variations in $w$ can be neglected. Should this sentence read
+``characterized by two variables: $\theta_\rho$ and $a$''?}
+
+\vspace{5mm}
+
+We do not agree that near-unity correlations between $a$ and $M$ implies that
+variations in $w$ can be neglected. $w$ has variability independent of 
+$\theta_\rho$ and $a$ which may be neccessary to characterize the behaviour of 
+the BOMEX cloud field.
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{p. 23243, lines 26-28. Please elaborate on how this can be seen or
+quantified from Figure 8. Also, how negative is the anticorrelation between 
+$\theta_l$ and $\theta_\rho$ at 500 meters in the cutoff portion of Figure 
+7?}
+
+\vspace{5mm}
+
+Upon reflection, we realise that this statement is unjustified, and we have 
+removed it from the paper.  At 500 meters, the anticorrelation between 
+$\theta_l$ and $\theta_\rho$ is $\approx$ -0.9.  We have added this 
+information to the text.
+
+\vspace{5mm}
+
+%-----------------------------------  
+
+\textbf{p. 23244, line 4. Here and some other places, should this be Romps and
+Kuang?}
+
+\vspace{5mm}
+
+Yes, this should be Romps and Kuang. We have corrected this error.
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{Figure 9. This figure is described inadequately. Since the dots in b 
+are the same as in a, but connected by lines differently, why are they shown 
+twice? In c, should these lines be labeled by the level? What correlation is 
+being shown in d?}
+
+\vspace{5mm}
+
+In an attempt to make Figure 9 clearer, we have removed the dots from (a) and 
+removed the lines from (b), added some level labels and highlighted lines every
+200 m in c), and removed every second level from the plots.  We have changed 
+the figure caption to read:
+
+``Method used to determine correlations between lower- and upper-level 
+cloud properties. a) Numerical particles are released once per minute from an 
+initial level in the cloud and advected vertically with the mean vertical 
+velocity of the cloud until the particle leaves the cloud. (Lines show the 
+time-height trajectories of the numerical particles and colours show the 
+cloud's vertical velocity.) b) The times at which particles reach each model 
+level are then identified and the cloud properties at those times are recorded. 
+(Dots show the time each particle reaches each model level and colours
+show the cloud's vertical velocity. Only half the model levels have been 
+plotted for clarity.)  c) The properties encountered by the particles at a 
+given height are then arranged by the time each particle was released, forming 
+a set of pseudo-time series at each height. (Dotted lines show the total 
+specific water values of the cloud at the time each particle reached a given 
+height.  The 600 m, 800 m, 1000 m, 1200 m, and 1400 m height particle values 
+are highlighted and labeled.  Only half the model levels have been plotted.)  
+d) Correlations are then taken between the properties of the particles at 
+release and the properties at higher levels to calculate correlation profiles. 
+(Solid line shows the correlation between total specific humidity of the 
+particles at release and the total specific humidity of the cloud at various
+heights. Dotted lines show the 99\% confidence level for a correlation to be
+significantly different than zero.)''
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{Section 4.1. How do these results compare to the results in the 
+``Nature and Nurture'' paper by Romps and Kuang?}
+
+\vspace{5mm}
+
+We compare our results with Romps and Kuang 2011 in the discussion in Section 
+4.3.  However, it does make sense to address this Section 4.1, so we have added 
+the following paragraph at the end of Section 4.1:
+
+``Our results largely agree with the results of Romps and Kuang [2010]: 
+upper-level cloud properties are governed by the entrainment and detrainment
+experienced by the cloud as it rises, and cloud base properties have little 
+influence on upper-level cloud properties, suggesting that nurture is more 
+important than nature in determining shallow cumulus cloud properties.  The 
+exception to this is cloud area, which is correlated with cloud base area and 
+which Romps and Kuang were not able to examine using their parcel model.
+Nevertheless, cloud base area and entrainment/detrainment rates still exert 
+roughly equal influence over upper-level cloud area.''
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{Section 4.2. This method for calculating the cloud-top properties 
+relies on collecting statistics on the grid cell(s) that first contains liquid 
+water at a given height. Is this not prone to large numerical error? How can we 
+be sure that the results from this method can be trusted to give meaningful
+statistics? A more robust method would be to average properties some distance 
+(say, 100 m) below the cloud top and the same distance above the cloud top.}
+
+\vspace{5mm}
+
+We have redone these calculations using environmental properties in an 125m 
+region centred on the cloud top (5 grid cells in the vertical), and cloud 
+properties over the top 100 m of the cloud (4 grid cells in the vertical).  
+This does appear to remove noise from the calculation, since while the results 
+are not significantly different, the p-values of the results are much higher.
+
+The main differences between the calculations using the immediate cloud-top and
+the top 100 m are greater differences in the cloud properties between the tall
+and short clouds, and less differences in the environment properties between 
+the tall and short clouds.  The environmental vertical velocity between 
+550-750 m still shows a weakend effect on future cloud height, but cloud top 
+height now appears entirely insensitive to 750-1000 m environmental properties.
+
+We have updated the values in Table 1 with these calculations, and changed 
+the text in Section 4.2 to reflect the new calculation method, and the slightly 
+modified results. 
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{p. 23251, line 7. ``but not buoyancy''? Why would the upward velocity 
+of parcels in a convective boundary layer not be controlled by buoyancy?}
+
+\vspace{5mm}
+
+This was a poor choice of words.  First, we should have said ``the upward 
+velocity of plumes'', not ``air parcels''. Second, we intended to say that the 
+mean vertical velocity of sub-cloud plumes is not correlated with the plume's 
+mean buoyancy.  We have changed this sentence to read: ``Conversely, the mean 
+upward velocity of plumes in this region is uncorrelated with the plume's mean 
+buoyancy and plume velocity anomalies dissipate quickly as the plumes rise,
+suggesting the sub-cloud plume dynamics are dominated by inertia and pressure
+effects.''
+
+\vspace{5mm}
+
+%-----------------------------------
+
+\textbf{p. 23251, lines 17-18. These lines state: ``the fate of clouds... is
+determined by a race btw. the rate the cloud moves upward and rate the cloud is 
+mixed away.'' This is reminiscent of Neggers et al, ``A multiparcel model...'' 
+Is there support for the Neggers et al theory in this paper? Please elaborate. 
+The discussion on p. 23245 lines 24-28 seems to suggest the opposite.}
+
+\vspace{5mm}
+
+The assumption made by Neggers et al. that cloud parcels enter cloud base with 
+a wide range of properties is contradicted by our findings, as we state on 
+p. 23245 lines 24-28.  We have not attempted to examine the assumption made by 
+Neggers et al. that fractional entrainment rate is inversely proportional to 
+vertical velocity, although we agree that such an assumption would be 
+consistent with our findings.  However, we would say that there is are much
+stronger correlations between the height a cloud achieves and its area than 
+its vertical velocity.  This would lead us to speculate that the inverse 
+proportionality between fractional entrainment rate and vertical velocity 
+assumed by Neggers et al. is actually caused by larger clouds protecting their 
+core more effectively. Parcels in clouds with large areas are more protected
+from entrainment events, which allows them to achieve high buoyancies and 
+vertical velocities.  We have added the following paragraph to the discussion.
+
+``Neggers et al. [2002] construct a theory in which fractional entrainment rate 
+is inversely proportional to vertical velocity and cloud parcels enter cloud 
+base with a wide range of properties.  The variations in parcel properties then 
+set the entrainment rate and thus control the future evolution of the parcel 
+properties.  Our results disagree with the assumption of Neggers et al. that 
+parcels have a range of initial thermodynamic conditions.  We have not directly 
+examined the dependance of entrainment rate on vertical velocity; however, the 
+strong relationship between eventual height reached by the clouds and the cloud 
+area suggests that fractional entrainment is more likely dependent on cloud 
+area and any relationship between vertical velocity and entrainment is due to 
+larger area clouds shielding their cores from entrainment, producing higher 
+buoyancies and vertical velocities.''
+
+\vspace{5mm}
+
+\end{document}

@@ -1,0 +1,40 @@
+2007/12/21
+==========
+
+Tools we have
+-------------
+
+  * Cloud Tracker
+  * Direct E/D calculator
+
+Transition from shallow to deep convection
+------------------------------------------
+
+  * CIN/CAPE in setting cloud base mass flux
+  * Influence of the environment
+  * Behavior of chi and detrainment
+  * Cloud pulsation
+
+Stochastic mixing
+-----------------
+
+  * can we improve on p. 8-9-10 of "nature/nurture" by comparing
+    life histories of tracked clouds with the parcel
+    model?
+  * Can we confirm the PDF they assume in (1) on p. 9?
+
+2010/01/27
+==========
+
+JAS package info for entrainment interpolation paper:
+
+Your journal is: JAS
+Your package ID is: 14960
+Your package password is: 3ntr41n 
+
+
+2010/03/01
+==========
+
+find testable parameters in theories
+
