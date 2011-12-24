@@ -23,7 +23,8 @@
 \begin{document}
 
 
-\title{Something about entrainment}
+\title{Entrainment and detrainment rates of individual shallow cumulus clouds 
+in a LES}
 
 
 \author[1]{Jordan T Dawe}
@@ -104,6 +105,11 @@ TK
 
 %==============================================================================
 
+\section{Cloud field height-area}
+
+
+%==============================================================================
+
 \section{Entrainment Histograms}
 
 TK
@@ -112,7 +118,98 @@ TK
 
 \section{Corrected Entrainment and Detrainment}
 
-TK
+Consider a numerical model grid cell containing a cloud surface with normal 
+vector $\mathbf{C}$, where $\mathbf{C}$ points outward from the surface and 
+has units of m$^2$ (Figure TK).  This surface, 
+combined with $\mathbf{W}$, the portion of the grid cell walls that lie within 
+the cloud in m$^2$, encloses a cloud volume $V$ which has units of m$^3$.  
+\cite{Siebesma1998} gives the net entrainment and detrainment over the cloud 
+surface to be:
+\begin{equation}
+\label{eq:E_minus_D} 
+E - D = \int_C \rho \phi ( \mathbf{u_i} -  \mathbf{u}) \cdot d\mathbf{C},
+\end{equation}
+where $\rho$ is the air density in kg m$^{-3}$, $\mathbf{u}$ is the velocity
+of the air in m s$^{-1}$ and $\mathbf{u_i}$ is the velocity of the cloud 
+interface in m s$^{-1}$.  Calculating this integral requires knowledge of the 
+velocity field over the surface of $\mathbf{C}$ and the time evolution of 
+$\mathbf{C}$, neither of which is easily calculated in a numerical model.  
+Instead, we seek a simplified but equivalent calculation.
+
+To calculate the velocity of the cloud surface, we make use of the Leibnitz 
+Theorem:
+\begin{equation}
+\label{eq:leibnitz} 
+\frac{d}{dt}\int_{V(t)} \rho \phi dV = 
+  \int_{V(t)} \frac{\partial \rho \phi}{ \partial t} dV 
+  + \int_{C(t)} \rho \phi \mathbf{u_i}\cdot d\mathbf{C}
+  + \int_{W(t)} \rho \phi \mathbf{u_i}\cdot d\mathbf{W}.
+\end{equation}
+Since the walls of the grid cell do not move, $\mathbf{u_i}$ is 0 over 
+$\mathbf{W}$.  If we also assume ${\partial \rho}/{ \partial t} \approx 0$, we
+get
+\begin{equation}
+\label{eq:leibnitz2} 
+    \rho \frac{d}{dt}\int_{V(t)} \phi dV = 
+    \int_{V(t)} \rho \frac{\partial \phi}{ \partial t} dV 
+    \int_{C(t)} \rho \phi \mathbf{u_i}\cdot d\mathbf{C}.
+\end{equation}
+We then combine equations (\ref{eq:E_minus_D}) and (\ref{eq:leibnitz2}) to give:
+\begin{equation}
+\label{eq:step1} 
+      E - D = \rho \frac{d}{dt}\int_{V(t)} \phi dV
+            - \int_{V(t)} \rho \frac{\partial \phi}{ \partial t} dV 
+            - \int_C \rho \phi \mathbf{u} \cdot d\mathbf{C}.
+\end{equation}
+
+Next we apply the divergence theorem to simplify the flux integral through 
+$\mathbf{C}$:
+\begin{equation}
+\label{eq:divergence} 
+\int_{V} \nabla \cdot (\rho \phi \mathbf{u}) dV = 
+  \int_{C} \rho \phi \mathbf{u}\cdot d\mathbf{C}
++ \int_{W} \rho \phi \mathbf{u}\cdot d\mathbf{W}
+\end{equation}
+
+Substituting this into (\ref{eq:step1}) results in
+ \begin{equation}
+\label{eq:entrainment_detrainment} 
+E - D = \rho \phi \frac{dV}{dt} 
+  - V \nabla \cdot (\rho \phi \mathbf{u})
+  + \int_W \rho \phi \mathbf{u} \cdot d\mathbf{W}.
+\end{equation}
+Following \cite{Romps2010}, if (\ref{eq:entrainment_detrainment}) is positive,
+the result of this calculation is assumed to all be $E$, and if negative, $D$: 
+
+\begin{equation}
+\label{eq:max_ent} 
+E = \mathrm{max}\left(0, 
+    \rho \phi \frac{dV}{dt}
+  - V \nabla \cdot (\rho \phi \mathbf{u})
+  + \int_W \rho \mathbf{u} \cdot d\mathbf{W}\right)
+\end{equation}
+\begin{equation}
+\label{eq:max_det} 
+D = \mathrm{max}\left(0, 
+  - \rho \phi \frac{dV}{dt} 
+  + V \nabla \cdot (\rho \phi \mathbf{u})
+  - \int_W \rho \mathbf{u} \cdot d\mathbf{W}\right).
+\end{equation}
+Therefore, we can find the entrainment and detrainment by calculating the rate 
+of change of the cloud volume inside the grid cell and the mass flux through 
+the cloudy portion of the grid cell 
+
+
+
+%==============================================================================
+
+* $\chi_q$ calculation: *
+
+\begin{equation}
+\chi_q = \frac{(1 + \gamma) q_l}{\Delta q_t - \pi \Delta \theta_l \frac{\partial q_s}{\partial T}}
+\end{equation}
+
+
 
 %==============================================================================
 
@@ -203,8 +300,9 @@ by empirical formulae.
 \begin{acknowledgements}
 Support for this research was provided by the Canadian Foundation for Climate 
 and Atmospheric Science through the Cloud Aerosol Feedback and Climate 
-network.  Figures were generated using the matplotlib library in the Python
-programming language.
+network. We thank Marat Khairoutdinov for making SAM available to the cloud 
+modeling community. Figures were generated using the matplotlib library in the 
+Python programming language.
 \end{acknowledgements}
 
 
@@ -290,7 +388,7 @@ programming language.
 %% TWO-COLUMN TABLE
 
 \begin{table*}[t]
-\caption{Taxonomy of Entrainment and Detrainment}
+\caption{Taxonomy of cloud core entrainment and detrainment}
 \vskip4mm
 \centering
 \begin{tabular}{llccc}
